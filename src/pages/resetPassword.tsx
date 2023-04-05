@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useProfileQuery, useResetPasswordMutation } from "../services/authApi";
 import { ResetPasswordRequest } from "../models/resetPassword.model";
+import Spinner from "../components/spinner";
 
 const ResetPassword = () => {
   const [email, setEmail] = useState("");
@@ -12,7 +13,7 @@ const ResetPassword = () => {
 
   const [
     resetPassword,
-    { data: resetData, isSuccess: resetSuccess, isError: resetError, error: errorReset },
+    { data: resetData, isSuccess: resetSuccess, isError: resetError, error: errorReset, isLoading: loadingReset },
   ] = useResetPasswordMutation();
 
   const {
@@ -80,6 +81,8 @@ const url = window.location.href;
         />
       </div>
       <button onClick={handleResetPassword} disabled={isLoading}>
+      {loadingReset && <Spinner /> }
+
         {isLoading ? "Loading..." : "Reset Password"}
       </button>
     </div>

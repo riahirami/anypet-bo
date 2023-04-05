@@ -15,7 +15,28 @@ import {
   useEmailVerificationMutation,
   useResetPasswordMutation,
 } from "../services/authApi";
-
+import {
+  Avatar,
+  AvatarGroup,
+  Box,
+  Button,
+  Grid,
+  List,
+  ListItemAvatar,
+  ListItemButton,
+  ListItemSecondaryAction,
+  ListItemText,
+  MenuItem,
+  TextField,
+  Typography,
+  Alert,
+  Stack,
+  AlertTitle,
+  Container,
+} from "@mui/material";
+import Spinner from "../components/spinner";
+import AlertDialogModal from "../components/AlertDialogModal";
+import Navbar from "../components/Navbar";
 
 function Dashboard() {
   const { name } = useAppSelector(selectAuth);
@@ -23,6 +44,7 @@ function Dashboard() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const tokenValue = JSON.parse(localStorage.getItem("user") || "{}");
+  const [showModal, setShowModal] = useState(false);
 
   const {
     data: dataProfile,
@@ -48,7 +70,6 @@ function Dashboard() {
       error: logoutError,
     },
   ] = useLogoutUserMutation(tokenValue);
-
 
   const [
     resendEmail,
@@ -76,7 +97,7 @@ function Dashboard() {
 
   async function handleResendEmail() {
     const responseResend = await resendEmail(tokenValue);
-    await console.log(responseResend);
+    if (responseResend) setShowModal(true);
   }
 
   const [
@@ -110,30 +131,44 @@ function Dashboard() {
     const thisEmail = dataProfile?.user?.email;
     const newPassword = password;
     const confirmNewPassword = passwordConfirmation;
-   
 
     console.log(resetPassword);
   }
   return (
     <>
+      {isLoading && <Spinner />}
+      <Navbar />
       <div>Dahsboard</div>
 
-      {isLoading ? <p>loading ....</p> : ""}
       {isError ? (
         <>
-          <p>
-            error access profile, check your email to verify your account first
-            !
-          </p>
-          <button type="button" onClick={() => handleResendEmail()} disabled={isLoading}>
+          <Alert
+            severity="warning"
+            sx={{ height: "60", t: "center", paddingLeft: "30%" }}
+          >
+            <AlertTitle>Warning</AlertTitle>
+            Error access profile, —{" "}
+            <strong>check your email to verify your account !</strong>
+          </Alert>
+
+          <button
+            type="button"
+            onClick={() => handleResendEmail()}
+            disabled={isLoading}
+          >
             resend email verification
           </button>
+          {loadingResend && <Spinner />}
+
           {loadingResend ? (
-            <p>loading ...</p>
+            <Spinner />
           ) : successResend ? (
-            <p>email resend successfully , check your email address !</p>
+            showModal && <AlertDialogModal title="Resend email " />
           ) : errorResend ? (
-            <p>error to sending mail</p>
+            <Alert severity="error" sx={{ height: "60", textAlign: "center" }}>
+              <AlertTitle>Error</AlertTitle>
+              This is an error alert — <strong>check it out!</strong>
+            </Alert>
           ) : (
             <p></p>
           )}
@@ -145,19 +180,19 @@ function Dashboard() {
       )}
       <ul>
         {dataProfile?.user && (
-          <React.Fragment>
-            <span>Username: {dataProfile.user.login}</span>
-            <p>Fullname: {dataProfile.user.name}</p>
-            <p>email: {dataProfile.user.email}</p>
-            <p>Phone: {dataProfile.user.phone}</p>
-            {/* add other properties as needed */}
-          </React.Fragment>
+          <Container>
+            <React.Fragment>
+              <span>Username: {dataProfile.user.login}</span>
+              <p>Fullname: {dataProfile.user.name}</p>
+              <p>email: {dataProfile.user.email}</p>
+              <p>Phone: {dataProfile.user.phone}</p>
+            </React.Fragment>
+          </Container>
         )}
       </ul>
       <button type="button" onClick={() => handleLogout()}>
         logout
       </button>
-     
     </>
   );
 }

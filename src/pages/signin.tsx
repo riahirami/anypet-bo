@@ -3,9 +3,36 @@ import {
   useLoginUserMutation,
   useForgotPasswordMutation,
 } from "../services/authApi";
-import { Link, useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../app/hooks";
 import { setUser } from "../features/authSlice";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Grid,
+  Link,
+  Box,
+  Typography,
+  Container,
+} from "@mui/material";
+import Divider from "@mui/material/Divider";
+import Chip from "@mui/material/Chip";
+import { Modal } from "@mui/joy";
+
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import AlertDialogModal from "../components/AlertDialogModal";
+import { ResetPasswordResponse } from "../models/resetPassword.model";
+
+export interface Rep {
+  message: string
+}
+
 const initialState = {
   name: "",
   email: "",
@@ -16,7 +43,10 @@ const initialState = {
   password: "",
 };
 
+const theme = createTheme();
 const Signin = () => {
+  const [showModal, setShowModal] = useState(false);
+
   const [formValue, setFormValue] = useState(initialState);
   const { name, login, email, password, phone, address, avatar } = formValue;
   const navigate = useNavigate();
@@ -50,6 +80,7 @@ const Signin = () => {
   }
 
   const handleLogin = async () => {
+    // e.preventDefault();
     if (email && password) {
       await loginUser({ email, password });
     } else {
@@ -69,53 +100,105 @@ const Signin = () => {
 
   const handleSubmitForgotPassword = async () => {
     const responseForgot = await forgotPassword(email);
-
-    console.log(responseForgotData);
+   if (forgotSuccess) {
+    
+    setShowModal(true);
+  }
+  const msg: ResetPasswordResponse ={
+    message:""
+  }
+  
+  msg.message = responseForgotData
+    console.log( responseForgotData);
   };
   return (
-    <>
-      <h1> Sign in </h1>
-      <div className="form">
-        <input
-          type="email"
-          placeholder="your email"
-          name="email"
-          onChange={handleChangeForm}
-        ></input>
-        <input
-          type="password"
-          placeholder="your password"
-          name="password"
-          onChange={handleChangeForm}
-        ></input>
+    <div>
+      {/* materrial ui */}
+      <>
+      {showModal && <AlertDialogModal title="forgot password" />}
 
-        <button type="button" onClick={handleLogin} disabled={isLoginLoading}>
-          login
-        </button>
-        <button
-          type="button"
-          onClick={handleSubmitForgotPassword}
-          disabled={forgotLoading}
-        >
-          forgot password ?
-        </button>
+        <ThemeProvider theme={theme}>
+          <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <Box
+              sx={{
+                marginTop: 8,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+                <LockOutlinedIcon />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                Sign in
+              </Typography>
+              <Box component="form" noValidate sx={{ mt: 1 }}>
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  onChange={handleChangeForm}
+                  autoFocus
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  onChange={handleChangeForm}
+                  autoComplete="current-password"
+                />
+                <Grid container>
+                  <Grid item>
 
-        {forgotSuccess ? (
-          <p>reset password email send, check your email ! </p>
-        ) : forgotError ? (
-          <p>
-            Error to send your email to reset your password, try again later !{" "}
-          </p>
-        ) : (
-          <p></p>
-        )}
-      </div>
+                    <Button
+                      type="button"
+                      onClick={handleSubmitForgotPassword}
+                      variant="text"
+                      disabled={forgotLoading}
+                    >
+                      Forgot password?
+                    </Button>
+                  </Grid>
+                </Grid>
+                <Button
+                  type="button"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  onClick={handleLogin}
+                >
+                  Sign In
+                </Button>
+                <Divider>
+                  <Chip label="Don't have an account ?" />
+                </Divider>
+                <Button
+                  href="/signup"
+                  type="button"
+                  fullWidth
+                  sx={{ mt: 3, mb: 2 }}
+                  variant="contained"
+                >
+                  {"Sign Up"}
+                </Button>
+                <Grid item></Grid>
+              </Box>
+            </Box>
+          </Container>
+        </ThemeProvider>
 
-      <h2>you haven't an account ?</h2>
-      <Link to="/signup">
-        <button type="button">sign up </button>
-      </Link>
-    </>
+      </>
+    </div>
   );
 };
 

@@ -6,5 +6,5 @@ export interface ResetPasswordRequest {
   }
   
   export interface ResetPasswordResponse {
-    message: string;
+    message: string|any;
   }

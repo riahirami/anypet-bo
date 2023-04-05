@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useEmailVerificationMutation } from "../services/authApi";
-
+import { Alert, AlertTitle, Button } from "@mui/material";
 
 const EmailVerify = () => {
   const [verifyEmail, { data, isSuccess, isError, isLoading, error }] =
@@ -33,13 +33,18 @@ const EmailVerify = () => {
 
   return (
     <div>
-      <h1>email verify page </h1>
-      <button onClick={verified} disabled={isLoading}>
-        verifier
-      </button>
-      <p>
+      <h1> </h1>
+      <h2>{"Email verify page"}</h2>
+      <p></p>
+      <Alert
+        severity="warning"
+        sx={{ height: "60", t: "center", paddingLeft: "30%" }}
+      >
         Verifying email with ID: {iid} and hash: {hhash}
-      </p>
+      </Alert>
+      <Button color="warning" variant="contained" onClick={verified} disabled={isLoading}>
+        verifier
+      </Button>
     </div>
   );
 };
