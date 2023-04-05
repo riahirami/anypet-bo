@@ -1,24 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import { useAppDispatch } from "./app/hooks";
+import { useEffect } from "react";
+import { setUser } from "./features/authSlice";
+import EmailVerify from "./pages/emailVerify";
+import Signin from "./pages/signin";
+import Signup from "./pages/signup";
+import ResetPassword from "./pages/resetPassword";
 
 function App() {
+  const dispatch = useAppDispatch();
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+  useEffect(() => {
+    dispatch(setUser(user));
+  }, []);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Navigate to="/signin" replace />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/signin" element={<Signin />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/api/email/verify/:id/:hash" element={<EmailVerify />} />
+          <Route path="/api/reset-password" element={<ResetPassword />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
