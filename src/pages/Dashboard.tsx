@@ -53,13 +53,9 @@ function Dashboard() {
     isSuccess,
     isLoading,
   } = useProfileQuery(tokenValue.token);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  
 
-  useEffect(() => {
-    console.log(dataProfile);
-  }, [dataProfile]);
+
 
   const [
     logoutUser,
@@ -100,40 +96,12 @@ function Dashboard() {
     if (responseResend) setShowModal(true);
   }
 
-  const [
-    verifyEmail,
-    {
-      isLoading: verificationLoadig,
-      isSuccess: verificationSuccess,
-      isError: verificationError,
-    },
-  ] = useEmailVerificationMutation(tokenValue);
+ 
 
-  async function handleEmail() {
-    const url = window.location.href;
-    const parts = url.split("/");
-    const id = parts[5];
-    const hash = parts[6].split("?")[0];
-    console.log(id, hash);
-  }
-  const handleVerifyEmail = async (token: string, id: string, hash: string) => {
-    try {
-      // const result = await verifyEmail({ token, id, hash });
-      console.log(); // Do something with the successful response
-    } catch (error) {
-      console.error(error); // Handle any errors that occur during the mutation
-    }
-  };
+  
 
-  // function handleResetPassword(newEmail: string, newPassword: string, confirmNewPassword: string) {
-  function handleResetPassword(event: React.MouseEvent<HTMLButtonElement>) {
-    event.preventDefault();
-    const thisEmail = dataProfile?.user?.email;
-    const newPassword = password;
-    const confirmNewPassword = passwordConfirmation;
 
-    console.log(resetPassword);
-  }
+
   return (
     <>
       {isLoading && <Spinner />}

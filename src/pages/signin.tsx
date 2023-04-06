@@ -64,6 +64,8 @@ const Signin = () => {
     },
   ] = useLoginUserMutation();
 
+ 
+
   useEffect(() => {
     if (isLoginSuccess) {
       console.log("success login" + loginData.name);
@@ -109,7 +111,7 @@ const Signin = () => {
   }
   
   msg.message = responseForgotData
-    console.log( responseForgotData);
+  await console.log( responseForgotData);
   };
   return (
     <div>
