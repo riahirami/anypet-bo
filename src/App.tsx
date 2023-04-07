@@ -1,13 +1,10 @@
 import "./App.css";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
+import { BrowserRouter } from "react-router-dom";
 import { useAppDispatch } from "./app/hooks";
 import { useEffect } from "react";
 import { setUser } from "./features/authSlice";
-import EmailVerify from "./pages/emailVerify";
-import Signin from "./pages/signin";
-import Signup from "./pages/signup";
-import ResetPassword from "./pages/resetPassword";
+import { Router } from './components/Router';
+
 
 function App() {
   const dispatch = useAppDispatch();
@@ -18,16 +15,11 @@ function App() {
   }, []);
   return (
     <div className="App">
+     <div className="App">
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Navigate to="/signin" replace />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/signin" element={<Signin />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/api/email/verify/:id/:hash" element={<EmailVerify />} />
-          <Route path="/api/reset-password" element={<ResetPassword />} />
-        </Routes>
+          <Router />
       </BrowserRouter>
+    </div>
     </div>
   );
 }

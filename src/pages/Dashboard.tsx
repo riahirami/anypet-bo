@@ -12,35 +12,20 @@ import {
   useLogoutUserMutation,
   useProfileQuery,
   useResendEmailVerificationMutation,
-  useEmailVerificationMutation,
   useResetPasswordMutation,
 } from "../services/authApi";
-import {
-  Avatar,
-  AvatarGroup,
-  Box,
-  Button,
-  Grid,
-  List,
-  ListItemAvatar,
-  ListItemButton,
-  ListItemSecondaryAction,
-  ListItemText,
-  MenuItem,
-  TextField,
-  Typography,
-  Alert,
-  Stack,
-  AlertTitle,
-  Container,
-} from "@mui/material";
+import { Alert, AlertTitle, Container } from "@mui/material";
 import Spinner from "../components/spinner";
 import AlertDialogModal from "../components/AlertDialogModal";
-import Navbar from "../components/Navbar";
+// import {Navbar as MenuNavbar} from "../components/Navbar/Navbar"
+import { useTranslation } from "react-i18next";
+import { dashboard } from '../core/constant/dashboard';
+import { resendEmailVerification as ResendEmailVerificationMsg } from "../core/constant/resendEmailVerification";
 
 function Dashboard() {
-  const { name } = useAppSelector(selectAuth);
+  // const { name } = useAppSelector(selectAuth);
   const { token } = useAppSelector(selectAuth);
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const tokenValue = JSON.parse(localStorage.getItem("user") || "{}");
@@ -53,9 +38,8 @@ function Dashboard() {
     isSuccess,
     isLoading,
   } = useProfileQuery(tokenValue.token);
-  
 
-
+  const { login, name, email, phone } = dataProfile?.user ?? {};
 
   const [
     logoutUser,
@@ -96,17 +80,10 @@ function Dashboard() {
     if (responseResend) setShowModal(true);
   }
 
- 
-
-  
-
-
-
   return (
     <>
       {isLoading && <Spinner />}
-      <Navbar />
-      <div>Dahsboard</div>
+      <div>Dahsboard { dashboard.welcomeMsg}</div>
 
       {isError ? (
         <>
@@ -115,8 +92,7 @@ function Dashboard() {
             sx={{ height: "60", t: "center", paddingLeft: "30%" }}
           >
             <AlertTitle>Warning</AlertTitle>
-            Error access profile, —{" "}
-            <strong>check your email to verify your account !</strong>
+            {dashboard.checkEmailMsg}
           </Alert>
 
           <button
@@ -135,10 +111,10 @@ function Dashboard() {
           ) : errorResend ? (
             <Alert severity="error" sx={{ height: "60", textAlign: "center" }}>
               <AlertTitle>Error</AlertTitle>
-              This is an error alert — <strong>check it out!</strong>
+              {ResendEmailVerificationMsg.errorResendEmail}
             </Alert>
           ) : (
-            <p></p>
+            {}
           )}
         </>
       ) : (
@@ -146,21 +122,26 @@ function Dashboard() {
           Welcome {isSuccess && dataProfile?.user ? dataProfile.user.login : ""}
         </h2>
       )}
-      <ul>
-        {dataProfile?.user && (
-          <Container>
-            <React.Fragment>
-              <span>Username: {dataProfile.user.login}</span>
-              <p>Fullname: {dataProfile.user.name}</p>
-              <p>email: {dataProfile.user.email}</p>
-              <p>Phone: {dataProfile.user.phone}</p>
-            </React.Fragment>
-          </Container>
+ <div>
+ <ul>
+        {dataProfile?.user ? (
+          dataProfile?.user && (
+            <Container>
+                <p>Username: {login}</p>
+                <p>Fullname: {name}</p>
+                <p>email: {email}</p>
+                <p>Phone: {phone}</p>
+            </Container>
+          )
+        ) : (
+          <p>{t("profile.user_not_found")}</p>
         )}
       </ul>
       <button type="button" onClick={() => handleLogout()}>
         logout
       </button>
+ </div>
+      
     </>
   );
 }

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useRegistreUserMutation } from "../services/authApi";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../app/hooks";
 import { User } from "../models/user.model";
 import { RegisterResponse } from "../models/registreResponse.model";
+import { useRegistreUserMutation } from "../services/authApi";
 import { setUser, registre } from "../features/authSlice";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {
@@ -11,16 +11,12 @@ import {
   Button,
   CssBaseline,
   TextField,
-  FormControlLabel,
-  Checkbox,
   Grid,
   Link,
   Box,
   Typography,
   Container,
 } from "@mui/material";
-import Divider from "@mui/material/Divider";
-import Chip from "@mui/material/Chip";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 const theme = createTheme();
@@ -95,12 +91,8 @@ function Signup() {
     responseApi = await registreUser(userData).unwrap();
     const token: string | undefined = await responseApi.token;
 
-    if (!token) {
-      console.log("Token is undefined!");
-      console.log(responseApi.message);
-    } else {
+    if (token) {  
       await dispatch(registre({ user, token }));
-      console.log(responseApi.message);
     }
   };
 
