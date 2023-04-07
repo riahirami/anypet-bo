@@ -47,33 +47,30 @@ const ResetPassword = () => {
 
   const navigate = useNavigate();
 
-  //   const urlParams = new URLSearchParams(window.location.search);
-  //   const thisEmail = urlParams.get("email");
-  //   const token = urlParams.get("token");
-
   const url = window.location.href;
   const parts = url.split("=");
   const token = parts[1].split("?")[0];
   const thisEmail = parts[2].split("=")[0];
 
-  // function handleResetPassword(newEmail: string, newPassword: string, confirmNewPassword: string) {
+  // const params = useParams();
+  // const token = params.token as string ;
+  // const thisEmail = params.email  as string ;
+  
+
   async function handleResetPassword() {
     const newPassword = password;
     const confirmNewPassword = passwordConfirmation;
     const tokenRequest = token as string;
 
-    console.log(thisEmail, tokenRequest, newPassword, confirmNewPassword);
 
     if (password == passwordConfirmation)  {
       const dataResponse = await resetPassword({
-        // email: thisEmail as string,
         email: thisEmail,
         password: newPassword,
         password_confirmation: confirmNewPassword,
         token: tokenRequest,
       });
-      await console.log(dataResponse);
-   await    console.log(resetSuccess);
+   
       
       if(dataResponse)
       setShowModal(true);

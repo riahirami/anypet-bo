@@ -10,12 +10,11 @@ const EmailVerify = () => {
 
   const tokenValue = JSON.parse(localStorage.getItem("user") || "{}");
 
-  const { iid, hhash } = useParams();
+  const params = useParams();
 
-  const url = window.location.href;
-  const parts = url.split("/");
-  const id = parts[6];
-  const hash = parts[7].split("?")[0];
+  const id = params.id as string ;
+  const hash = params.hash  as string ;
+  
 
   async function verified() {
     const resultVerify = await verifyEmail({
