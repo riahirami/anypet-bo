@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { RootState } from "../app/store";
-import { User } from "../models/user.model";
-import {AuthState  } from "../models/authState.model";
-import {  RegisterResponse } from "../models/registreResponse.model";
+import { RootState } from "../store";
+import { User } from "../../core/models/user.model";
+import {AuthState  } from "../../core/models/authState.model";
+import {  RegisterResponse } from "../../core/models/registreResponse.model";
 
 
 

@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { useProfileQuery, useResetPasswordMutation } from "../services/authApi";
-import { ResetPasswordRequest } from "../models/resetPassword.model";
-import Spinner from "../components/spinner";
+import { useProfileQuery, useResetPasswordMutation } from "../redux/api/authApi";
+import Spinner from "../components/Spinner/spinner";
 import {
   Container,
   CssBaseline,
@@ -15,7 +14,7 @@ import {
   Divider,
   Chip,
 } from "@mui/material";
-import AlertDialogModal from "../components/AlertDialogModal";
+import CustomModal from "../components/Modal/CustomModal";
 
 const ResetPassword = () => {
   const [email, setEmail] = useState("");
@@ -25,6 +24,7 @@ const ResetPassword = () => {
   const tokenValue = JSON.parse(localStorage.getItem("user") || "{}");
 
   const [showModal, setShowModal] = useState(false);
+  const [descriptionModal, setDescriptionModal] = useState("");
 
   const [
     resetPassword,
@@ -74,6 +74,9 @@ const ResetPassword = () => {
       
       if(dataResponse)
       setShowModal(true);
+      
+       setDescriptionModal(resetData?.message)
+
     }
     // navigate("/signin");
   }
@@ -134,7 +137,10 @@ const ResetPassword = () => {
               Confirm
             </Button>
             {loadingReset && <Spinner />}
-            { showModal && <AlertDialogModal title="reset password" />}
+            { showModal && <CustomModal
+            title="Reset password"
+            description={descriptionModal}
+          />}
             <Grid item></Grid>
           </Box>
         </Box>

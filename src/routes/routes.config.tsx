@@ -1,4 +1,4 @@
-import RouteObject from "../models/RouteObject.model";
+import RouteObject from "../core/models/RouteObject.model";
 import Dashboard from "../pages/Dashboard";
 import EmailVerify from "../pages/emailVerify";
 import ResetPassword from "../pages/resetPassword";

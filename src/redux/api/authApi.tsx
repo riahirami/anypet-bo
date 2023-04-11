@@ -1,11 +1,11 @@
 import { AnyAsyncThunk } from "@reduxjs/toolkit/dist/matchers";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { User } from "../models/user.model";
-import { RegisterResponse } from "../models/registreResponse.model";
+import { User } from "../../core/models/user.model";
+import { RegisterResponse } from "../../core/models/registreResponse.model";
 import {
   ResetPasswordRequest,
   ResetPasswordResponse,
-} from "../models/resetPassword.model";
+} from "../../core/models/resetPassword.model";
 
 
 
@@ -34,7 +34,7 @@ export const authApi = createApi({
       },
       invalidatesTags: ["User"]
     }),
-    registreUser: builder.mutation<RegisterResponse, User>({
+    registreUser: builder.mutation({
       query: (body: User) => {
         return {
           url: "/register",
@@ -42,6 +42,7 @@ export const authApi = createApi({
           body,
         };
       },
+      
       invalidatesTags: ["User"],
     }),
     logoutUser: builder.mutation({
@@ -67,18 +68,15 @@ export const authApi = createApi({
       providesTags: ["User"],
     }),
 
-    forgotPassword: builder.mutation<string, string>({
+    forgotPassword: builder.mutation({
       query: (email) => ({
         url: "/forgot-password",
         method: "POST",
         body: { email },
       }),
-      invalidatesTags: ["User"],
+      // invalidatesTags: ["User"],
     }),
-    resetPassword: builder.mutation<
-      ResetPasswordResponse,
-      ResetPasswordRequest
-    >({
+    resetPassword: builder.mutation({
       query: ({ email, password, password_confirmation, token }) => ({
         url: "/reset-password",
         method: "POST",

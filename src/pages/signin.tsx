@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import {
   useLoginUserMutation,
   useForgotPasswordMutation,
-} from "../services/authApi";
+} from "../redux/api/authApi";
 import { Link as RouterLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../app/hooks";
-import { setUser } from "../features/authSlice";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useAppDispatch } from "../redux/hooks";
+import { setUser } from "../redux/slices/authSlice";
+import { createTheme } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/system";
+import Spinner from "../components/Spinner/spinner";
+
 import {
   Avatar,
   Button,
@@ -20,18 +23,13 @@ import {
   Box,
   Typography,
   Container,
+  Divider,
+  Chip
 } from "@mui/material";
-import Divider from "@mui/material/Divider";
-import Chip from "@mui/material/Chip";
-import { Modal } from "@mui/joy";
 
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import AlertDialogModal from "../components/AlertDialogModal";
-import { ResetPasswordResponse } from "../models/resetPassword.model";
+import CustomModal from "../components/Modal/CustomModal";
 
-export interface Rep {
-  message: string
-}
 
 const initialState = {
   name: "",
@@ -46,6 +44,7 @@ const initialState = {
 const theme = createTheme();
 const Signin = () => {
   const [showModal, setShowModal] = useState(false);
+  const [descriptionModal, setDescriptionModal] = useState("");
 
   const [formValue, setFormValue] = useState(initialState);
   const { name, login, email, password, phone, address, avatar } = formValue;
@@ -64,16 +63,12 @@ const Signin = () => {
     },
   ] = useLoginUserMutation();
 
- 
-
   useEffect(() => {
     if (isLoginSuccess) {
-      console.log("success login" + loginData.name);
       dispatch(setUser({ token: loginData.token, name: loginData.name }));
       navigate("/dashboard");
     }
     if (isLoginError) {
-      console.log("error login");
     }
   }, [isLoginSuccess, isLoginError]);
 
@@ -82,12 +77,9 @@ const Signin = () => {
   }
 
   const handleLogin = async () => {
-    // e.preventDefault();
-    if (email && password) {
+    if (email && password) 
       await loginUser({ email, password });
-    } else {
-      console.log("error ! fill all input please");
-    }
+   
   };
 
   const [
@@ -100,26 +92,26 @@ const Signin = () => {
     },
   ] = useForgotPasswordMutation();
 
-  const handleSubmitForgotPassword = async () => {
-    const responseForgot = await forgotPassword(email);
-   if (forgotSuccess) {
+  const handleSubmitForgotPassword =  async() => {
+    await forgotPassword(email);
     
-    setShowModal(true);
-  }
-  const msg: ResetPasswordResponse ={
-    message:""
-  }
-  
-  msg.message = responseForgotData
-  await console.log( responseForgotData);
+    if (responseForgotData) {
+      setDescriptionModal(responseForgotData?.message)
+      setShowModal(true);
+    }
   };
 
-  
   return (
     <div>
       {/* materrial ui */}
       <>
-      {showModal && <AlertDialogModal title="forgot password" />}
+        {showModal && (
+          <CustomModal
+            title="Forgot password"
+            description={descriptionModal}
+          />
+        )}
+      {forgotLoading && <Spinner />}
 
         <ThemeProvider theme={theme}>
           <Container component="main" maxWidth="xs">
@@ -163,7 +155,6 @@ const Signin = () => {
                 />
                 <Grid container>
                   <Grid item>
-
                     <Button
                       type="button"
                       onClick={handleSubmitForgotPassword}
@@ -200,7 +191,6 @@ const Signin = () => {
             </Box>
           </Container>
         </ThemeProvider>
-
       </>
     </div>
   );

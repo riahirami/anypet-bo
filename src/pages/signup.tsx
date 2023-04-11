@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../app/hooks";
-import { User } from "../models/user.model";
-import { RegisterResponse } from "../models/registreResponse.model";
-import { useRegistreUserMutation } from "../services/authApi";
-import { setUser, registre } from "../features/authSlice";
+import { useAppDispatch } from "../redux/hooks";
+import { User } from "../core/models/user.model";
+import { RegisterResponse } from "../core/models/registreResponse.model";
+import { useRegistreUserMutation } from "../redux/api/authApi";
+import { setUser, registre } from "../redux/slices/authSlice";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {
   Avatar,
@@ -18,6 +18,7 @@ import {
   Container,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import CustomModal from "../components/Modal/CustomModal";
 
 const theme = createTheme();
 
@@ -48,7 +49,8 @@ function Signup() {
 
   const { name, login, email, password, phone, address, avatar } = formValue;
   const user: User = { ...formValue };
-
+  const [showModal, setShowModal] = useState(false);
+  const [descriptionModal, setDescriptionModal] = useState("");
   const dispatch = useAppDispatch();
   const [
     registreUser,
@@ -69,11 +71,12 @@ function Signup() {
 
   useEffect(() => {
     if (isRegisterSuccess) {
-      console.log("error login");
-    }
-    if (isRegisterSuccess) {
-      console.log("success registre", registerData);
       navigate("/dashboard");
+    }
+    if (isRegisterError ) {     
+      setShowModal(true);
+      setDescriptionModal(registerData?.message);
+
     }
   }, [isRegisterSuccess, isRegisterError]);
 
@@ -91,16 +94,19 @@ function Signup() {
     responseApi = await registreUser(userData).unwrap();
     const token: string | undefined = await responseApi.token;
 
-    if (token) {  
+    if (token) {
       await dispatch(registre({ user, token }));
+      
     }
   };
 
   return (
     <div>
-     
       {/* material ui  */}
-      <div>
+      <div> { showModal && <CustomModal
+            title="Sign up"
+            description={descriptionModal}
+          />}
         <ThemeProvider theme={theme}>
           <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -118,18 +124,15 @@ function Signup() {
               <Typography component="h1" variant="h5">
                 Sign up
               </Typography>
-              <Box
-                component="form"
-                noValidate
-                sx={{ mt: 3 }}
-              >
+              <Box component="form" noValidate sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
                     <TextField
                       autoComplete="given-name"
                       name="name"
                       value={name}
-                      onChange={handleChangeForm}                      required
+                      onChange={handleChangeForm}
+                      required
                       fullWidth
                       id="firstName"
                       label=" Name"
@@ -144,7 +147,8 @@ function Signup() {
                       label="login"
                       name="login"
                       value={login}
-                      onChange={handleChangeForm}                      autoComplete="family-name"
+                      onChange={handleChangeForm}
+                      autoComplete="family-name"
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -204,7 +208,6 @@ function Signup() {
                       id="avatar"
                     />
                   </Grid>
-                
                 </Grid>
                 <Button
                   fullWidth

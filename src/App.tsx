@@ -1,8 +1,8 @@
 import "./App.css";
 import { BrowserRouter } from "react-router-dom";
-import { useAppDispatch } from "./app/hooks";
+import { useAppDispatch } from "./redux/hooks";
 import { useEffect } from "react";
-import { setUser } from "./features/authSlice";
+import { setUser } from "./redux/slices/authSlice";
 import { Router } from './components/Router';
 
 

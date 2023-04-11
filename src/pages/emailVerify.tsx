@@ -1,6 +1,6 @@
 import React from "react";
 import {  useNavigate, useParams } from "react-router-dom";
-import { useEmailVerificationMutation } from "../services/authApi";
+import { useEmailVerificationMutation } from "../redux/api/authApi";
 import { Alert, Button } from "@mui/material";
 
 const EmailVerify = () => {
