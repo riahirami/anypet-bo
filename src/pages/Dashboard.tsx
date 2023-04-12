@@ -18,7 +18,7 @@ import { Alert, AlertTitle, Container } from "@mui/material";
 import Spinner from "../components/Spinner/spinner";
 import { useTranslation } from "react-i18next";
 import { dashboard } from "../core/constant/dashboard";
-import { resendEmailVerification as ResendEmailVerificationMsg } from "../core/constant/resendEmailVerification";
+import {  resendEmailVerificationMsg } from "../core/constant/resendEmailVerification";
 import CustomModal from "../components/Modal/CustomModal";
 
 function Dashboard() {
@@ -78,7 +78,7 @@ function Dashboard() {
     const responseResend = await resendEmail(tokenValue);
     
     if (responseResend) {
-      setDescriptionModal(ResendEmailVerificationMsg.successResendEmail); 
+      setDescriptionModal(resendEmailVerificationMsg.successResendEmail); 
       setShowModal(true);}
   }
 
@@ -122,7 +122,7 @@ function Dashboard() {
               sx={{ height: "60", textAlign: "center" }}
             >
               <AlertTitle>Error</AlertTitle>
-              {ResendEmailVerificationMsg.errorResendEmail}
+              {resendEmailVerificationMsg.errorResendEmail}
             </Alert>
           ) : null}
         </div>
