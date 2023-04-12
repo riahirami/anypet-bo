@@ -1,33 +1,17 @@
-import { AnyAsyncThunk } from "@reduxjs/toolkit/dist/matchers";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { User } from "../../core/models/user.model";
-import { RegisterResponse } from "../../core/models/registreResponse.model";
-import {
-  ResetPasswordRequest,
-  ResetPasswordResponse,
-} from "../../core/models/resetPassword.model";
-
-
+import {endpoints} from "../../core/constant/endpoints";
+import {baseQueryConfig} from "./BaseQueryConfig";
 
 export const authApi = createApi({
   reducerPath: "authApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost/api",
-    prepareHeaders: (headers, { getState }: any) => {
-      const token = getState().auth.token;
-      if (token) {
-        headers.set("authorization", `Bearer ${token}`);
-        return headers;
-      }
-      return headers.set("authorization", "");
-    },
-  }),
+  baseQuery: fetchBaseQuery(baseQueryConfig),
   tagTypes: ["User"],
   endpoints: (builder) => ({
     loginUser: builder.mutation({
       query: (body: { email: string; password: string }) => {
         return {
-          url: "/login",
+          url: endpoints.loginUserUrl,
           method: "post",
           body,
         };
@@ -37,7 +21,7 @@ export const authApi = createApi({
     registreUser: builder.mutation({
       query: (body: User) => {
         return {
-          url: "/register",
+          url: endpoints.registreUserUrl,
           method: "post",
           body,
         };
@@ -48,7 +32,7 @@ export const authApi = createApi({
     logoutUser: builder.mutation({
       query: (body: { token: string }) => {
         return {
-          url: "/auth/logout",
+          url: endpoints.logoutUserUrl,
           method: "post",
           body,
         };
@@ -58,7 +42,7 @@ export const authApi = createApi({
     profile: builder.query<{ message: string; user?: User }, string>({
       query: (token: string) => {
         return {
-          url: "/profile",
+          url: endpoints.profileUrl,
           method: "post",
           body: {
             token: token,
@@ -70,15 +54,15 @@ export const authApi = createApi({
 
     forgotPassword: builder.mutation({
       query: (email) => ({
-        url: "/forgot-password",
+        url: endpoints.forgotPasswordUrl,
         method: "POST",
         body: { email },
       }),
-      // invalidatesTags: ["User"],
+       invalidatesTags: ["User"],
     }),
     resetPassword: builder.mutation({
       query: ({ email, password, password_confirmation, token }) => ({
-        url: "/reset-password",
+        url: endpoints.resetPasswordUrl,
         method: "POST",
         body: { email, password, password_confirmation, token },
       }),
@@ -89,13 +73,13 @@ export const authApi = createApi({
       { token: string; id: string; hash: string }
     >({
       query: ({ token, id, hash }) => ({
-        url: `/email/verify/${id}/${hash}`,
+        url: endpoints.emailVerificationUrl+`${id}/${hash}`,
         method: "GET",
       }),
     }),
     resendEmailVerification: builder.mutation<string, { token: string }>({
       query: ({ token }) => ({
-        url: "/email/resend-verification",
+        url: endpoints.resendEmailVerificationUrl,
         method: "POST",
         body: { token },
       }),

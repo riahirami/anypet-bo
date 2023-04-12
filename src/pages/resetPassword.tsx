@@ -1,6 +1,9 @@
 import React, { useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { useProfileQuery, useResetPasswordMutation } from "../redux/api/authApi";
+import { Navigate, useNavigate, useParams,useLocation  } from "react-router-dom";
+import {
+  useProfileQuery,
+  useResetPasswordMutation,
+} from "../redux/api/authApi";
 import Spinner from "../components/Spinner/spinner";
 import {
   Container,
@@ -15,6 +18,7 @@ import {
   Chip,
 } from "@mui/material";
 import CustomModal from "../components/Modal/CustomModal";
+import { resetPasswordMsg } from "../core/constant/resetPassword";
 
 const ResetPassword = () => {
   const [email, setEmail] = useState("");
@@ -52,38 +56,38 @@ const ResetPassword = () => {
   const token = parts[1].split("?")[0];
   const thisEmail = parts[2].split("=")[0];
 
-  // const params = useParams();
-  // const token = params.token as string ;
-  // const thisEmail = params.email  as string ;
-  
+
 
   async function handleResetPassword() {
     const newPassword = password;
     const confirmNewPassword = passwordConfirmation;
     const tokenRequest = token as string;
 
-
-    if (password == passwordConfirmation)  {
+    if (password == passwordConfirmation) {
       const dataResponse = await resetPassword({
         email: thisEmail,
         password: newPassword,
         password_confirmation: confirmNewPassword,
         token: tokenRequest,
       });
-   
-      
-      if(dataResponse)
-      setShowModal(true);
-      
-       setDescriptionModal(resetData?.message)
 
+      if (dataResponse) {
+        setShowModal(true);
+        if (!resetData?.message)
+          setDescriptionModal(resetPasswordMsg.errorResetPassword);
+        else 
+        setDescriptionModal(resetData?.message);
+      }
     }
-    // navigate("/signin");
+    else 
+    {
+      setShowModal(true);
+      setDescriptionModal(resetPasswordMsg.passwordNotMatch);
+    }
   }
 
   return (
     <div>
-
       {/* mui */}
 
       <Container component="main" maxWidth="xs">
@@ -137,10 +141,12 @@ const ResetPassword = () => {
               Confirm
             </Button>
             {loadingReset && <Spinner />}
-            { showModal && <CustomModal
-            title="Reset password"
-            description={descriptionModal}
-          />}
+            {showModal && (
+              <CustomModal
+                title="Reset password"
+                description={descriptionModal}
+              />
+            )}
             <Grid item></Grid>
           </Box>
         </Box>

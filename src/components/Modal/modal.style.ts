@@ -3,11 +3,6 @@ import { styled, createTheme } from '@mui/system';
 import { Modal, Button, Typography } from '@mui/material';
 
 
-interface ModalProps {
-  open: boolean;
-  onClose: () => void;
-}
-
 export const CoreModal = styled(Modal)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -31,10 +26,10 @@ export const CustomButton = styled(Button)(({ theme }) => ({
     boxShadow: 'none',
   },
   position: 'absolute',
-  top: 0, 
-  right: 0, 
-  minWidth: 'auto', 
-  padding: '0.2rem 0.5rem', 
+  top: 0,
+  right: 0,
+  minWidth: 'auto',
+  padding: '0.2rem 0.5rem',
   fontSize: '0.8rem',
   borderRadius: 0,
   boxShadow: 'none',
