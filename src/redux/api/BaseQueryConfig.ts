@@ -1,7 +1,7 @@
 import { CONFIG } from "../../config";
 
 export const baseQueryConfig = {
-    baseUrl: CONFIG.BASE_URL_API+"api",
+    baseUrl: CONFIG.BASE_URL_API,
     prepareHeaders: (headers:any, { getState }: any) => {
       const token = getState().auth.token;
       if (token) {
