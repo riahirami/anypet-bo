@@ -12,7 +12,7 @@ export const authApi = createApi({
       query: (body: { email: string; password: string }) => {
         return {
           url: endpoints.loginUserUrl,
-          method: "post",
+          method: "POST",
           body,
         };
       },
