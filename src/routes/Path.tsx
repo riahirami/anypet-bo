@@ -4,4 +4,12 @@ export const PATHS = {
     DASHBOARD: '/dashboard',
     EmailVerify: '/api/email/verify/:id/:hash',
     ResetPassword: '/api/reset-password',
+    Categories: '/categories',
+    AddCategories: '/addcategory',
+    showCategory: '/categoryshow/:id',
+    Advertise: '/Advertise/',
+    AddAdvertise: '/addadvertise/',
+    showAdvertise: '/advertise/:id',
+    updateAdvertise: '/advertise/update/:id',
+    adsByCategory: '/advertise/category/:id',
 }

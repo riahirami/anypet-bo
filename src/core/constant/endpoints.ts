@@ -9,4 +9,9 @@ export const endpoints = {
     emailVerificationUrl: "api/email/verify/",
     resendEmailVerificationUrl: "api/email/resend-verification",
 
+    Categories: "categories/",
+
+
+    Ads:"ads/",
+    AdsByCategory:"ads/category/",
 }
