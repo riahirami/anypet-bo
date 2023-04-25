@@ -1,6 +1,6 @@
 import React from "react";
 import {  useNavigate, useParams } from "react-router-dom";
-import { useEmailVerificationMutation } from "../redux/api/authApi";
+import { useEmailVerificationMutation } from "../../redux/api/authApi";
 import { Alert, Button } from "@mui/material";
 
 const EmailVerify = () => {
@@ -24,7 +24,7 @@ const EmailVerify = () => {
     });
 
     if (data) {
-      navigate("/dashboard");
+      navigate("/profile");
     }
   }
 
@@ -35,7 +35,7 @@ const EmailVerify = () => {
         severity="warning"
         sx={{ height: "60", t: "center", paddingLeft: "30%" }}
       >
-        You're redirected by an email verficiation to verify your account ! 
+        You're redirected by an email verification to verify your account ! 
       </Alert>
       <Button color="warning" variant="contained" onClick={verified} disabled={isLoading}>
         Validate

@@ -14,4 +14,6 @@ export const endpoints = {
 
     Ads:"ads/",
     AdsByCategory:"ads/category/",
+    AdsByDate:"ads/date/",
+    
 }

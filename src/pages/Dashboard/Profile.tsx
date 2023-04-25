@@ -1,27 +1,27 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
   logout,
   selectAuth,
   resendEmailVerification,
-} from "../redux/slices/authSlice";
-import { authApi } from "../redux/api/authApi";
+} from "../../redux/slices/authSlice";
 import {
   useLogoutUserMutation,
   useProfileQuery,
   useResendEmailVerificationMutation,
   useResetPasswordMutation,
-} from "../redux/api/authApi";
+} from "../../redux/api/authApi";
 import { Alert, AlertTitle, Container } from "@mui/material";
-import Spinner from "../components/Spinner/spinner";
+import Spinner from "../../components/Spinner/spinner";
 import { useTranslation } from "react-i18next";
-import { dashboard } from "../core/constant/dashboard";
-import {  resendEmailVerificationMsg } from "../core/constant/resendEmailVerification";
-import CustomModal from "../components/Modal/CustomModal";
+import { dashboard } from "../../core/constant/dashboard";
+import { resendEmailVerificationMsg } from "../../core/constant/resendEmailVerification";
+import CustomModal from "../../components/Modal/CustomModal";
 
-function Dashboard() {
+
+function Profile() {
   // const { name } = useAppSelector(selectAuth);
   const { token } = useAppSelector(selectAuth);
   const { t } = useTranslation();
@@ -34,7 +34,6 @@ function Dashboard() {
   const {
     data: dataProfile,
     isError,
-    isFetching,
     isSuccess,
     isLoading,
   } = useProfileQuery(tokenValue.token);
@@ -76,17 +75,18 @@ function Dashboard() {
 
   async function handleResendEmail() {
     const responseResend = await resendEmail(tokenValue);
-    
+
     if (responseResend) {
-      setDescriptionModal(resendEmailVerificationMsg.successResendEmail); 
-      setShowModal(true);}
+      setDescriptionModal(resendEmailVerificationMsg.successResendEmail);
+      setShowModal(true);
+    }
   }
 
   return (
     <>
       {isLoading && <Spinner />}
-      <div>Dahsboard {dashboard.welcomeMsg}</div>
-  
+     
+      <div>Dashboard {dashboard.welcomeMsg}</div>
       {isError && (
         <div>
           <Alert
@@ -96,7 +96,7 @@ function Dashboard() {
             <AlertTitle>Warning</AlertTitle>
             {dashboard.checkEmailMsg}
           </Alert>
-  
+
           <button
             type="button"
             onClick={() => handleResendEmail()}
@@ -108,26 +108,25 @@ function Dashboard() {
             logout
           </button>
           {loadingResend && <Spinner />}
-  
+
           {loadingResend ? (
             <Spinner />
           ) : successResend ? (
-            showModal &&  <CustomModal
-            title="Verification email"
-            description={descriptionModal}
-           />
+            showModal && (
+              <CustomModal
+                title="Verification email"
+                description={descriptionModal}
+              />
+            )
           ) : errorResend ? (
-            <Alert
-              severity="error"
-              sx={{ height: "60", textAlign: "center" }}
-            >
+            <Alert severity="error" sx={{ height: "60", textAlign: "center" }}>
               <AlertTitle>Error</AlertTitle>
               {resendEmailVerificationMsg.errorResendEmail}
             </Alert>
           ) : null}
         </div>
       )}
-  
+
       {!isError && isSuccess && dataProfile?.user && (
         <>
           <h2>Welcome {login}</h2>
@@ -142,13 +141,12 @@ function Dashboard() {
           </button>
         </>
       )}
-  
+
       {!isError && (!isSuccess || !dataProfile?.user) && (
         <p>{t("profile.user_not_found")}</p>
       )}
     </>
   );
-  
 }
 
-export default Dashboard;
+export default Profile;

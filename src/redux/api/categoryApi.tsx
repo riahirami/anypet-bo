@@ -9,15 +9,19 @@ export const categoryApi = createApi({
     baseQuery: fetchBaseQuery(baseQueryConfig),
     tagTypes: ["Category"],
     endpoints: (builder) => ({
-        getCategories: builder.query<CategoryData, void>({
-            query :()=> {
+        getCategories: builder.query<CategoryData, number>({
+            query : (page) => `${endpoints.Categories}?page=${page}`,
+            providesTags: ["Category"]
+         }),
+         getAllCategories: builder.query<CategoryData, number>({
+            query : (perpage) => {
                 return {
-                    url : endpoints.Categories,
+                    url : `${endpoints.Categories}?perpage=${perpage}`,
                     method: "get",
-                };
+                 };
             },
             providesTags: ["Category"]
-        }),
+         }),
         addCategory: builder.mutation({
             query : ({title,description}) => {
                 return {
@@ -59,4 +63,4 @@ export const categoryApi = createApi({
 
 })
 
-export const {useGetCategoriesQuery,useGetCategoryByIdQuery,useAddCategoryMutation,useUpdateCategoryMutation,useDeleteCategoryMutation} = categoryApi;
+export const {useGetCategoriesQuery, useGetAllCategoriesQuery,useGetCategoryByIdQuery,useAddCategoryMutation,useUpdateCategoryMutation,useDeleteCategoryMutation} = categoryApi;
