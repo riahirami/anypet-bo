@@ -71,7 +71,7 @@ function Signup() {
 
   useEffect(() => {
     if (isRegisterSuccess) {
-      navigate("/dashboard");
+      navigate("/profile");
     }
     if (isRegisterError ) {     
       setShowModal(true);

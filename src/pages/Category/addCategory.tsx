@@ -1,12 +1,20 @@
-import { Button, TextField } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import { useAddCategoryMutation } from "../../redux/api/categoryApi";
 import { Category } from "../../core/models/category.model";
 import CustomModal from "../../components/Modal/CustomModal";
 import Spinner from "../../components/Spinner/spinner";
+import {CustomTextField,StyledButton} from './category.style'; 
 
 const AddCategory = () => {
-    const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const item: Category = {
     title: "",
@@ -25,58 +33,54 @@ const AddCategory = () => {
   }
 
   const handleAddcategory = async () => {
-    setShowModal(true);
-
     await addCategory({ title, description });
-
-  
-};
+     setShowModal(isSuccess);
+  };
 
   return (
     <div>
-      <h3>add Category</h3>
+      <Typography align="left">Add category</Typography>
 
       {isLoading && <Spinner />}
 
       {showModal && (
-              <CustomModal
-                title="Add"
-                description="category added succeffully"
-              />
-            )}  
+        <CustomModal title="Add" description="category added succeffully" />
+      )}
       <form>
-        <TextField
-          style={{ width: "200px", margin: "5px" }}
-          type="text"
+        <CustomTextField
+          id="title"
           label="title"
           name="title"
-          id="title"
-          variant="outlined"
           onChange={handleChangeForm}
+          color="primary"
+          helperText="Please enter a title"
+          fullWidth
         />
         <br />
-        <TextField
-          style={{ width: "200px", margin: "5px" }}
-          type="text"
-          name="description"
-          label=" description"
+
+        <CustomTextField
           id="description"
-          variant="outlined"
+          label="description"
+          name="description"
           onChange={handleChangeForm}
+          color="primary"
+          helperText="Please enter a description"
+          fullWidth
+          multiline
+          rows={4}
         />
 
         <br />
-
-        <Button
-          
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-          type="button"
-          onClick={() => handleAddcategory()}
-          disabled={isLoading}
-        >
-          save
-        </Button>
+        <div style={{ display: "flex", justifyContent: "left" }}>
+          <StyledButton size="large"
+            variant="contained"
+            type="button"
+            onClick={handleAddcategory}
+            disabled={isLoading}
+          >
+            save
+          </StyledButton>
+        </div>
       </form>
     </div>
   );

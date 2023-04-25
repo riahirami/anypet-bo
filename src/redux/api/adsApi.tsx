@@ -1,24 +1,16 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 import { baseQueryConfig } from "./BaseQueryConfig";
 import { endpoints } from "../../core/constant/endpoints";
-import { Ad } from "../../core/models/ad.model";
-interface AdData {
-  current_page: number;
-  data: Ad[]; // Remplacer `any` avec le type spécifique de vos données.
-  first_page_url: string;
-  from: number;
-  last_page: number;
-  // Ajouter d'autres propriétés si nécessaire.
-}
+import { Ad, AdData } from "../../core/models/ad.model";
+
 export const adsApi = createApi({
   reducerPath: "adsApi",
   baseQuery: fetchBaseQuery(baseQueryConfig),
   tagTypes: ["Ad"],
   endpoints: (builder) => ({
-    getAds: builder.query<AdData, void>({
-      query: () => endpoints.Ads,
-      providesTags: ["Ad"]
-
+    getAds: builder.query<AdData, number>({
+      query: (page) => `${endpoints.Ads}?page=${page}`,
+      providesTags: ["Ad"],
     }),
     addAd: builder.mutation({
       query: ({
@@ -60,7 +52,7 @@ export const adsApi = createApi({
         category_id,
       }) => ({
         url: `${endpoints.Ads}${id}`,
-        method: 'PUT',
+        method: "PUT",
         body: {
           title,
           description,
@@ -87,9 +79,8 @@ export const adsApi = createApi({
         return {
           url: endpoints.Ads + `${id}`,
           method: "get",
-          providesTags: ["Ad"]
-
-        };    
+          providesTags: ["Ad"],
+        };
       },
     }),
     getAdsByCategory: builder.query({
@@ -97,9 +88,16 @@ export const adsApi = createApi({
         return {
           url: endpoints.AdsByCategory + `${id}`,
           method: "get",
-          providesTags: ["Ad"]
-
-        };    
+          providesTags: ["Ad"],
+        };
+      },
+    }),
+    getAdsByDate: builder.query({
+      query: (date: any) => {
+        return {
+          url: `${endpoints.AdsByDate}${date}`,
+          method: "get",
+        };
       },
     }),
   }),
@@ -111,5 +109,6 @@ export const {
   useAddAdMutation,
   useGetAdByIdQuery,
   useUpdateAdMutation,
-  useGetAdsByCategoryQuery
+  useGetAdsByCategoryQuery,
+  useGetAdsByDateQuery,
 } = adsApi;

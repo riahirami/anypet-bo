@@ -3,8 +3,8 @@ import { Navigate, useNavigate, useParams,useLocation  } from "react-router-dom"
 import {
   useProfileQuery,
   useResetPasswordMutation,
-} from "../redux/api/authApi";
-import Spinner from "../components/Spinner/spinner";
+} from "../../redux/api/authApi";
+import Spinner from "../../components/Spinner/spinner";
 import {
   Container,
   CssBaseline,
@@ -17,8 +17,8 @@ import {
   Divider,
   Chip,
 } from "@mui/material";
-import CustomModal from "../components/Modal/CustomModal";
-import { resetPasswordMsg } from "../core/constant/resetPassword";
+import CustomModal from "../../components/Modal/CustomModal";
+import { resetPasswordMsg } from "../../core/constant/resetPassword";
 
 const ResetPassword = () => {
   const [email, setEmail] = useState("");

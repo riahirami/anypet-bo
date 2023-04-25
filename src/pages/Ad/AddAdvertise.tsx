@@ -1,10 +1,9 @@
-import { Button, TextField } from "@mui/material";
+import { Button, FormControl, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { Ad } from "../../core/models/ad.model";
 import CustomModal from "../../components/Modal/CustomModal";
 import Spinner from "../../components/Spinner/spinner";
 import { useAddAdMutation } from "../../redux/api/adsApi";
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,8 +12,8 @@ import {
   getCategories,
   categorySlice,
 } from "../../redux/slices/categorySlice";
-import { RootState } from "../../redux/store";
-import GetCategories from "../../components/getter/getCategories";
+import {CityFormControl,CustomTextField,PostalFormControl,StateFormControl,StreetFormControl,StyledButton} from './Advertise.style'; 
+import { useGetAllCategoriesQuery } from "../../redux/api/categoryApi";
 
 const AddAdvertise = () => {
   const [showModal, setShowModal] = useState(false);
@@ -43,18 +42,17 @@ const AddAdvertise = () => {
     postal_code,
     category_id,
   } = ad;
+  const { data: dataAllCategory } = useGetAllCategoriesQuery(100);
 
-  const categories = useSelector(selectCategory);
-  console.log({ categories });
+  // const categories = useSelector(selectCategory);
+  const categories = dataAllCategory?.data;
 
   function handleChangeForm(e: any) {
     const { name, value } = e.target;
     setAd((prevData) => ({ ...prevData, [name]: value }));
   }
 
-  const handleAddcategory = async () => {
-    setShowModal(true);
-
+  const handleAddAd = async () => {
     await addAdvertise({
       title,
       description,
@@ -65,11 +63,18 @@ const AddAdvertise = () => {
       postal_code,
       category_id,
     });
+    setShowModal(true);
+  };
+  const handleSelected = (event: any) => {
+    event.preventDefault();
+    const selectedItemId: string = event.target.value as string;
+    setAd({ ...ad, category_id: selectedItemId });
+    console.log(selectedItemId);
   };
 
   return (
     <div>
-      <h3>add advertise</h3>
+      <Typography align="left">Add advertise</Typography>
 
       {isLoading && <Spinner />}
 
@@ -77,105 +82,119 @@ const AddAdvertise = () => {
         <CustomModal title="Add" description="advertise added succeffully" />
       )}
       <form>
-        <TextField
-          style={{ width: "200px", margin: "5px" }}
+        <CustomTextField
           type="text"
           label="title"
           name="title"
           id="title"
           variant="outlined"
           onChange={handleChangeForm}
+          fullWidth
+          helperText="Please enter a valide title"
         />
-        <br />
-        <TextField
-          style={{ width: "200px", margin: "5px" }}
+        <CustomTextField
+          select
+          name="category_id"
+          id="category_id"
+          fullWidth
+          label="Category"
+          onChange={handleSelected}
+          helperText="Please choose a category of your advertise"
+
+        >
+          {categories?.map((category) => (
+            <MenuItem key={category.id} value={category.id}>
+              {category.title}
+            </MenuItem>
+          ))}
+        </CustomTextField>
+        <CustomTextField
           type="text"
           name="description"
           label=" description"
           id="description"
           variant="outlined"
           onChange={handleChangeForm}
+          fullWidth
+          helperText="Please enter a real description"
+          multiline
+          rows={4}
+          maxRows={5}
+
         />
-        <br />
-        <TextField
-          style={{ width: "200px", margin: "5px" }}
+
+        <CustomTextField
           type="text"
           name="country"
           label="country"
           id="country"
           variant="outlined"
           onChange={handleChangeForm}
+          fullWidth
+          margin="normal"
+          helperText="Please enter a valide country"
         />
 
-        <br />
-        <TextField
-          style={{ width: "200px", margin: "5px" }}
+
+      <StateFormControl variant="filled">
+        <CustomTextField
           type="text"
           name="state"
           label="state"
           id="state"
           variant="outlined"
           onChange={handleChangeForm}
+          fullWidth
+          helperText="Please enter a valid state"
         />
-
-        <br />
-        <TextField
-          style={{ width: "200px", margin: "5px" }}
+      </StateFormControl>
+      <CityFormControl variant="filled">
+        <CustomTextField
           type="text"
           name="city"
           label="city"
           id="city"
           variant="outlined"
           onChange={handleChangeForm}
+          fullWidth
+          helperText="Please enter a valid city"
         />
-
-        <br />
-        <TextField
-          style={{ width: "200px", margin: "5px" }}
+      </CityFormControl>
+      <StreetFormControl variant="filled">
+        <CustomTextField
           type="text"
           name="street"
           label="street"
           id="street"
           variant="outlined"
           onChange={handleChangeForm}
+          fullWidth
+          helperText="Please enter a valid street"
         />
-        <br />
-        <TextField
-          style={{ width: "200px", margin: "5px" }}
+      </StreetFormControl>
+      <PostalFormControl variant="filled">
+        <CustomTextField
           type="text"
           name="postal_code"
           label="postal_code"
           id="postal_code"
           variant="outlined"
           onChange={handleChangeForm}
+          fullWidth
+          helperText="Please enter a valid postal code"
         />
+      </PostalFormControl>
 
-        <br />
-        <TextField
-          style={{ width: "200px", margin: "5px" }}
-          type="text"
-          name="category_id"
-          label="category_id"
-          id="category_id"
-          variant="outlined"
-          onChange={handleChangeForm}
-        />
-
-        <br />
-        <GetCategories />
-
-        <br />
-        <Button
+        <StyledButton
           variant="contained"
-          sx={{ mt: 3, mb: 2 }}
           type="button"
-          onClick={() => handleAddcategory()}
+          onClick={() => handleAddAd()}
           disabled={isLoading}
+          
         >
           save
-        </Button>
+        </StyledButton>
       </form>
-     
     </div>
   );
 };

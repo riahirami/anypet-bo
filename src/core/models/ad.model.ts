@@ -11,9 +11,10 @@ export interface Ad {
 }
 
 
+
 export interface AdData {
   current_page: number;
-  data: Ad[];
+  data: Ad[]; 
   first_page_url: string;
   from: number;
   last_page: number;

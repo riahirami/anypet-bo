@@ -22,9 +22,8 @@ const AdsByCategory = () => {
       <Grid item xs={12} md={6}>
         {isLoading && <Spinner />}
 
-        <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-          Advertise of category {id}
-        </Typography>
+        <Typography align="left">Advertise of category {id}</Typography>
+
         {isLoading ? (
           <p>loading ...</p>
         ) : isSuccess ? (

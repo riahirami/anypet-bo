@@ -19,9 +19,8 @@ const AdDetails = () => {
     <Grid item xs={12} md={6}>
       {isLoading && <Spinner />}
 
-      <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-        Advertise
-      </Typography>
+      <Typography align="left">Advertise {id}</Typography>
+
       <p>{adData?.title}</p>
       <p>{adData?.description}</p>
       <p>{adData?.country}</p>

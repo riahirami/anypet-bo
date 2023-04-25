@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.App {
+  display: flex;
+}
+
+.router-container {
+ flex: 4;
+}
+
+.playground-container {
+  flex: 1; /* Set playground container to 25% width */
+  display: flex;
+  flex-direction: column;}
