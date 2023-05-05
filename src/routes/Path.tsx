@@ -3,6 +3,7 @@ export const PATHS = {
     SIGNUP: '/signup',
     DASHBOARD: '/dashboard',
     PROFILE: '/profile',
+    PROFILEUpdate: '/profile/update',
     EmailVerify: '/api/email/verify/:id/:hash',
     ResetPassword: '/api/reset-password',
     Categories: '/categories',
@@ -13,4 +14,8 @@ export const PATHS = {
     showAdvertise: '/advertise/:id',
     updateAdvertise: '/advertise/update/:id',
     adsByCategory: '/advertise/category/:id',
+    ManageAds: '/advertisesRequests',
+    Stats: '/stats',
+    StatsHome: '/stats/home',
+    Users: '/users',
 }

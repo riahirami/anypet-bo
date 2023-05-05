@@ -8,6 +8,9 @@ export interface Ad {
   street: string
   postal_code: string
   category_id: string
+  created_at?:string
+  updated_at?:string
+  status?:string
 }
 
 

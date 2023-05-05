@@ -1,0 +1,158 @@
+import React from "react";
+import { useState } from "react";
+
+import {
+  useForgotPasswordMutation,
+  useUpdateAvatarMutation,
+} from "../../../redux/api/authApi";
+import { Button, TextField, Box, Tab } from "@mui/material";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import Spinner from "../../../components/Spinner/spinner";
+import CustomModal from "../../../components/Modal/CustomModal";
+import AlertComponent from "../../../components/Alert/Alert";
+
+const initialState = {
+  name: "",
+  email: "",
+  login: "",
+  phone: "",
+  address: "",
+  avatar: "",
+  password: "",
+};
+
+const Update = () => {
+  const [avatarImg, setAvatarImg] = useState<File | null>(null);
+
+  const [value, setValue] = React.useState("1");
+  const [showModal, setShowModal] = useState(false);
+  const [descriptionModal, setDescriptionModal] = useState("");
+
+  const [formValue, setFormValue] = useState(initialState);
+  const { name, login, email, password, phone, address, avatar } = formValue;
+
+  const [
+    updateAvatar,
+    {
+      data: avatarData,
+      isSuccess: avatarSuccess,
+      isError: avatarError,
+      isLoading: AvatarLoading,
+    },
+  ] = useUpdateAvatarMutation();
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
+
+  const handleChangeFormAvatar = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const imgFile = event?.target?.files?.[0];
+    if (imgFile) {
+      setAvatarImg(imgFile);
+    }
+  };
+
+  const handleAddAvatar = async () => {
+    console.log("Avatar image:", avatarImg);
+    const formData = new FormData();
+    if (avatarImg) {
+      formData.append("avatar", avatarImg);
+      updateAvatar(formData)
+        .unwrap()
+        .then(() => {
+          setShowModal(true);
+        });
+    }
+  };
+
+  const [
+    forgotPassword,
+    {
+      data: responseForgotData,
+      isLoading: forgotLoading,
+      isSuccess: forgotSuccess,
+      error: forgotError,
+    },
+  ] = useForgotPasswordMutation();
+
+  function handleChangeForm(e: any) {
+    setFormValue({ ...formValue, [e.target.name]: e.target.value });
+  }
+
+  // TODO: check for undefined on the first click
+  const handleSubmitForgotPassword = async () => {
+    await forgotPassword(email);
+
+    if (responseForgotData) {
+      setDescriptionModal(responseForgotData?.message);
+      setShowModal(true);
+    }
+  };
+  return (
+    <div>
+      {forgotLoading && <Spinner />}
+      {avatarSuccess && (
+        <AlertComponent
+          title="your avatar changed succeffully"
+          severity="success"
+        />
+      )}
+
+      <Box sx={{ width: "100%", typography: "body1" }}>
+        <TabContext value={value}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <TabList onChange={handleChange} aria-label="lab API tabs example">
+              <Tab label="Update Avatar" value="1" />
+              <Tab label="Change password" value="2" />
+              <Tab label="Item Three" value="3" />
+            </TabList>
+          </Box>
+          <TabPanel value="1">
+            {" "}
+            <TextField
+              label="Avatar"
+              color="primary"
+              type="file"
+              onChange={handleChangeFormAvatar}
+            />
+            <Button
+              variant="contained"
+              size="large"
+              type="button"
+              disabled={AvatarLoading}
+              onClick={handleAddAvatar}
+            >
+              save
+            </Button>
+          </TabPanel>
+          <TabPanel value="2">
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              onChange={handleChangeForm}
+              autoFocus
+            />
+            <Button
+              type="button"
+              onClick={handleSubmitForgotPassword}
+              variant="contained"
+              disabled={forgotLoading}
+            >
+              Reset Password
+            </Button>
+          </TabPanel>
+          <TabPanel value="3">Item Three</TabPanel>
+        </TabContext>
+      </Box>
+    </div>
+  );
+};
+
+export default Update;

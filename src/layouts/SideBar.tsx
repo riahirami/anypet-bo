@@ -24,8 +24,8 @@ import { Calendar } from "../icons/Calendar";
 import { PATHS } from "../routes/Path";
 import { Link } from "react-router-dom";
 
-import {Typography} from '@mui/material'
-export type Theme = "light" | "dark";
+import { Theme } from "../core/enums";
+// export type Theme = "light" | "dark";
 
 export const themes = {
   light: {
@@ -73,33 +73,21 @@ const hexToRgba = (hex: string, alpha: number) => {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
 
-export const Playground: React.FC = () => {
+interface Props {
+  mode: Theme;
+  handleThemeChange: () => void;
+}
+
+export const Playground: React.FC<Props> = ({
+  mode: theme,
+  handleThemeChange,
+}) => {
   const { toggleSidebar, collapseSidebar, broken, collapsed } = useProSidebar();
 
   const [isRTL, setIsRTL] = useState<boolean>(false);
   const [hasImage, setHasImage] = useState<boolean>(false);
-  const DarkLight = localStorage.getItem("theme") as Theme;
-  const [theme, setTheme] = useState<Theme> (DarkLight);
 
-  // handle on RTL change event
-  const handleRTLChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsRTL(e.target.checked);
-  };
 
-  useEffect(()=>{
-    const DarkLight = localStorage.getItem("theme") as Theme;
-    setTheme(DarkLight);
-    console.log("sidbar theme:"+DarkLight)
-  },[])
-
-  // handle on theme change event
-  // const handleThemeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setTheme(e.target.checked ? "dark" : "light");
-  //   console.log({theme});
-  //   localStorage.setItem("theme",theme);
-  // };
-
-  // handle on image change event
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setHasImage(e.target.checked);
   };
@@ -152,14 +140,7 @@ export const Playground: React.FC = () => {
         direction: isRTL ? "rtl" : "ltr",
       }}
     >
-        <div style={{ marginBottom: 16 }}>
-              {/* <Switch
-                id="theme"
-                checked={theme === "dark"}
-                onChange={handleThemeChange}
-                label="Dark theme"
-              /> */}
-            </div>
+     
       <Sidebar
         image="https://user-images.githubusercontent.com/25878302/144499035-2911184c-76d3-4611-86e7-bc4e8ff84ff5.jpg"
         rtl={isRTL}
@@ -175,9 +156,8 @@ export const Playground: React.FC = () => {
         <div
           style={{ display: "flex", flexDirection: "column", height: "100%" }}
         >
-          <SidebarHeader  style={{ marginBottom: "24px", marginTop: "16px" }} />
-          <div style={{ flex: 1, marginBottom: "32px" }} >
-
+          <SidebarHeader style={{ marginBottom: "24px", marginTop: "16px" }} />
+          <div style={{ flex: 1, marginBottom: "32px" }}>
             <Menu menuItemStyles={menuItemStyles}>
               <MenuItem icon={<Book />}>
                 <Link to={PATHS.PROFILE}>Profil</Link>
@@ -193,46 +173,62 @@ export const Playground: React.FC = () => {
               >
                 <MenuItem>
                   {" "}
-                  <Link to={PATHS.AddAdvertise}>Add advertise</Link>
-                </MenuItem>
-                <MenuItem>
-                  {" "}
                   <Link to={PATHS.Advertise}>List advertises</Link>
                 </MenuItem>
-              </SubMenu>
-              <SubMenu label="Categories" icon={<Global />} >
                 <MenuItem>
                   {" "}
-                  <Link to={PATHS.AddCategories}>Add categories</Link>
+                  <Link to={PATHS.AddAdvertise}>Add advertise</Link>
                 </MenuItem>
+                <MenuItem
+                  suffix={
+                    <Badge variant="danger" shape="circle">
+                      6
+                    </Badge>
+                  }
+                >
+                  {" "}
+                  {/* TODO :  change the badge value*/}
+                  <Link to={PATHS.ManageAds}>Advertises requests </Link>
+                </MenuItem>
+              </SubMenu>
+              <SubMenu label="Categories" icon={<Global />}>
                 <MenuItem>
                   {" "}
                   <Link to={PATHS.Categories}>List categories</Link>
                 </MenuItem>
+                <MenuItem>
+                  {" "}
+                  <Link to={PATHS.AddCategories}>Add categories</Link>
+                </MenuItem>
               </SubMenu>
-              <SubMenu label="Messages" icon={<InkBottle />}>
+              <SubMenu
+                label="Messages"
+                icon={<InkBottle />}
+                suffix={<Badge variant="success">New</Badge>}
+              >
                 <MenuItem> Dark</MenuItem>
                 <MenuItem> Light</MenuItem>
               </SubMenu>
 
               <Menu menuItemStyles={menuItemStyles}>
-                <MenuItem
-                  icon={<Calendar />}
-                  suffix={<Badge variant="success">New</Badge>}
-                >
-                  Messages
+                <MenuItem icon={<Calendar />}>
+                  <Link to={PATHS.Users}>Users</Link>
                 </MenuItem>
               </Menu>
-
               <SubMenu label="Statistics" icon={<BarChart />}>
-                <MenuItem> Dark</MenuItem>
-                <MenuItem> Light</MenuItem>
+                <MenuItem>
+                  <Link to={PATHS.StatsHome}> Home</Link>
+                </MenuItem>
+                <MenuItem>
+                  <Link to={PATHS.Stats}> Advertises</Link>
+                </MenuItem>
               </SubMenu>
             </Menu>
           </div>
           <SidebarFooter collapsed={collapsed} />
         </div>
       </Sidebar>
+
       {/* <main>
         <div style={{ padding: "16px 24px", color: "#44596e" }}>
           <div style={{ marginBottom: "16px" }}>
@@ -272,14 +268,7 @@ export const Playground: React.FC = () => {
               />
             </div>
 
-            <div style={{ marginBottom: 16 }}>
-              <Switch
-                id="theme"
-                checked={theme === "dark"}
-                onChange={handleThemeChange}
-                label="Dark theme"
-              />
-            </div>
+           
 
             <div style={{ marginBottom: 16 }}>
               <Switch

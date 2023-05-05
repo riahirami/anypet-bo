@@ -14,7 +14,11 @@ import Profile from "../pages/Dashboard/Profile";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import EmailVerify from "../pages/Dashboard/emailVerify";
 import ResetPassword from "../pages/Dashboard/resetPassword";
-
+import AdvertiseRequest from "../pages/Ad/AdvertiseRequest";
+import Stats from "../pages/Stats/Stats";
+import Home from "../pages/Stats/Home";
+import Users from "../pages/Users/Users";
+import Update from "../pages/Dashboard/Profile/Update";
 
 const RoutesConfig: RouteObject[] = [
   {
@@ -28,6 +32,10 @@ const RoutesConfig: RouteObject[] = [
   {
     path: PATHS.PROFILE,
     element: <Profile />,
+  },
+  {
+    path: PATHS.PROFILEUpdate,
+    element: <Update />,
   },
   {
     path: PATHS.DASHBOARD,
@@ -56,7 +64,7 @@ const RoutesConfig: RouteObject[] = [
   },
   {
     path: PATHS.Advertise,
-    element: <Advertise />,
+    element: <Advertise key=""/>,
   },
   {
     path: PATHS.AddAdvertise,
@@ -74,6 +82,23 @@ const RoutesConfig: RouteObject[] = [
     path: PATHS.adsByCategory,
     element: <AdsByCategory />,
   },
+
+  {
+    path: PATHS.ManageAds,
+    element: <AdvertiseRequest />,
+  },
+  {
+    path: PATHS.Stats,
+    element: <Stats />
+  },
+  {
+    path: PATHS.StatsHome,
+    element: <Home />
+  },
+  {
+    path: PATHS.Users,
+    element: <Users />
+  }
 ];
 
 export default RoutesConfig;
