@@ -25,6 +25,7 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import {message} from "../../core/constant/message";
 
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -41,7 +42,7 @@ import {
   getCategories,
 } from "../../redux/slices/categorySlice";
 import { Demo } from "./category.style";
-import { Playground } from "../../layouts/SideBar";
+import { Playground } from "../../layouts/SideBar/SideBar";
 import { ProSidebarProvider } from "../../components/SidebarSrc/ProSidebarProvider";
 import Pagination from "@mui/material/Pagination";
 
@@ -117,7 +118,7 @@ const Categories = () => {
         </Grid>
         {isFetching && <Spinner />}
         {showModal && (
-          <CustomModal title="Delete" description="deleted succeffully" />
+          <CustomModal title="Delete" description={message.CATEGORYDELETED} />
         )}{" "}
         <Demo>
           <TableContainer component={Paper}>

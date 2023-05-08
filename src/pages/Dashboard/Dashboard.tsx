@@ -22,7 +22,7 @@ import { resendEmailVerificationMsg } from "../../core/constant/resendEmailVerif
 import CustomModal from "../../components/Modal/CustomModal";
 import { ProSidebarProvider } from "../../components/SidebarSrc/ProSidebarProvider";
 import Profile from "./Profile";
-import { Playground } from "../../layouts/SideBar";
+import { Playground } from "../../layouts/SideBar/SideBar";
 import { BrowserRouter } from "react-router-dom";
 
 function Dashboard() {

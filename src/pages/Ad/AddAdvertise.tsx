@@ -24,6 +24,7 @@ import { useGetAllCategoriesQuery } from "../../redux/api/categoryApi";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
+import {message} from "../../core/constant/message";
 
 const advertiseSchema = Yup.object().shape({
   title: Yup.string()
@@ -117,7 +118,7 @@ const AddAdvertise = () => {
       {isLoading && <Spinner />}
 
       {showModal && (
-        <CustomModal title="Add" description="advertise added succeffully" />
+        <CustomModal title="Add" description={message.ADVERRTISESADDED} />
       )}
       <Formik
         initialValues={{

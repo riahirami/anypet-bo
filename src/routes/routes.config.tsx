@@ -20,6 +20,7 @@ import Home from "../pages/Stats/Home";
 import Users from "../pages/Users/Users";
 import Update from "../pages/Dashboard/Profile/Update";
 
+
 const RoutesConfig: RouteObject[] = [
   {
     path: PATHS.SIGNIN,
@@ -31,7 +32,7 @@ const RoutesConfig: RouteObject[] = [
   },
   {
     path: PATHS.PROFILE,
-    element: <Profile />,
+    element: <Update />,
   },
   {
     path: PATHS.PROFILEUpdate,
@@ -64,7 +65,7 @@ const RoutesConfig: RouteObject[] = [
   },
   {
     path: PATHS.Advertise,
-    element: <Advertise key=""/>,
+    element: <Advertise />,
   },
   {
     path: PATHS.AddAdvertise,

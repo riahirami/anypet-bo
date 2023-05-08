@@ -62,6 +62,9 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { red } from "@mui/material/colors";
 import AdCard from "../../components/Card/AdsCard";
 import AlertComponent from "../../components/Alert/Alert";
+import { message } from "../../core/constant/message";
+import OrderBy from "components/OrderBy/OrderBy";
+import OrderDirection from "components/OrderDirection/OrderDirection";
 
 const Advertise = () => {
   const [showModal, setShowModal] = useState(false);
@@ -74,6 +77,8 @@ const Advertise = () => {
   const [parameters, setParameters] = useState<parametersListing>({
     page: 1,
     perPage: "4",
+    orderBy: undefined,
+    orderDirection: undefined,
     keyword: undefined,
     date: undefined,
     status: undefined,
@@ -89,19 +94,6 @@ const Advertise = () => {
     });
   }, [debouncedSearchTerm, parameters]);
 
-  const [
-    deletAd,
-    { data: deletData, isSuccess: isSuccessDelete, isLoading: loadingDelete },
-  ] = useDeleteAdMutation();
-
-  function handleDeleteAd(id: string) {
-    deletAd(id)
-      .unwrap()
-      .then(() => {
-        refetch();
-        setShowModal(true);
-      });
-  }
   const handlePageChange = (event: any, page: number) => {
     setParameters({ ...parameters, page });
   };
@@ -126,15 +118,20 @@ const Advertise = () => {
   const handlePerPageChange = (perPage: any) => {
     setParameters({ ...parameters, perPage });
   };
+  const handleOrderByChange = (orderBy: any) => {
+    setParameters({ ...parameters, orderBy });
+  };
 
+  const handleOrderDirectionChange = (orderDirection: any) => {
+    setParameters({ ...parameters, orderDirection });
+  };
+
+  const handleParameterChange = (param: string, value: any) => {
+    setParameters({ ...parameters, [param]: value });
+  };
   return (
     <div>
-      {isSuccessDelete && (
-        <AlertComponent
-          title="advertise deleted succeffully"
-          severity="success"
-        />
-      )}
+      {/* {isSuccessDelete && <AlertComponent title={message.ADVERRTISESDELETED} severity="success" />} */}
       <Box display="flex" borderRadius="3px">
         <InputBase
           sx={{ ml: 2, flex: 1 }}
@@ -182,7 +179,7 @@ const Advertise = () => {
       <br />
       <Grid>
         {isLoading && <Spinner />}
-        
+
         <Container>
           {}
 
@@ -191,7 +188,7 @@ const Advertise = () => {
               {data?.data.map((ad: Ad) => (
                 <Grid item key={ad.id} xs={12} sm={6} md={4} lg={3}>
                   <AdCard adData={ad} />
-                  <Link to={"/advertise/" + ad.id}>
+                  {/* <Link to={"/advertise/" + ad.id}>
                     <IconButton
                       color="primary"
                       aria-label="details"
@@ -217,7 +214,7 @@ const Advertise = () => {
                     >
                       <EditIcon />
                     </IconButton>
-                  </Link>
+                  </Link> */}
                 </Grid>
               ))}
             </Grid>
@@ -242,6 +239,16 @@ const Advertise = () => {
             defaultValue={parameters.perPage}
             value={parameters.perPage}
             onChange={handlePerPageChange}
+          />
+          <OrderBy
+            defaultValue={parameters.orderBy}
+            value={parameters.orderBy}
+            onChange={handleOrderByChange}
+          />
+          <OrderDirection
+            defaultValue={parameters.orderDirection}
+            value={parameters.orderDirection}
+            onChange={handleOrderDirectionChange}
           />
         </Grid>
       </Grid>

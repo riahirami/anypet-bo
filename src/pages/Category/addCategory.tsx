@@ -15,6 +15,7 @@ import { CustomTextField, StyledButton } from "./category.style";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
+import { message } from "../../core/constant/message";
 
 const categorySchema = Yup.object().shape({
   title: Yup.string()
@@ -48,17 +49,17 @@ const AddCategory = () => {
   }
 
   const handleAddcategory = async (values: any, { setSubmitting }: any) => {
-    await addCategory(values).unwrap()
-    .then(() => {
-      setShowModal(true);
-    
-    })
-    .then(() => {
-      return new Promise(resolve => setTimeout(resolve, 2000)); // wait for 2 seconds
-    })
-    .then(() => {
-      navigate("/categories");
-    });
+    await addCategory(values)
+      .unwrap()
+      .then(() => {
+        setShowModal(true);
+      })
+      .then(() => {
+        return new Promise((resolve) => setTimeout(resolve, 2000)); // wait for 2 seconds
+      })
+      .then(() => {
+        navigate("/categories");
+      });
   };
 
   return (
@@ -68,7 +69,7 @@ const AddCategory = () => {
       {isLoading && <Spinner />}
 
       {showModal && (
-        <CustomModal title="Add" description="category added succeffully" />
+        <CustomModal title="Add" description={message.CATEGORYADDED} />
       )}
       <Formik
         initialValues={{

@@ -11,6 +11,8 @@ import Spinner from "../../components/Spinner/spinner";
 import { CustomTextField, StyledButton } from "./category.style";
 import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
+import {message} from "../../core/constant/message";
+
 const categorySchema = Yup.object().shape({
   title: Yup.string()
     .required("Title is required")
@@ -74,7 +76,7 @@ const Categoryshow = () => {
       {showModal && (
         <CustomModal
           title="Update"
-          description="category updated succeffully"
+          description={message.CATEGORYEDITED}
         />
       )}
       {isLoading ? (

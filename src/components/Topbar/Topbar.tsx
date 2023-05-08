@@ -14,18 +14,18 @@ import MenuItem from "@mui/material/MenuItem";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Person2Icon from "@mui/icons-material/Person2";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import ImageIcon from '@mui/icons-material/Image';
+import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
 
 import { useLogoutUserMutation } from "../../redux/api/authApi";
 import { Link, useNavigate } from "react-router-dom";
 import { PATHS } from "../../routes/Path";
+
 import { Theme } from "../../core/enums";
+import { Props } from "./TopbarProps.type";
 
-interface Props {
-  mode: Theme;
-  handleThemeChange: () => void;
-}
 
-const Topbar: React.FC<Props> = ({ mode, handleThemeChange }) => {
+const Topbar: React.FC<Props> = ({ mode, handleThemeChange, handleImageChange,hasImage }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const tokenValue = JSON.parse(localStorage.getItem("user") || "{}");
@@ -65,8 +65,15 @@ const Topbar: React.FC<Props> = ({ mode, handleThemeChange }) => {
         </IconButton>
       </Box>
 
+
+
       {/* ICONS */}
       <Box display="flex">
+      <IconButton onClick={handleImageChange}>
+         {hasImage =="true" ? <ImageIcon  /> :
+         <HideImageOutlinedIcon />}
+          
+        </IconButton>
         <IconButton onClick={handleThemeChange}>
           {mode === Theme.LIGHT ? (
             <DarkModeOutlinedIcon />

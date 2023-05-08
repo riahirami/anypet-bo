@@ -1,11 +1,7 @@
-import { MenuItem, TextField } from "@mui/material";
+import { MenuItem } from "@mui/material";
 import React from "react";
-
-interface PerPageSelectProps {
-  value: string| number | undefined;
-  defaultValue: string;
-  onChange: (value: string) => void;
-}
+import { PerPageSelectProps } from "./PerPage.type";
+import { StyledTextFieldList } from './PerPage.style';
 
 const PerPageSelect = ({ value, onChange }: PerPageSelectProps) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -13,7 +9,7 @@ const PerPageSelect = ({ value, onChange }: PerPageSelectProps) => {
   };
 
   return (
-    <TextField
+    <StyledTextFieldList
       id="outlined-select-perPage"
       select
       label="per page"
@@ -23,7 +19,7 @@ const PerPageSelect = ({ value, onChange }: PerPageSelectProps) => {
       <MenuItem value="4">4</MenuItem>
       <MenuItem value="8">8</MenuItem>
       <MenuItem value="12">12</MenuItem>
-    </TextField>
+    </StyledTextFieldList>
   );
 };
 

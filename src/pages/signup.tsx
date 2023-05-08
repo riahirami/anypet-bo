@@ -22,6 +22,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import CustomModal from "../components/Modal/CustomModal";
 import { useFormik, Formik, Form, Field } from "formik";
 import * as Yup from "yup";
+import AlertComponent from "./../components/Alert/Alert";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -149,8 +150,8 @@ function Signup() {
       {/* material ui  */}
       <div>
         {" "}
-        {showModal && (
-          <CustomModal title="Sign up" description={descriptionModal} />
+        {isRegisterSuccess && (
+          <AlertComponent title={descriptionModal} severity="success" />
         )}
         <ThemeProvider theme={theme}>
           <Container component="main" maxWidth="xs">
@@ -184,7 +185,7 @@ function Signup() {
                     />
                     {formik.touched.name && formik.errors.name ? (
                       <Alert severity="error">{formik.errors.name}</Alert>
-                      ) : null}
+                    ) : null}
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
@@ -199,7 +200,7 @@ function Signup() {
                     />
                     {formik.touched.login && formik.errors.login ? (
                       <Alert severity="error">{formik.errors.login}</Alert>
-                      ) : null}
+                    ) : null}
                   </Grid>
                   <Grid item xs={12} sm={12}>
                     <TextField
@@ -214,7 +215,7 @@ function Signup() {
                     />
                     {formik.touched.email && formik.errors.email ? (
                       <Alert severity="error">{formik.errors.email}</Alert>
-                      ) : null}
+                    ) : null}
                   </Grid>
                   <Grid item xs={12} sm={12}>
                     <TextField
@@ -229,7 +230,7 @@ function Signup() {
                     />
                     {formik.touched.password && formik.errors.password ? (
                       <Alert severity="error">{formik.errors.password}</Alert>
-                      ) : null}
+                    ) : null}
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
@@ -244,7 +245,7 @@ function Signup() {
                     />
                     {formik.touched.phone && formik.errors.phone ? (
                       <Alert severity="error">{formik.errors.phone}</Alert>
-                      ) : null}
+                    ) : null}
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
@@ -259,11 +260,14 @@ function Signup() {
                     />
                     {formik.touched.address && formik.errors.address ? (
                       <Alert severity="error">{formik.errors.address}</Alert>
-
                     ) : null}
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <Button variant="contained" type="submit" disabled={isRegistreLoading}>
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      disabled={isRegistreLoading}
+                    >
                       Submit
                     </Button>
                   </Grid>

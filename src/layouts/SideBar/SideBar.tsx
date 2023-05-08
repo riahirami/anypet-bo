@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Sidebar,
   Menu,
@@ -7,90 +7,44 @@ import {
   useProSidebar,
   menuClasses,
   MenuItemStyles,
-} from "../components/SidebarSrc";
+} from "../../components/SidebarSrc";
 
-import { Switch } from "../components/SidebarSrc/Switch";
-import { SidebarFooter } from "../components/SidebarSrc/SidebarFooter";
-import { Badge } from "../components/SidebarSrc/Badge";
-import { PackageBadges } from "../components/SidebarSrc/PackageBadges";
-import { SidebarHeader } from "../components/SidebarSrc/SidebarHeader";
+import { SidebarFooter } from "../../components/SidebarSrc/SidebarFooter";
+import { Badge } from "../../components/SidebarSrc/Badge";
+import {  } from "../../components/SidebarSrc/PackageBadges";
+import { SidebarHeader } from "../../components/SidebarSrc/SidebarHeader";
 
-import { Diamond } from "../icons/Diamond";
-import { BarChart } from "../icons/BarChart";
-import { Global } from "../icons/Global";
-import { InkBottle } from "../icons/InkBottle";
-import { Book } from "../icons/Book";
-import { Calendar } from "../icons/Calendar";
-import { PATHS } from "../routes/Path";
+import { Diamond } from "../../icons/Diamond";
+import { BarChart } from "../../icons/BarChart";
+import { Global } from "../../icons/Global";
+import { InkBottle } from "../../icons/InkBottle";
+import { Book } from "../../icons/Book";
+import { Calendar } from "../../icons/Calendar";
+import { PATHS } from "../../routes/Path";
 import { Link } from "react-router-dom";
 
-import { Theme } from "../core/enums";
-// export type Theme = "light" | "dark";
+import {themes} from "./SideBar.style"
+import { Props } from "components/Topbar/TopbarProps.type";
 
-export const themes = {
-  light: {
-    sidebar: {
-      backgroundColor: "#ffffff",
-      color: "#607489",
-    },
-    menu: {
-      menuContent: "#fbfcfd",
-      icon: "#0098e5",
-      hover: {
-        backgroundColor: "#c5e4ff",
-        color: "#44596e",
-      },
-      disabled: {
-        color: "#9fb6cf",
-      },
-    },
-  },
-  dark: {
-    sidebar: {
-      backgroundColor: "#0b2948",
-      color: "#ffffff",
-    },
-    menu: {
-      menuContent: "#082440",
-      icon: "#59d0ff",
-      hover: {
-        backgroundColor: "#00458b",
-        color: "#b6c8d9",
-      },
-      disabled: {
-        color: "#3e5e7e",
-      },
-    },
-  },
-};
+import { hexToRgba} from "../../core/services/helpers";
 
-// hex to rgba converter
-const hexToRgba = (hex: string, alpha: number) => {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
 
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-};
-
-interface Props {
-  mode: Theme;
-  handleThemeChange: () => void;
-}
 
 export const Playground: React.FC<Props> = ({
   mode: theme,
   handleThemeChange,
+  hasImage,
+  handleImageChange
 }) => {
   const { toggleSidebar, collapseSidebar, broken, collapsed } = useProSidebar();
 
   const [isRTL, setIsRTL] = useState<boolean>(false);
-  const [hasImage, setHasImage] = useState<boolean>(false);
 
+  // const [hasImage, setHasImage] = useState<boolean>(false);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setHasImage(e.target.checked);
-  };
+  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setHasImage(e.target.checked);
+  // };
 
   const menuItemStyles: MenuItemStyles = {
     root: {
@@ -142,21 +96,22 @@ export const Playground: React.FC<Props> = ({
     >
      
       <Sidebar
-        image="https://user-images.githubusercontent.com/25878302/144499035-2911184c-76d3-4611-86e7-bc4e8ff84ff5.jpg"
+        image="https://demos.themeselection.com/chameleon-admin-template/app-assets/images/backgrounds/04.jpg"
         rtl={isRTL}
         breakPoint="lg"
         backgroundColor={hexToRgba(
           themes[theme].sidebar.backgroundColor,
-          hasImage ? 0.9 : 1
+          hasImage=="false" ? 0.7 : 1
         )}
         rootStyles={{
           color: themes[theme].sidebar.color,
         }}
+        
       >
         <div
           style={{ display: "flex", flexDirection: "column", height: "100%" }}
         >
-          <SidebarHeader style={{ marginBottom: "24px", marginTop: "16px" }} />
+          <SidebarHeader  style={{ marginBottom: "24px", marginTop: "16px" }} />
           <div style={{ flex: 1, marginBottom: "32px" }}>
             <Menu menuItemStyles={menuItemStyles}>
               <MenuItem icon={<Book />}>
@@ -229,58 +184,7 @@ export const Playground: React.FC<Props> = ({
         </div>
       </Sidebar>
 
-      {/* <main>
-        <div style={{ padding: "16px 24px", color: "#44596e" }}>
-          <div style={{ marginBottom: "16px" }}>
-            {broken && (
-              <button className="sb-button" onClick={() => toggleSidebar()}>
-                Toggle
-              </button>
-            )}
-          </div>
-          <div style={{ marginBottom: "48px" }}>
-            <Typography variant="h4" fontWeight={600}>
-              React Pro Sidebar
-            </Typography>
-            <Typography variant="body2">
-              React Pro Sidebar provides a set of components for creating high
-              level and customizable side navigation
-            </Typography>
-            <PackageBadges />
-          </div>
-
-          <div style={{ padding: "0 8px" }}>
-            <div style={{ marginBottom: 16 }}>
-              <Switch
-                id="collapse"
-                checked={collapsed}
-                onChange={() => collapseSidebar()}
-                label="Collapse"
-              />
-            </div>
-
-            <div style={{ marginBottom: 16 }}>
-              <Switch
-                id="rtl"
-                checked={isRTL}
-                onChange={handleRTLChange}
-                label="RTL"
-              />
-            </div>
-
-           
-
-            <div style={{ marginBottom: 16 }}>
-              <Switch
-                id="image"
-                checked={hasImage}
-                onChange={handleImageChange}
-                label="Image"
-              />
-            </div>
-          </div>
-        </div>
-      </main> */}
+      
     </div>
   );
 };

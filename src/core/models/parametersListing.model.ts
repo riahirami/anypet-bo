@@ -4,4 +4,6 @@ export interface parametersListing{
     page: number;
     perPage: string;
     status: string | undefined;
+    orderBy: string | undefined;
+    orderDirection: string | undefined;
   }

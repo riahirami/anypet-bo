@@ -10,6 +10,8 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import Spinner from "../../../components/Spinner/spinner";
 import CustomModal from "../../../components/Modal/CustomModal";
 import AlertComponent from "../../../components/Alert/Alert";
+import {message} from "../../../core/constant/message";
+import Profile from './../Profile';
 
 const initialState = {
   name: "",
@@ -95,7 +97,7 @@ const Update = () => {
       {forgotLoading && <Spinner />}
       {avatarSuccess && (
         <AlertComponent
-          title="your avatar changed succeffully"
+          title={message.AVATARCHANGED}
           severity="success"
         />
       )}
@@ -104,12 +106,12 @@ const Update = () => {
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList onChange={handleChange} aria-label="lab API tabs example">
-              <Tab label="Update Avatar" value="1" />
-              <Tab label="Change password" value="2" />
-              <Tab label="Item Three" value="3" />
+              <Tab label="Profile" value="1" />
+              <Tab label="Update Avatar" value="2" />
+              <Tab label="Change password" value="3" />
             </TabList>
           </Box>
-          <TabPanel value="1">
+          <TabPanel value="2">
             {" "}
             <TextField
               label="Avatar"
@@ -127,7 +129,14 @@ const Update = () => {
               save
             </Button>
           </TabPanel>
-          <TabPanel value="2">
+
+          <TabPanel value="1">
+            
+            <Profile />
+            
+          </TabPanel>
+
+          <TabPanel value="3">
             <TextField
               margin="normal"
               required
@@ -148,7 +157,6 @@ const Update = () => {
               Reset Password
             </Button>
           </TabPanel>
-          <TabPanel value="3">Item Three</TabPanel>
         </TabContext>
       </Box>
     </div>

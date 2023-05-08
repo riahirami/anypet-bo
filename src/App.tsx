@@ -4,7 +4,7 @@ import { useAppDispatch } from "./redux/hooks";
 import { useEffect } from "react";
 import { setUser } from "./redux/slices/authSlice";
 import { Router } from "./components/Router";
-import { Playground } from "./layouts/SideBar";
+import { Playground } from "./layouts/SideBar/SideBar";
 import { ProSidebarProvider } from "./components/SidebarSrc/ProSidebarProvider";
 import Topbar from "./components/Topbar/Topbar";
 import Dashboard from "./pages/Dashboard/Dashboard";
@@ -12,7 +12,7 @@ import useTheme from "./customHooks/useTheme";
 
 function App() {
   const dispatch = useAppDispatch();
-  const { mode, handleThemeChange } = useTheme();
+  const { mode, handleThemeChange, handleImageChange,hasImage } = useTheme();
 
   ///////////////////////
 
@@ -35,12 +35,12 @@ function App() {
         <Dashboard />
         <div className="playground-container">
           <ProSidebarProvider>
-            <Playground mode={mode} handleThemeChange={handleThemeChange} />
+            <Playground mode={mode} handleThemeChange={handleThemeChange} handleImageChange={handleImageChange} hasImage={hasImage}/>
           </ProSidebarProvider>
         </div>
         <div className="router-container">
           <ProSidebarProvider>
-            <Topbar mode={mode} handleThemeChange={handleThemeChange} />
+            <Topbar mode={mode} handleThemeChange={handleThemeChange}  handleImageChange={handleImageChange} hasImage={hasImage}/>
           </ProSidebarProvider>
           <Router />
         </div>

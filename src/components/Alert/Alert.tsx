@@ -1,13 +1,9 @@
 import React, { useState, FC } from "react";
-
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import { Snackbar } from "@mui/material";
 import {StyledAlert,StyledSnackbar} from "./Alert.style"
-interface SnackbarProps {
-  title: any;
-  severity: 'error' | 'warning' | 'info' | 'success';
+import { SnackbarProps } from "./Alert.type";
 
-}
 const AlertComponent: FC<SnackbarProps> = ({ title,severity  }) => {
   const [openSnack, setOpenSnack] = useState(true);
 

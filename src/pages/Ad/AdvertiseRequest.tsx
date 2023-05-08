@@ -16,28 +16,13 @@ import dayjs, { Dayjs } from "dayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { Ad, AdData } from "../../core/models/ad.model";
 import {
-  Avatar,
   Button,
   Fab,
   Pagination,
   Grid,
   IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
   TextField,
   Typography,
-  Card,
-  CardContent,
-  CardActions,
-  Checkbox,
-  FormLabel,
-  RadioGroup,
-  FormGroup,
-  FormControlLabel,
-  FormControl,
-  Radio,
   MenuItem,
   Snackbar,
   Stack,
@@ -56,6 +41,9 @@ import { statusParams } from "../../core/models/statusParams.model";
 import PerPageSelect from "../../components/PerPageChange/PerPageSelect";
 import AdCard from "../../components/Card/AdsCard";
 import AlertComponent from "../../components/Alert/Alert";
+import { message } from "../../core/constant/message";
+import OrderBy from "components/OrderBy/OrderBy";
+import OrderDirection from "components/OrderDirection/OrderDirection";
 
 const AdvertiseRequest = () => {
   const [showModal, setShowModal] = useState(false);
@@ -72,6 +60,8 @@ const AdvertiseRequest = () => {
     keyword: undefined,
     date: undefined,
     status: "0",
+    orderBy: undefined,
+    orderDirection: undefined,
   });
 
   const [statusParams, setStatusParams] = useState<statusParams>({
@@ -89,13 +79,15 @@ const AdvertiseRequest = () => {
   const { data, error, isLoading, isSuccess, refetch } =
     useGetAdsQuery(parameters);
 
-  const [changeStatus,{
-    data: dataChangeStatus,
-    isLoading: loadingUpdateStatus,
-    isSuccess: successChangeStatus,
-    isError: errorChangeStatus,
-    
-  } ]= useChangeStatusAdsMutation();
+  const [
+    changeStatus,
+    {
+      data: dataChangeStatus,
+      isLoading: loadingUpdateStatus,
+      isSuccess: successChangeStatus,
+      isError: errorChangeStatus,
+    },
+  ] = useChangeStatusAdsMutation();
 
   useEffect(() => {
     setStatusParams({ ...statusParams });
@@ -120,19 +112,17 @@ const AdvertiseRequest = () => {
     setParameters({ ...parameters, perPage: event.target.value });
   };
 
-  const handleStatusChange = async(
+  const handleStatusChange = async (
     adId: string | number | undefined,
     status: StatusOption
   ) => {
-    changeStatus({ id: adId, status }).unwrap().then(()=>{
-
-      refetch();
-    });
+    changeStatus({ id: adId, status })
+      .unwrap()
+      .then(() => {
+        refetch();
+      });
     // setStatusParams({ id: adId, status });
- 
   };
-
-
 
   function handleStatusListChange(event: React.ChangeEvent<HTMLInputElement>) {
     const newStatus = event.target.value;
@@ -142,16 +132,26 @@ const AdvertiseRequest = () => {
       setParameters({ ...parameters, status: newStatus });
     }
   }
-  
+
   const handlePerPageChange = (perPage: string) => {
     setParameters({ ...parameters, perPage });
   };
 
+  const handleOrderByChange = (orderBy: any) => {
+    setParameters({ ...parameters, orderBy });
+  };
+
+  const handleOrderDirectionChange = (orderDirection: any) => {
+    setParameters({ ...parameters, orderDirection });
+  };
 
   return (
     <div>
       {successChangeStatus && (
-        <AlertComponent title="request changed succeffully" severity="success" />
+        <AlertComponent
+          title={message.ADVERTISESTATUSCHANGED}
+          severity="success"
+        />
       )}
 
       <Typography align="left">Advertises requests</Typography>
@@ -204,7 +204,7 @@ const AdvertiseRequest = () => {
               <Grid item key={ad.id} xs={12} sm={4} md={3} lg={3}>
                 {data && <AdCard adData={ad} />}
 
-                <IconButton
+                {/* <IconButton
                   color="error"
                   aria-label="cancel"
                   component="label"
@@ -214,6 +214,7 @@ const AdvertiseRequest = () => {
                 >
                   <CancelIcon />
                 </IconButton>
+
                 <IconButton
                   color="success"
                   aria-label="validate"
@@ -234,7 +235,43 @@ const AdvertiseRequest = () => {
                   }
                 >
                   <HourglassEmptyIcon />
-                </IconButton>
+                </IconButton> */}
+                <Grid container justifyContent="space-between">
+                  <Grid item key={ad.id} xs={12} sm={4} md={3} lg={3}>
+                    <Button
+                      variant="contained"
+                      color="warning"
+                      onClick={() =>
+                        handleStatusChange(ad.id, StatusOption.Waiting)
+                      }
+                    >
+                      Waiting
+                    </Button>
+                  </Grid>
+                  <Grid item key={ad.id} xs={12} sm={4} md={3} lg={3}>
+                    <Button
+                      variant="contained"
+                      color="success"
+                      onClick={() =>
+                        handleStatusChange(ad.id, StatusOption.Validated)
+                      }
+                    >
+                      Valide
+                    </Button>
+                  </Grid>
+                  <Grid item key={ad.id} xs={12} sm={4} md={3} lg={3}>
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      color="error"
+                      onClick={() =>
+                        handleStatusChange(ad.id, StatusOption.Canceled)
+                      }
+                    >
+                      Cancel
+                    </Button>
+                  </Grid>
+                </Grid>
               </Grid>
             ))}
           </Grid>
@@ -261,6 +298,16 @@ const AdvertiseRequest = () => {
               defaultValue={parameters.perPage}
               value={parameters.perPage}
               onChange={handlePerPageChange}
+            />
+            <OrderBy
+              defaultValue={parameters.orderBy}
+              value={parameters.orderBy}
+              onChange={handleOrderByChange}
+            />
+            <OrderDirection
+              defaultValue={parameters.orderDirection}
+              value={parameters.orderDirection}
+              onChange={handleOrderDirectionChange}
             />
           </Grid>
         </Grid>

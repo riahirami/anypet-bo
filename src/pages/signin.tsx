@@ -30,7 +30,7 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import CustomModal from "../components/Modal/CustomModal";
 import AlertComponent from "../components/Alert/Alert";
-import {ServerResponse} from "../core/models/authState.model"
+import { ServerResponse } from "../core/models/authState.model";
 const initialState = {
   name: "",
   email: "",
@@ -40,7 +40,6 @@ const initialState = {
   avatar: "",
   password: "",
 };
-
 
 const theme = createTheme();
 const Signin = () => {
@@ -106,13 +105,7 @@ const Signin = () => {
   return (
     <div>
       <>
-        {
-          isLoginError && (
-            <AlertComponent title={loginError} severity="error" />
-          )
-
-          // <CustomModal title="Error" description={loginError?.data.message}/>
-        }
+        {isLoginError && <AlertComponent title={loginError} severity="error" />}
         {showModal && (
           <CustomModal title="Forgot password" description={descriptionModal} />
         )}

@@ -19,6 +19,7 @@ import { useGetAllCategoriesQuery } from "../../redux/api/categoryApi";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import AlertComponent from "../../components/Alert/Alert";
+import {message} from "../../core/constant/message";
 
 const advertiseSchema = Yup.object().shape({
   title: Yup.string()
@@ -106,7 +107,7 @@ const AdUpdate = () => {
       {isLoading && <Spinner />}
    
    {succesUpdate && (
-        <AlertComponent title="advertise updated succeffully" severity="success" />
+        <AlertComponent title={message.ADVERRTISESEDITED} severity="success" />
       )}
       {isLoading ? (
         <Spinner />
