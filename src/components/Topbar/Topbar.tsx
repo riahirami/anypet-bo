@@ -1,6 +1,5 @@
-import { Box, IconButton, useTheme } from "@mui/material";
-import { useContext, useState } from "react";
-import { ColorModeContext, tokens } from "../theme";
+import { Box, IconButton } from "@mui/material";
+import { useState } from "react";
 import InputBase from "@mui/material/InputBase";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
@@ -8,30 +7,28 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
-import { Theme, themes } from "../../layouts/SideBar";
 import { Badge } from "../SidebarSrc/Badge";
-import { Switch } from "../SidebarSrc/Switch";
 
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import LogoutIcon from '@mui/icons-material/Logout';
-import Person2Icon from '@mui/icons-material/Person2';
+import LogoutIcon from "@mui/icons-material/Logout";
+import Person2Icon from "@mui/icons-material/Person2";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import ImageIcon from '@mui/icons-material/Image';
+import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
 
-import {
-  useLogoutUserMutation,
-  useProfileQuery,
-} from "../../redux/api/authApi";
+import { useLogoutUserMutation } from "../../redux/api/authApi";
 import { Link, useNavigate } from "react-router-dom";
 import { PATHS } from "../../routes/Path";
-const Topbar = () => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-  const colorMode = useContext(ColorModeContext);
-  const DarkLight = localStorage.getItem("theme") as Theme;
-  const [mode, setMode] = useState<Theme>(DarkLight);
 
+import { Theme } from "../../core/enums";
+import { Props } from "./TopbarProps.type";
+
+
+const Topbar: React.FC<Props> = ({ mode, handleThemeChange, handleImageChange,hasImage }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const tokenValue = JSON.parse(localStorage.getItem("user") || "{}");
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -40,7 +37,6 @@ const Topbar = () => {
     setAnchorEl(null);
   };
 
-  const tokenValue = JSON.parse(localStorage.getItem("user") || "{}");
 
   const [
     logoutUser,
@@ -58,16 +54,6 @@ const Topbar = () => {
     localStorage.setItem("user", "{}");
     navigate("/signin");
   };
-  // TODO : dark mode for sidebar.tsx
-  const handleThemeChange = () => {
-    DarkLight == "dark" ? setMode("light") : setMode("dark");
-    localStorage.setItem("theme", mode);
-    console.log("topbar theme:" + mode);
-  };
-
-  if (!DarkLight) {
-    localStorage.setItem("theme", "light");
-  }
 
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
@@ -79,10 +65,17 @@ const Topbar = () => {
         </IconButton>
       </Box>
 
+
+
       {/* ICONS */}
       <Box display="flex">
+      <IconButton onClick={handleImageChange}>
+         {hasImage =="true" ? <ImageIcon  /> :
+         <HideImageOutlinedIcon />}
+          
+        </IconButton>
         <IconButton onClick={handleThemeChange}>
-          {mode === "dark" ? (
+          {mode === Theme.LIGHT ? (
             <DarkModeOutlinedIcon />
           ) : (
             <LightModeOutlinedIcon />
@@ -95,6 +88,7 @@ const Topbar = () => {
             6
           </Badge>
         </IconButton>
+
         <IconButton>
           <SettingsOutlinedIcon />
         </IconButton>
@@ -117,9 +111,17 @@ const Topbar = () => {
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem onClick={handleClose}>My account</MenuItem>
-            <MenuItem onClick={handleClose}><Person2Icon></Person2Icon><Link to={PATHS.PROFILE}>Profile</Link></MenuItem>
-            <MenuItem onClick={logoutFunction}><LogoutIcon></LogoutIcon>Logout</MenuItem>
+            <MenuItem onClick={handleClose}>
+              <Person2Icon></Person2Icon>
+              <Link to={PATHS.PROFILE}>Profile</Link>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <ManageAccountsIcon></ManageAccountsIcon>
+              <Link to={PATHS.PROFILEUpdate}>My account</Link>
+            </MenuItem>
+            <MenuItem onClick={logoutFunction}>
+              <LogoutIcon></LogoutIcon>Logout
+            </MenuItem>
           </Menu>
         </div>
       </Box>

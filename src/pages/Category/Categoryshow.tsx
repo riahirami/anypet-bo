@@ -1,18 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useGetCategoryByIdQuery,
   useUpdateCategoryMutation,
 } from "../../redux/api/categoryApi";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, Navigator, useNavigate } from "react-router-dom";
 import { Button, TextField, Typography } from "@mui/material";
 import { Category } from "../../core/models/category.model";
 import CustomModal from "../../components/Modal/CustomModal";
 import Spinner from "../../components/Spinner/spinner";
 import { CustomTextField, StyledButton } from "./category.style";
+import * as Yup from "yup";
+import { Formik, Form, Field } from "formik";
+import {message} from "../../core/constant/message";
 
+const categorySchema = Yup.object().shape({
+  title: Yup.string()
+    .required("Title is required")
+    .min(6, "Title must be at least 6 characters")
+    .max(20, "Title must be at most 255 characters"),
+  description: Yup.string()
+    .required("Description is required")
+    .min(12, "description must be at least 12 characters"),
+});
 const Categoryshow = () => {
   const { id } = useParams();
-  const { data, isLoading } = useGetCategoryByIdQuery(id);
+  const { data, isLoading, refetch } = useGetCategoryByIdQuery(id);
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const item: Category = {
@@ -26,65 +38,108 @@ const Categoryshow = () => {
     { data: updateData, isSuccess: succesUpdate, isLoading: loadingUpdate },
   ] = useUpdateCategoryMutation();
 
-  function handleChangeForm(e: any) {
-    const { name, value } = e.target;
-    setCategory((prevCategory) => ({ ...prevCategory, [name]: value }));
+  function handleChangeForm(formikProps: any) {
+    return (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = event.target;
+      formikProps.setFieldValue(name, value);
+    };
   }
-  async function handleUpdate(id: string) {
-   
+  useEffect(() => {
+    refetch();
+  }, [isLoading, refetch]);
+
+  const handleUpdate = async (values: any) => {
     await updateCategory({
       id,
-      title: category.title,
-      description: category.description,
-    });
-    setShowModal(true);
-    navigate("/categories");
-  }
+      title: values.title,
+      description: values.description,
+    })
+      .unwrap()
+      .then(() => {
+        setShowModal(true);
+      })
+      .then(() => {
+        return new Promise((resolve) => setTimeout(resolve, 2000)); // wait for 2 seconds
+      })
+      .then(() => {
+        navigate("/categories");
+      });
+  };
 
   return (
     <div>
       <Typography align="left">
-        Update Category {id} | {data?.data?.title}
+        Update Category id: {id} | {data?.data?.title}
       </Typography>
-      {isLoading ? <p>loading ...</p> : <p>error !</p>}
       {isLoading && <Spinner />}
       {loadingUpdate && <Spinner />}
       {showModal && (
         <CustomModal
           title="Update"
-          description="category updated succeffully"
+          description={message.CATEGORYEDITED}
         />
       )}
-      <form>
-        <CustomTextField
-          type="text"
-          label="title"
-          name="title"
-          id="title"
-          onChange={handleChangeForm}
-          defaultValue={data?.data?.title}
-          fullWidth
-        />
-        <CustomTextField
-          type="text"
-          name="description"
-          label=" description"
-          id="description"
-          fullWidth
-          onChange={handleChangeForm}
-          defaultValue={data?.data?.description}
-        />
-
-        <StyledButton
-          variant="contained"
-          type="button"
-          disabled={isLoading}
-          onChange={handleChangeForm}
-          onClick={() => handleUpdate(id as string)}
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <Formik
+          initialValues={{
+            title: data?.data?.title,
+            description: data?.data?.description,
+          }}
+          validationSchema={categorySchema}
+          onSubmit={handleUpdate}
         >
-          Update
-        </StyledButton>
-      </form>
+          {(formikProps) => (
+            <Form>
+              <Field
+                id="title"
+                name="title"
+                label="title"
+                color="primary"
+                fullWidth
+                as={CustomTextField}
+                helperText={
+                  formikProps.touched.title && formikProps.errors.title
+                }
+                error={formikProps.touched.title && !!formikProps.errors.title}
+                onChange={handleChangeForm(formikProps)}
+              />
+              <br />
+              <Field
+                id="description"
+                name="description"
+                label="description"
+                color="primary"
+                fullWidth
+                multiline
+                rows={4}
+                as={CustomTextField}
+                helperText={
+                  formikProps.touched.description &&
+                  formikProps.errors.description
+                }
+                error={
+                  formikProps.touched.description &&
+                  !!formikProps.errors.description
+                }
+                onChange={handleChangeForm(formikProps)}
+              />
+              <br />
+              <div style={{ display: "flex", justifyContent: "left" }}>
+                <StyledButton
+                  size="large"
+                  variant="contained"
+                  type="submit"
+                  disabled={formikProps.isSubmitting}
+                >
+                  save
+                </StyledButton>
+              </div>
+            </Form>
+          )}
+        </Formik>
+      )}
     </div>
   );
 };

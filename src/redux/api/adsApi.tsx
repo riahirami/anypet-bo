@@ -3,13 +3,34 @@ import { baseQueryConfig } from "./BaseQueryConfig";
 import { endpoints } from "../../core/constant/endpoints";
 import { Ad, AdData } from "../../core/models/ad.model";
 
+function generateQueryParams(obj: { [key: string]: any }): string {
+  const params = new URLSearchParams();
+
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key) && obj[key] !== undefined) {
+      params.append(key, obj[key]);
+    }
+  }
+
+  return params.toString();
+}
 export const adsApi = createApi({
   reducerPath: "adsApi",
   baseQuery: fetchBaseQuery(baseQueryConfig),
   tagTypes: ["Ad"],
   endpoints: (builder) => ({
-    getAds: builder.query<AdData, number>({
-      query: (page) => `${endpoints.Ads}?page=${page}`,
+    getAds: builder.query<
+      AdData,
+      {
+        keyword: string | undefined;
+        date: string | undefined;
+        page: number;
+        perPage: string;
+        status: string | undefined;
+      }
+    >({
+      query: (parameters) =>
+        endpoints.AdsGlobal + "?" + generateQueryParams(parameters),
       providesTags: ["Ad"],
     }),
     addAd: builder.mutation({
@@ -92,11 +113,42 @@ export const adsApi = createApi({
         };
       },
     }),
-    getAdsByDate: builder.query({
-      query: (date: any) => {
+    changeStatusAds: builder.mutation<
+      Ad,
+      {
+        id: string | number | undefined;
+        status: string | number | undefined;
+      }
+    >({
+      query: (parameters) => ({
+        url: endpoints.changeStatusAds + "?" + generateQueryParams(parameters),
+        method: "get",
+      }),
+    }),
+
+    getAdsStats: builder.query({
+      query: (column: any) => {
         return {
-          url: `${endpoints.AdsByDate}${date}`,
+          url: endpoints.statsAds+"?column="+column,
           method: "get",
+        };
+      },
+    }),
+    getAdsByStatus: builder.query({
+      query: (status: string) => {
+        return {
+          url: endpoints.AdsByStatus + `${status}`,
+          method: "get",
+          providesTags: ["Ad"],
+        };
+      },
+    }),
+    getCountAdsPerDate: builder.query({
+      query: () => {
+        return {
+          url: endpoints.COUNTADSPERDATE,
+          method: "get",
+          providesTags: ["Ad"],
         };
       },
     }),
@@ -110,5 +162,8 @@ export const {
   useGetAdByIdQuery,
   useUpdateAdMutation,
   useGetAdsByCategoryQuery,
-  useGetAdsByDateQuery,
+  useChangeStatusAdsMutation,
+  useGetAdsStatsQuery,
+  useGetAdsByStatusQuery,
+  useGetCountAdsPerDateQuery
 } = adsApi;

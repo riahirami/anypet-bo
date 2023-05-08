@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  useDeleteAdMutation,
-  useGetAdsQuery,
-  useGetAdsByDateQuery,
-} from "../../redux/api/adsApi";
+import { useDeleteAdMutation, useGetAdsQuery } from "../../redux/api/adsApi";
 import { Ad, AdData } from "../../core/models/ad.model";
 import {
   Avatar,
@@ -17,7 +13,22 @@ import {
   ListItemText,
   TextField,
   Typography,
+  Card,
+  CardHeader,
+  CardContent,
+  CardActions,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Box,
+  InputBase,
+  Divider,
+  MenuItem,
+  CardMedia,
 } from "@mui/material";
+
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
@@ -36,139 +47,148 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DateCalendar } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import {Demo} from './Advertise.style'; 
+import { Demo } from "./Advertise.style";
+import EventBusyIcon from "@mui/icons-material/EventBusy";
+import SearchIcon from "@mui/icons-material/Search";
+import { Container } from "@mui/joy";
+import useDebounce from "../../customHooks/useDebounce";
+import { parametersListing } from "../../core/models/parametersListing.model";
+import { formaDateTime } from "../../core/services/helpers";
+import PerPageSelect from "../../components/PerPageChange/PerPageSelect";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ShareIcon from "@mui/icons-material/Share";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { red } from "@mui/material/colors";
+import AdCard from "../../components/Card/AdsCard";
+import AlertComponent from "../../components/Alert/Alert";
+import { message } from "../../core/constant/message";
+import OrderBy from "components/OrderBy/OrderBy";
+import OrderDirection from "components/OrderDirection/OrderDirection";
 
 const Advertise = () => {
   const [showModal, setShowModal] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [date, setDate] = useState<string | null>("");
-  const [value, setValue] = useState<Dayjs | null>(dayjs("2023-04-01"));
+  const [key, setKey] = useState<string | null>("");
+  const [value, setValue] = useState<Dayjs | null | string>(
+    dayjs("2023-04-01")
+  );
   const [selectedPicker, setSelectedPicker] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [parameters, setParameters] = useState<parametersListing>({
+    page: 1,
+    perPage: "4",
+    orderBy: undefined,
+    orderDirection: undefined,
+    keyword: undefined,
+    date: undefined,
+    status: undefined,
+  });
+  const { data, error, isLoading, isSuccess, refetch } =
+    useGetAdsQuery(parameters);
 
-  const { data, error, isLoading, isSuccess } = useGetAdsQuery(currentPage);
+  const debouncedSearchTerm = useDebounce(searchTerm, 700);
+  useEffect(() => {
+    setParameters({
+      ...parameters,
+      keyword: debouncedSearchTerm !== "" ? debouncedSearchTerm : undefined,
+    });
+  }, [debouncedSearchTerm, parameters]);
 
-  const { data: dataByDate, isLoading: dataByDateLoading } =
-    useGetAdsByDateQuery(date);
-
-  const [
-    deletAd,
-    { data: deletData, isSuccess: isSuccessDelete, isLoading: loadingDelete },
-  ] = useDeleteAdMutation();
-
-  function handleDeleteAd(id: string) {
-    deletAd(id);
-    setShowModal(isSuccessDelete);
-  }
   const handlePageChange = (event: any, page: number) => {
-    setCurrentPage(page);
+    setParameters({ ...parameters, page });
   };
 
-  const handlePicker = (date: dayjs.Dayjs | null) => {
+  const handlePicker = (date: dayjs.Dayjs | null | string) => {
     setSelectedPicker(true);
-    const dateString = dayjs(date).format("YYYY-MM-DDTHH:mm:ss");
-    const datePicker = dateString?.substring(0, 10).replace(/-/g, ""); // '20230424'
-    setDate(datePicker);
+    const datePicker = dayjs(date).format("YYYY-MM-DDTHH:mm:ss");
+    const dateString = datePicker?.substring(0, 10).replace(/-/g, "");
+    setParameters({ ...parameters, date: dateString });
+    console.log({ parameters });
   };
 
   const handleReset = () => {
-    setSelectedPicker(false);
+    setValue("YYYY-DD-MM");
+    setParameters({ ...parameters, date: undefined });
+  };
+
+  useEffect(() => {
+    refetch();
+  }, [data, refetch]);
+
+  const handlePerPageChange = (perPage: any) => {
+    setParameters({ ...parameters, perPage });
+  };
+  const handleOrderByChange = (orderBy: any) => {
+    setParameters({ ...parameters, orderBy });
+  };
+
+  const handleOrderDirectionChange = (orderDirection: any) => {
+    setParameters({ ...parameters, orderDirection });
+  };
+
+  const handleParameterChange = (param: string, value: any) => {
+    setParameters({ ...parameters, [param]: value });
   };
   return (
     <div>
-              <Typography align="left">Advertises</Typography>
+      {/* {isSuccessDelete && <AlertComponent title={message.ADVERRTISESDELETED} severity="success" />} */}
+      <Box display="flex" borderRadius="3px">
+        <InputBase
+          sx={{ ml: 2, flex: 1 }}
+          placeholder="Search"
+          defaultValue={key}
+          onChange={(event) => {
+            // setParameters({...parameters,keyword:event.target.value === '' ? undefined : event.target.value})
+            setSearchTerm(event.target.value);
+          }}
+        />
+        <IconButton type="button" sx={{ p: 1 }}>
+          <SearchIcon />
+        </IconButton>
+      </Box>
+      <Typography align="left">Advertises</Typography>
+      <Grid container alignItems="center">
+        <Grid item md={4}>
+          <Grid container>
+            <Grid item>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={["DatePicker"]}>
+                  <DatePicker
+                    value={value}
+                    onChange={(newDate) => handlePicker(newDate)}
+                  />
+                </DemoContainer>
+              </LocalizationProvider>
+            </Grid>
+            <Grid item>
+              <Button onClick={handleReset}>Reset</Button>
+            </Grid>
+          </Grid>
+        </Grid>
 
-      <Grid>
-      <Link to={PATHS.AddAdvertise}>
-          <Button variant="contained" endIcon={<PlusOneIcon />}>
-            Add Advertise
-          </Button>{" "}
-        </Link>
-
+        <Grid item md={4} container justifyContent="flex-end">
+          <Link to={PATHS.AddAdvertise}>
+            <Button variant="contained" endIcon={<PlusOneIcon />}>
+              Add Advertise
+            </Button>
+          </Link>
+        </Grid>
       </Grid>
-      <Grid item xs={12} md={12}>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DemoContainer components={["DatePicker"]}>
-            <DatePicker
-              value={value}
-              onChange={(newDate) => handlePicker(newDate)}
-            />
-          </DemoContainer>
-        </LocalizationProvider>
-        <Button onClick={handleReset}>reset</Button>
 
+      <br />
+      <br />
+      <Grid>
         {isLoading && <Spinner />}
-        {showModal && (
-          <CustomModal title="Delete" description="deleted succeffully" />
-        )}{" "}
-        <Demo>
+
+        <Container>
           {}
-          {selectedPicker ? (
-            <List>
-              {dataByDate?.data.map((ad: Ad) => (
-                <ListItem key={ad.id}>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <FormatListBulletedIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <Link to={"/advertise/" + ad.id}>
-                    <ListItemText
-                      primary={ad.title}
-                      secondary={ad.description}
-                    />
-                  </Link>
-                  <ListItemText primary={ad.country} secondary={ad.city} />
-                  <ListItemText primary={ad.state} secondary={ad.street} />
-                  <ListItemText primary={ad.postal_code} />
-                  <Link to={"/advertise/" + ad.id}>
-                    <IconButton
-                      color="primary"
-                      aria-label="details"
-                      component="label"
-                    >
-                      <VisibilityIcon />
-                    </IconButton>
-                  </Link>
-                  <IconButton
-                    color="primary"
-                    aria-label="delete"
-                    component="label"
-                    onClick={() => handleDeleteAd(ad.id || "")}
-                    disabled={loadingDelete}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                  <Link to={"/advertise/update/" + ad.id}>
-                    <IconButton
-                      color="primary"
-                      aria-label="edit"
-                      component="label"
-                    >
-                      <EditIcon />
-                    </IconButton>
-                  </Link>
-                </ListItem>
-              ))}
-            </List>
-          ) : (
-            <List>
+
+          <Grid container spacing={1}>
+            <Grid container spacing={2}>
               {data?.data.map((ad: Ad) => (
-                <ListItem key={ad.id}>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <FormatListBulletedIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <Link to={"/advertise/" + ad.id}>
-                    <ListItemText
-                      primary={ad.title}
-                      secondary={ad.description}
-                    />
-                  </Link>
-                  <ListItemText primary={ad.country} secondary={ad.city} />
-                  <ListItemText primary={ad.state} secondary={ad.street} />
-                  <ListItemText primary={ad.postal_code} />
-                  <Link to={"/advertise/" + ad.id}>
+                <Grid item key={ad.id} xs={12} sm={6} md={4} lg={3}>
+                  <AdCard adData={ad} />
+                  {/* <Link to={"/advertise/" + ad.id}>
                     <IconButton
                       color="primary"
                       aria-label="details"
@@ -194,35 +214,43 @@ const Advertise = () => {
                     >
                       <EditIcon />
                     </IconButton>
-                  </Link>
-                </ListItem>
+                  </Link> */}
+                </Grid>
               ))}
-            </List>
-          )}
-        </Demo>
-        {selectedPicker ? (
-          <Stack spacing={2}>
-            <Pagination
-              color="primary"
-              count={dataByDate?.last_page}
-              defaultPage={currentPage}
-              boundaryCount={1}
-              onChange={handlePageChange}
-              disabled={isLoading}
-            />
-          </Stack>
-        ) : (
-          <Stack spacing={2}>
-            <Pagination
-              color="primary"
-              count={data?.last_page}
-              defaultPage={currentPage}
-              boundaryCount={1}
-              onChange={handlePageChange}
-              disabled={isLoading}
-            />
-          </Stack>
-        )}
+            </Grid>
+          </Grid>
+        </Container>
+      </Grid>
+      <br></br>
+      <br></br>
+      <Grid container alignItems="center" justifyContent="space-between">
+        <Grid item>
+          <Pagination
+            color="primary"
+            count={data?.last_page}
+            defaultPage={parameters.page}
+            boundaryCount={1}
+            onChange={handlePageChange}
+            disabled={isLoading}
+          />
+        </Grid>
+        <Grid item xs={4} sm={6} md={8} container justifyContent="flex-end">
+          <PerPageSelect
+            defaultValue={parameters.perPage}
+            value={parameters.perPage}
+            onChange={handlePerPageChange}
+          />
+          <OrderBy
+            defaultValue={parameters.orderBy}
+            value={parameters.orderBy}
+            onChange={handleOrderByChange}
+          />
+          <OrderDirection
+            defaultValue={parameters.orderDirection}
+            value={parameters.orderDirection}
+            onChange={handleOrderDirectionChange}
+          />
+        </Grid>
       </Grid>
     </div>
   );

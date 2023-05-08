@@ -16,10 +16,38 @@ import {
   Box,
   Typography,
   Container,
+  Alert,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import CustomModal from "../components/Modal/CustomModal";
+import { useFormik, Formik, Form, Field } from "formik";
+import * as Yup from "yup";
+import AlertComponent from "./../components/Alert/Alert";
 
+const validationSchema = Yup.object().shape({
+  name: Yup.string()
+    .required("name is required")
+    .min(4, "name must be at least 4 characters"),
+  email: Yup.string()
+    .required("email is required")
+    .min(8, "email must be at least 8 characters"),
+  login: Yup.string()
+    .required("login is required")
+    .min(4, "login must be at least 4 characters"),
+  phone: Yup.string()
+    .required("phone is required")
+    .min(8, "phone must be at least 8 characters"),
+  address: Yup.string()
+    .required("address is required")
+    .min(4, "address must be at least 4 characters"),
+  password: Yup.string()
+    .required("password code is required")
+    .min(8, "Password must be 8 characters long")
+    .matches(/[0-9]/, "Password requires a number")
+    .matches(/[a-z]/, "Password requires a lowercase letter")
+    .matches(/[A-Z]/, "Password requires an uppercase letter")
+    .matches(/[^\w]/, "Password requires a symbol"),
+});
 const theme = createTheme();
 
 function Signup() {
@@ -47,7 +75,7 @@ function Signup() {
   };
   const [formValue, setFormValue] = useState(initialState);
 
-  const { name, login, email, password, phone, address, avatar } = formValue;
+  const { name, login, email, password, phone, address } = formValue;
   const user: User = { ...formValue };
   const [showModal, setShowModal] = useState(false);
   const [descriptionModal, setDescriptionModal] = useState("");
@@ -73,10 +101,9 @@ function Signup() {
     if (isRegisterSuccess) {
       navigate("/profile");
     }
-    if (isRegisterError ) {     
+    if (isRegisterError) {
       setShowModal(true);
       setDescriptionModal(registerData?.message);
-
     }
   }, [isRegisterSuccess, isRegisterError]);
 
@@ -88,7 +115,6 @@ function Signup() {
       password: password,
       phone: phone,
       address: address,
-      avatar: avatar,
     };
 
     responseApi = await registreUser(userData).unwrap();
@@ -96,17 +122,37 @@ function Signup() {
 
     if (token) {
       await dispatch(registre({ user, token }));
-      
     }
   };
+  const initialValues = {
+    name: "",
+    login: "",
+    email: "",
+    password: "",
+    phone: "",
+    address: "",
+  };
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: async (values) => {
+      const responseApi = await registreUser(values).unwrap();
+      const token = responseApi.token;
+
+      if (token) {
+        await dispatch(registre({ user: values, token }));
+      }
+    },
+  });
 
   return (
     <div>
       {/* material ui  */}
-      <div> { showModal && <CustomModal
-            title="Sign up"
-            description={descriptionModal}
-          />}
+      <div>
+        {" "}
+        {isRegisterSuccess && (
+          <AlertComponent title={descriptionModal} severity="success" />
+        )}
         <ThemeProvider theme={theme}>
           <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -124,109 +170,109 @@ function Signup() {
               <Typography component="h1" variant="h5">
                 Sign up
               </Typography>
-              <Box component="form" noValidate sx={{ mt: 3 }}>
+              <form onSubmit={formik.handleSubmit}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
                     <TextField
-                      autoComplete="given-name"
-                      name="name"
-                      value={name}
-                      onChange={handleChangeForm}
-                      required
+                      label="Name"
                       fullWidth
-                      id="firstName"
-                      label=" Name"
-                      autoFocus
+                      type="text"
+                      id="name"
+                      name="name"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.name}
                     />
+                    {formik.touched.name && formik.errors.name ? (
+                      <Alert severity="error">{formik.errors.name}</Alert>
+                    ) : null}
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
-                      required
                       fullWidth
+                      label="nickname"
+                      type="text"
                       id="lastName"
-                      label="login"
                       name="login"
-                      value={login}
-                      onChange={handleChangeForm}
-                      autoComplete="family-name"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.login}
                     />
+                    {formik.touched.login && formik.errors.login ? (
+                      <Alert severity="error">{formik.errors.login}</Alert>
+                    ) : null}
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sm={12}>
                     <TextField
-                      required
                       fullWidth
+                      label="email"
+                      type="text"
                       id="email"
-                      label="Email Address"
                       name="email"
-                      value={email}
-                      onChange={handleChangeForm}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.email}
                     />
+                    {formik.touched.email && formik.errors.email ? (
+                      <Alert severity="error">{formik.errors.email}</Alert>
+                    ) : null}
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sm={12}>
                     <TextField
-                      required
                       fullWidth
+                      label="password"
+                      id="password"
                       name="password"
-                      value={password}
-                      onChange={handleChangeForm}
-                      label="Password"
                       type="password"
-                      id="password"
-                      autoComplete="new-password"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.password}
                     />
+                    {formik.touched.password && formik.errors.password ? (
+                      <Alert severity="error">{formik.errors.password}</Alert>
+                    ) : null}
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
-                      required
-                      fullWidth
-                      name="phone"
-                      value={phone}
-                      onChange={handleChangeForm}
                       label="phone"
-                      id="password"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
                       fullWidth
-                      name="address"
-                      value={address}
-                      onChange={handleChangeForm}
+                      type="text"
+                      id="phone"
+                      name="phone"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.phone}
+                    />
+                    {formik.touched.phone && formik.errors.phone ? (
+                      <Alert severity="error">{formik.errors.phone}</Alert>
+                    ) : null}
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
                       label="address"
+                      type="text"
                       id="address"
+                      name="address"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.address}
                     />
+                    {formik.touched.address && formik.errors.address ? (
+                      <Alert severity="error">{formik.errors.address}</Alert>
+                    ) : null}
                   </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      name="avatar"
-                      value={avatar}
-                      onChange={handleChangeForm}
-                      label="avatar"
-                      id="avatar"
-                    />
+                  <Grid item xs={12} sm={6}>
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      disabled={isRegistreLoading}
+                    >
+                      Submit
+                    </Button>
                   </Grid>
                 </Grid>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                  type="button"
-                  onClick={() => handleRegistre()}
-                  disabled={isRegistreLoading}
-                >
-                  Sign Up
-                </Button>
-                <Grid container justifyContent="flex-end">
-                  <Grid item>
-                    <Link href="/signin" variant="body2">
-                      Already have an account? Sign in
-                    </Link>
-                  </Grid>
-                </Grid>
-              </Box>
+              </form>
             </Box>
           </Container>
         </ThemeProvider>

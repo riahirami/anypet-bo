@@ -24,13 +24,13 @@ import {
   Container,
   Divider,
   Chip,
-  Alert
+  Alert,
 } from "@mui/material";
 
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import CustomModal from "../components/Modal/CustomModal";
-
-
+import AlertComponent from "../components/Alert/Alert";
+import { ServerResponse } from "../core/models/authState.model";
 const initialState = {
   name: "",
   email: "",
@@ -69,17 +69,17 @@ const Signin = () => {
       navigate("/profile");
     }
     if (isLoginError) {
+      setShowModal(true);
+      console.log({ loginError });
     }
-  }, [isLoginSuccess, isLoginError]);
+  }, [isLoginSuccess]);
 
   function handleChangeForm(e: any) {
     setFormValue({ ...formValue, [e.target.name]: e.target.value });
   }
 
   const handleLogin = async () => {
-    if (email && password) 
-      await loginUser({ email, password });
-
+    if (email && password) await loginUser({ email, password });
   };
 
   const [
@@ -89,33 +89,27 @@ const Signin = () => {
       isLoading: forgotLoading,
       isSuccess: forgotSuccess,
       error: forgotError,
-      
-
-      
     },
   ] = useForgotPasswordMutation();
 
   // TODO: check for undefined on the first click
-  const handleSubmitForgotPassword =  async() => {
+  const handleSubmitForgotPassword = async () => {
     await forgotPassword(email);
-    
+
     if (responseForgotData) {
-      setDescriptionModal(responseForgotData?.message)
+      setDescriptionModal(responseForgotData?.message);
       setShowModal(true);
     }
   };
 
   return (
     <div>
-      {/* materrial ui */}
       <>
+        {isLoginError && <AlertComponent title={loginError} severity="error" />}
         {showModal && (
-          <CustomModal
-            title="Forgot password"
-            description={descriptionModal}
-          />
+          <CustomModal title="Forgot password" description={descriptionModal} />
         )}
-      {forgotLoading && <Spinner />}
+        {forgotLoading && <Spinner />}
 
         <ThemeProvider theme={theme}>
           <Container component="main" maxWidth="xs">
@@ -178,6 +172,7 @@ const Signin = () => {
                 >
                   Sign In
                 </Button>
+
                 <Divider>
                   <Chip label="Don't have an account ?" />
                 </Divider>

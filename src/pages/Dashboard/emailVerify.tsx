@@ -22,10 +22,7 @@ const EmailVerify = () => {
       id: id,
       hash: hash,
     });
-
-    if (data) {
       navigate("/profile");
-    }
   }
 
   return (

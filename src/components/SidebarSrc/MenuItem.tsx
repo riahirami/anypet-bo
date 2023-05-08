@@ -120,8 +120,6 @@ export const MenuItemFR: React.ForwardRefRenderFunction<HTMLLIElement, MenuItemP
     [menuClasses.disabled]: disabled,
   };
 
-  // console.log('level - ', children, ' - ', level);
-
   return (
     <StyledMenuItem
       ref={ref}

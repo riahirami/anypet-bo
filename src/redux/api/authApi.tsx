@@ -51,7 +51,14 @@ export const authApi = createApi({
       },
       providesTags: ["User"],
     }),
-
+    UpdateAvatar: builder.mutation({
+      query: (body) => ({
+        url: endpoints.UPDATEAVATAR,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["User"],
+    }),
     forgotPassword: builder.mutation({
       query: (email) => ({
         url: endpoints.forgotPasswordUrl,
@@ -97,4 +104,5 @@ export const {
   useResendEmailVerificationMutation,
   useEmailVerificationMutation,
   useResetPasswordMutation,
+  useUpdateAvatarMutation
 } = authApi;

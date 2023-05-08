@@ -15,7 +15,10 @@ code {
 .App {
   display: flex;
 }
-
+a,a:visited {
+  text-decoration: none;
+  color: #050505;
+}
 .router-container {
  flex: 4;
 }

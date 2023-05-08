@@ -6,6 +6,7 @@ import { Switch } from "./Switch";
 import { IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Avatar } from "@mui/material";
+import { useProfileQuery } from "../../redux/api/authApi";
 interface SidebarHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
 }
@@ -64,6 +65,17 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   const { rtl } = useProSidebar();
   const { toggleSidebar, collapseSidebar, broken, collapsed } = useProSidebar();
 
+  const tokenValue = JSON.parse(localStorage.getItem("user") || "{}");
+  const {
+    data: dataProfile,
+    isError,
+    isSuccess,
+    isLoading,
+  } = useProfileQuery(tokenValue.token);
+
+  const { login, name, email, phone, avatar } = dataProfile?.user ?? {};
+
+
   const [collapse, setCollapse] = useState(true);
   const handleCollapseSidebar = () => {
     if (collapse) {
@@ -90,14 +102,15 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   <div style={{ marginTop: "20px", marginBottom: "20px" }}>
     <Avatar
       alt="Avatar"
-      src="https://global-img.gamergen.com/dragon-ball-ultimate-swipe-11-04-2014-1_0000629652.jpg"
+      src={avatar}
       sx={{ width: 100, height: 100 }}
     />
   </div>
   <div style={{ marginTop: "20px", marginBottom: "20px" }}>
     <Typography variant="subtitle1" fontWeight={700} color="#0098e5">
-      Dashboard
+      Dashboard : {login}
     </Typography>
+  
   </div>
 </div>
 

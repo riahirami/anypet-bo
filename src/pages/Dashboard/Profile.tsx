@@ -12,21 +12,29 @@ import {
   useProfileQuery,
   useResendEmailVerificationMutation,
   useResetPasswordMutation,
+  useUpdateAvatarMutation,
 } from "../../redux/api/authApi";
-import { Alert, AlertTitle, Container } from "@mui/material";
+import { Alert, AlertTitle, Avatar, CardMedia, Container } from "@mui/material";
 import Spinner from "../../components/Spinner/spinner";
 import { useTranslation } from "react-i18next";
 import { dashboard } from "../../core/constant/dashboard";
 import { resendEmailVerificationMsg } from "../../core/constant/resendEmailVerification";
 import CustomModal from "../../components/Modal/CustomModal";
-
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 function Profile() {
   // const { name } = useAppSelector(selectAuth);
+  const dispatch = useAppDispatch();
   const { token } = useAppSelector(selectAuth);
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const tokenValue = JSON.parse(localStorage.getItem("user") || "{}");
   const [showModal, setShowModal] = useState(false);
   const [descriptionModal, setDescriptionModal] = useState("");
@@ -37,8 +45,6 @@ function Profile() {
     isSuccess,
     isLoading,
   } = useProfileQuery(tokenValue.token);
-
-  const { login, name, email, phone } = dataProfile?.user ?? {};
 
   const [
     logoutUser,
@@ -65,6 +71,18 @@ function Profile() {
     { data: resetData, isSuccess: resetSuccess, isError: resetError },
   ] = useResetPasswordMutation();
 
+  const [
+    updateAvatar,
+    {
+      data: avatarData,
+      isSuccess: avatarSuccess,
+      isError: avatarError,
+      isLoading: AvatarLoading,
+    },
+  ] = useUpdateAvatarMutation();
+
+  const { login, name, email, phone, avatar } = dataProfile?.user ?? {};
+
   function handleLogout() {
     // dispatch(logout);
     if (token) {
@@ -82,71 +100,62 @@ function Profile() {
     }
   }
 
-  return (
-    <>
-      {isLoading && <Spinner />}
-     
-      <div>Dashboard {dashboard.welcomeMsg}</div>
-      {isError && (
-        <div>
-          <Alert
-            severity="warning"
-            sx={{ height: "60", t: "center", paddingLeft: "30%" }}
-          >
-            <AlertTitle>Warning</AlertTitle>
-            {dashboard.checkEmailMsg}
+  if (isLoading) return <Spinner />;
+  if (isError)
+    return (
+      <div>
+        <Alert
+          severity="warning"
+          sx={{ height: "60", t: "center", paddingLeft: "30%" }}
+        >
+          <AlertTitle>Warning</AlertTitle>
+          {dashboard.checkEmailMsg}
+        </Alert>
+
+        <button
+          type="button"
+          onClick={() => handleResendEmail()}
+          disabled={isLoading}
+        >
+          resend email verification
+        </button>
+        <button type="button" onClick={() => handleLogout()}>
+          logout
+        </button>
+        {loadingResend && <Spinner />}
+
+        {loadingResend ? (
+          <Spinner />
+        ) : successResend ? (
+          showModal && (
+            <CustomModal
+              title="Verification email"
+              description={descriptionModal}
+            />
+          )
+        ) : errorResend ? (
+          <Alert severity="error" sx={{ height: "60", textAlign: "center" }}>
+            <AlertTitle>Error</AlertTitle>
+            {resendEmailVerificationMsg.errorResendEmail}
           </Alert>
+        ) : null}
+      </div>
+    );
 
-          <button
-            type="button"
-            onClick={() => handleResendEmail()}
-            disabled={isLoading}
-          >
-            resend email verification
-          </button>
-          <button type="button" onClick={() => handleLogout()}>
-            logout
-          </button>
-          {loadingResend && <Spinner />}
-
-          {loadingResend ? (
-            <Spinner />
-          ) : successResend ? (
-            showModal && (
-              <CustomModal
-                title="Verification email"
-                description={descriptionModal}
-              />
-            )
-          ) : errorResend ? (
-            <Alert severity="error" sx={{ height: "60", textAlign: "center" }}>
-              <AlertTitle>Error</AlertTitle>
-              {resendEmailVerificationMsg.errorResendEmail}
-            </Alert>
-          ) : null}
-        </div>
-      )}
-
-      {!isError && isSuccess && dataProfile?.user && (
-        <>
-          <h2>Welcome {login}</h2>
-          <Container>
-            <p>Username: {login}</p>
-            <p>Fullname: {name}</p>
-            <p>email: {email}</p>
-            <p>Phone: {phone}</p>
-          </Container>
-          <button type="button" onClick={() => handleLogout()}>
-            logout
-          </button>
-        </>
-      )}
-
-      {!isError && (!isSuccess || !dataProfile?.user) && (
-        <p>{t("profile.user_not_found")}</p>
-      )}
-    </>
-  );
+  if (isSuccess && dataProfile?.user)
+    return (
+      <>
+        <h2>Welcome {login}</h2>
+        <Container>
+          <Avatar sx={{ width: 90, height: 90 }} alt="avatar" src={avatar} />
+          <p>Username: {login}</p>
+          <p>Fullname: {name}</p>
+          <p>email: {email}</p>
+          <p>Phone: {phone}</p>
+        </Container>
+      </>
+    );
+  else return <p>{t("profile.user_not_found")}</p>;
 }
 
 export default Profile;
