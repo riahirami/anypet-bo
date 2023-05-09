@@ -22,6 +22,8 @@ export const endpoints = {
     changeStatusAds:"ads/requestad",
     statsAds : "ads/stats",
     COUNTADSPERDATE : "ads/statsdate",
+    SETASFAVORITE : "ads/setfavorite/",
+    LISTFAVORITE : "ads/listfavorite",
 
 
     USERS: "users",

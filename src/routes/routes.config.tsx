@@ -19,6 +19,7 @@ import Stats from "../pages/Stats/Stats";
 import Home from "../pages/Stats/Home";
 import Users from "../pages/Users/Users";
 import Update from "../pages/Dashboard/Profile/Update";
+import ListFavorit from "pages/Ad/ListFavorit";
 
 
 const RoutesConfig: RouteObject[] = [
@@ -99,6 +100,10 @@ const RoutesConfig: RouteObject[] = [
   {
     path: PATHS.Users,
     element: <Users />
+  },
+  {
+    path: PATHS.LISTFAVORIT,
+    element: <ListFavorit />
   }
 ];
 

@@ -19,6 +19,8 @@ const OrderDirection = ({ value, onChange }: OrderDirectionSelectProps)  => {
     value={value}
     onChange={handleChange}
   >
+    
+    <MenuItem >Select an option</MenuItem>
     <MenuItem value="asc">Ascending</MenuItem>
     <MenuItem value="desc">Descending</MenuItem>
   </StyledTextFieldList>  )
