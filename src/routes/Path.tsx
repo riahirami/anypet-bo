@@ -18,4 +18,5 @@ export const PATHS = {
     Stats: '/stats',
     StatsHome: '/stats/home',
     Users: '/users',
+    LISTFAVORIT: '/favoritlist',
 }

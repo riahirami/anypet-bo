@@ -1,7 +1,7 @@
 import { MenuItem } from "@mui/material";
 import React from "react";
 import { PerPageSelectProps } from "./PerPage.type";
-import { StyledTextFieldList } from './PerPage.style';
+import { StyledTextFieldList } from "./PerPage.style";
 
 const PerPageSelect = ({ value, onChange }: PerPageSelectProps) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,6 +16,7 @@ const PerPageSelect = ({ value, onChange }: PerPageSelectProps) => {
       value={value}
       onChange={handleChange}
     >
+      <MenuItem >Select an option</MenuItem>
       <MenuItem value="4">4</MenuItem>
       <MenuItem value="8">8</MenuItem>
       <MenuItem value="12">12</MenuItem>

@@ -112,16 +112,16 @@ function Profile() {
           {dashboard.checkEmailMsg}
         </Alert>
 
-        <button
+        <Button
           type="button"
           onClick={() => handleResendEmail()}
           disabled={isLoading}
         >
           resend email verification
-        </button>
-        <button type="button" onClick={() => handleLogout()}>
+        </Button>
+        <Button type="button" onClick={() => handleLogout()}>
           logout
-        </button>
+        </Button>
         {loadingResend && <Spinner />}
 
         {loadingResend ? (

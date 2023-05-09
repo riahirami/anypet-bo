@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   useChangeStatusAdsMutation,
   useGetAdsQuery,
+  
 } from "../../redux/api/adsApi";
 import { Demo } from "./Advertise.style";
 import Spinner from "../../components/Spinner/spinner";
@@ -53,6 +54,8 @@ const AdvertiseRequest = () => {
     dayjs("2023-04-01")
   );
   const [status, setStatus] = useState("");
+
+ 
 
   const [parameters, setParameters] = useState<parametersListing>({
     page: 1,
@@ -123,6 +126,8 @@ const AdvertiseRequest = () => {
       });
     // setStatusParams({ id: adId, status });
   };
+
+ 
 
   function handleStatusListChange(event: React.ChangeEvent<HTMLInputElement>) {
     const newStatus = event.target.value;

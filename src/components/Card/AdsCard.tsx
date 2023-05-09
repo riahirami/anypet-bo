@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -25,10 +25,24 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useGetAllCategoriesQuery } from "../../redux/api/categoryApi";
 import { AdCardProps } from "./AdsCard.type";
 import useDeleteAd from "customHooks/useDeleteAd";
+import { useListFavoriteQuery, useSetFavoriteMutation } from "redux/api/adsApi";
 
 function AdCard({ adData }: AdCardProps) {
   const { data: CategoryData, refetch: RefetchCategory } =
     useGetAllCategoriesQuery(100);
+  const [setFavorit, { data: datasetFavoris, isSuccess: successFavoris }] =
+    useSetFavoriteMutation();
+
+  const [isFavorite, setIsFavorit] = useState<boolean>();
+  const [listFavorite, setListFavorite] = useState<Ad>();
+
+  const { data, isSuccess, isLoading, refetch } = useListFavoriteQuery(1);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setListFavorite(data);
+    }
+  }, [data]);
 
   const { handleDeleteAd } = useDeleteAd();
 
@@ -50,13 +64,32 @@ function AdCard({ adData }: AdCardProps) {
   };
 
   const handleShowDetails = () => {
-    console.log("Show details clicked");
     handleMenuClose();
   };
   const changeIdtoCategory = (id: string) => {
     const category = CategoryData?.data.find((cat: any) => cat.id == id);
     return category?.title;
   };
+
+  const checkIsFavorit = async (id: any) => {
+    const favoris = data?.data.find((fav: any) => fav.ad_id == id);
+    if (favoris) {
+      setIsFavorit(true);
+    } else {
+      setIsFavorit(false);
+    }
+  };
+
+  useEffect(() => {
+    checkIsFavorit(adData.id);
+  }, [data]);
+
+  const setfavorit = async (id: any) => {
+    await setFavorit(id);
+    refetch();
+    setIsFavorit(true);
+  };
+
   return (
     <>
       <Card key={adData.id}>
@@ -145,12 +178,15 @@ function AdCard({ adData }: AdCardProps) {
         </CardContent>
         <CardActions disableSpacing>
           <Grid container justifyContent="space-between">
-            <Grid item key={adData.id} xs={12} sm={4} md={3} lg={3}>
-              <IconButton aria-label="add to favorites">
-                <FavoriteIcon />
+            <Grid item xs={12} sm={4} md={3} lg={3}>
+              <IconButton
+                aria-label="add to favorites"
+                onClick={() => setfavorit(adData.id)}
+              >
+                {isFavorite ? <FavoriteIcon color="error" /> : <FavoriteIcon />}
               </IconButton>
             </Grid>
-            <Grid item key={adData.id} xs={12} sm={4} md={3} lg={3}>
+            <Grid item xs={12} sm={4} md={3} lg={3}>
               <Link to={"/advertise/" + adData.id}>
                 <IconButton
                   color="default"
@@ -161,7 +197,7 @@ function AdCard({ adData }: AdCardProps) {
                 </IconButton>
               </Link>
             </Grid>
-            <Grid item key={adData.id} xs={12} sm={4} md={3} lg={3}>
+            <Grid item xs={12} sm={4} md={3} lg={3}>
               <IconButton aria-label="share">
                 <ShareIcon />
               </IconButton>

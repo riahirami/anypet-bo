@@ -1,5 +1,5 @@
 import { Box, IconButton } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InputBase from "@mui/material/InputBase";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
@@ -14,8 +14,8 @@ import MenuItem from "@mui/material/MenuItem";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Person2Icon from "@mui/icons-material/Person2";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import ImageIcon from '@mui/icons-material/Image';
-import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
+import ImageIcon from "@mui/icons-material/Image";
+import HideImageOutlinedIcon from "@mui/icons-material/HideImageOutlined";
 
 import { useLogoutUserMutation } from "../../redux/api/authApi";
 import { Link, useNavigate } from "react-router-dom";
@@ -23,12 +23,22 @@ import { PATHS } from "../../routes/Path";
 
 import { Theme } from "../../core/enums";
 import { Props } from "./TopbarProps.type";
+import { useListFavoriteQuery } from "redux/api/adsApi";
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 
-
-const Topbar: React.FC<Props> = ({ mode, handleThemeChange, handleImageChange,hasImage }) => {
+const Topbar: React.FC<Props> = ({
+  mode,
+  handleThemeChange,
+  handleImageChange,
+  hasImage,
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const tokenValue = JSON.parse(localStorage.getItem("user") || "{}");
+
+  const { data, isSuccess, isLoading, refetch } = useListFavoriteQuery(1);
+
+
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -36,7 +46,6 @@ const Topbar: React.FC<Props> = ({ mode, handleThemeChange, handleImageChange,ha
   const handleClose = () => {
     setAnchorEl(null);
   };
-
 
   const [
     logoutUser,
@@ -65,14 +74,10 @@ const Topbar: React.FC<Props> = ({ mode, handleThemeChange, handleImageChange,ha
         </IconButton>
       </Box>
 
-
-
       {/* ICONS */}
       <Box display="flex">
-      <IconButton onClick={handleImageChange}>
-         {hasImage =="true" ? <ImageIcon  /> :
-         <HideImageOutlinedIcon />}
-          
+        <IconButton onClick={handleImageChange}>
+          {hasImage == "true" ? <ImageIcon /> : <HideImageOutlinedIcon />}
         </IconButton>
         <IconButton onClick={handleThemeChange}>
           {mode === Theme.LIGHT ? (
@@ -90,7 +95,12 @@ const Topbar: React.FC<Props> = ({ mode, handleThemeChange, handleImageChange,ha
         </IconButton>
 
         <IconButton>
-          <SettingsOutlinedIcon />
+          <Link to="/favoritlist">
+            <FavoriteBorderOutlinedIcon  />
+          </Link>
+          <Badge variant="danger" shape="circle">
+            {data?.count}
+          </Badge>
         </IconButton>
         <div>
           <IconButton

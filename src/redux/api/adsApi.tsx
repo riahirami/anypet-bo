@@ -152,6 +152,24 @@ export const adsApi = createApi({
         };
       },
     }),
+    setFavorite: builder.mutation({
+      query: (id) => {
+        return {
+          url: endpoints.SETASFAVORITE+id,
+          method: "post",
+          providesTags: ["Ad"],
+        };
+      },
+    }),
+    listFavorite: builder.query({
+      query: () => {
+        return {
+          url: endpoints.LISTFAVORITE,
+          method: "get",
+          providesTags: ["Ad"],
+        };
+      },
+    }),
   }),
 });
 
@@ -165,5 +183,7 @@ export const {
   useChangeStatusAdsMutation,
   useGetAdsStatsQuery,
   useGetAdsByStatusQuery,
-  useGetCountAdsPerDateQuery
+  useGetCountAdsPerDateQuery,
+  useListFavoriteQuery,
+  useSetFavoriteMutation,
 } = adsApi;

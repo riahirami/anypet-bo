@@ -21,7 +21,6 @@ function App() {
       const userData = localStorage.getItem("user");
       if (userData) {
         const user = JSON.parse(userData);
-        console.log({user})
         dispatch(setUser(user));
       }
     } catch (error) {
