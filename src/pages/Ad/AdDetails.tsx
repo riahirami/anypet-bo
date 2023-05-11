@@ -7,6 +7,7 @@ import { Button, Grid } from "@mui/material";
 import { useGetAllCategoriesQuery } from "../../redux/api/categoryApi";
 
 import AdCard from "../../components/Card/AdsCard";
+import Comment from "components/Comment/Comment";
 
 const AdDetails: React.FC = () => {
   const { id } = useParams();
@@ -29,6 +30,9 @@ const AdDetails: React.FC = () => {
     <Grid item xs={12} md={12}>
       {isLoading && <Spinner />}
       {adData && <AdCard adData={adData} />}
+      <Grid>
+        <Comment />
+      </Grid>
     </Grid>
   );
 };

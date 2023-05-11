@@ -19,4 +19,5 @@ export const PATHS = {
     StatsHome: '/stats/home',
     Users: '/users',
     LISTFAVORIT: '/favoritlist',
+    LISTCOMMENTS: '/comment/:id',
 }

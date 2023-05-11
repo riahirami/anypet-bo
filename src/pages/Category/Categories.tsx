@@ -169,6 +169,7 @@ const Categories = () => {
               </TableBody>
             </Table>
           </TableContainer>
+
         </Demo>
       </Grid>
     </div>
