@@ -30,6 +30,7 @@ export const categoryApi = createApi({
           body: { title, description },
         };
       },
+      invalidatesTags: ["Category"],
     }),
     updateCategory: builder.mutation({
       query: ({ id, title, description }) => ({
@@ -46,6 +47,7 @@ export const categoryApi = createApi({
           body: id,
         };
       },
+      invalidatesTags: ["Category"],
     }),
     getCategoryById: builder.query({
       query: (id: any) => {
@@ -54,6 +56,7 @@ export const categoryApi = createApi({
           method: "get",
         };
       },
+      providesTags: ["Category"],
     }),
   }),
 });

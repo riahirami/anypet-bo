@@ -28,4 +28,6 @@ export const endpoints = {
 
     USERS: "users",
     VERIFIEDUSERS: "users/verified",
+
+    LISTCOMMENTS: "comment/"
 }
