@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useDeleteAdMutation, useGetAdsQuery } from "../../redux/api/adsApi";
+import {
+  useDeleteAdMutation,
+  useGetAdsQuery,
+  useGetMediaByIdQuery,
+} from "../../redux/api/adsApi";
 import { Ad, AdData } from "../../core/models/ad.model";
 import {
   Avatar,
@@ -69,9 +73,8 @@ import OrderDirection from "components/OrderDirection/OrderDirection";
 const Advertise = () => {
   const [showModal, setShowModal] = useState(false);
   const [key, setKey] = useState<string | null>("");
-  const [value, setValue] = useState<Dayjs | null | string>(
-    dayjs("2023-04-01")
-  );
+  const [value, setValue] = useState<Dayjs | null | string>(dayjs());
+
   const [selectedPicker, setSelectedPicker] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [parameters, setParameters] = useState<parametersListing>({
@@ -85,6 +88,13 @@ const Advertise = () => {
   });
   const { data, error, isLoading, isSuccess, refetch } =
     useGetAdsQuery(parameters);
+
+    const [idAds, setIdAds]= useState(undefined);
+    const {
+      data: MediaData,
+      isLoading: MediaLoading,
+      isSuccess: MediaSuccess,
+    } = useGetMediaByIdQuery(249);
 
   const debouncedSearchTerm = useDebounce(searchTerm, 700);
   useEffect(() => {
@@ -103,7 +113,6 @@ const Advertise = () => {
     const datePicker = dayjs(date).format("YYYY-MM-DDTHH:mm:ss");
     const dateString = datePicker?.substring(0, 10).replace(/-/g, "");
     setParameters({ ...parameters, date: dateString });
-    console.log({ parameters });
   };
 
   const handleReset = () => {
@@ -187,34 +196,8 @@ const Advertise = () => {
             <Grid container spacing={2}>
               {data?.data.map((ad: Ad) => (
                 <Grid item key={ad.id} xs={12} sm={6} md={4} lg={3}>
-                  <AdCard adData={ad} />
-                  {/* <Link to={"/advertise/" + ad.id}>
-                    <IconButton
-                      color="primary"
-                      aria-label="details"
-                      component="label"
-                    >
-                      <VisibilityIcon />
-                    </IconButton>
-                  </Link>
-                  <IconButton
-                    color="primary"
-                    aria-label="delete"
-                    component="label"
-                    onClick={() => handleDeleteAd(ad.id || "")}
-                    disabled={loadingDelete}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                  <Link to={"/advertise/update/" + ad.id}>
-                    <IconButton
-                      color="primary"
-                      aria-label="edit"
-                      component="label"
-                    >
-                      <EditIcon />
-                    </IconButton>
-                  </Link> */}
+                  <AdCard adData={ad} medias={MediaData}/>
+                
                 </Grid>
               ))}
             </Grid>

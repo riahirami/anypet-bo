@@ -23,11 +23,15 @@ import { Link } from "react-router-dom";
 import { Ad, AdData } from "../../core/models/ad.model";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useGetAllCategoriesQuery } from "../../redux/api/categoryApi";
-import { AdCardProps } from "./AdsCard.type";
+import { AdCardProps, Media } from "./AdsCard.type";
 import useDeleteAd from "customHooks/useDeleteAd";
-import { useListFavoriteQuery, useSetFavoriteMutation } from "redux/api/adsApi";
+import {
+  useGetMediaByIdQuery,
+  useListFavoriteQuery,
+  useSetFavoriteMutation,
+} from "redux/api/adsApi";
 
-function AdCard({ adData }: AdCardProps) {
+function AdCard({ adData,medias }: AdCardProps) {
   const { data: CategoryData, refetch: RefetchCategory } =
     useGetAllCategoriesQuery(100);
   const [setFavorit, { data: datasetFavoris, isSuccess: successFavoris }] =
@@ -37,6 +41,12 @@ function AdCard({ adData }: AdCardProps) {
   const [listFavorite, setListFavorite] = useState<Ad>();
 
   const { data, isSuccess, isLoading, refetch } = useListFavoriteQuery(1);
+
+  const {
+    data: MediaData,
+    isLoading: MediaLoading,
+    isSuccess: MediaSuccess,
+  } = useGetMediaByIdQuery(adData?.id);
 
   useEffect(() => {
     if (isSuccess) {
@@ -119,16 +129,32 @@ function AdCard({ adData }: AdCardProps) {
           title={`Advertise ${adData.id}`}
           subheader={formaDateTime(adData.created_at)}
         />
-        <CardMedia
-          component="img"
-          height="280px"
-          image="https://images.pexels.com/photos/248307/pexels-photo-248307.jpeg?cs=srgb&dl=pexels-pixabay-248307.jpg&fm=jpg"
-          alt={adData.title}
-        />
+
         <CardContent>
+          <Grid container alignItems={"center"} >
+            {MediaSuccess &&
+              medias?.data.map((media: Media) => {
+                console.log({medias});
+                const url =
+                  "http://localhost/" +
+                  media.file_path.replace("public/", "storage/");
+                return (
+                  <Grid item key={media.id} xs={12} sm={4} md={4} lg={4}>
+                    <CardMedia
+                      component="img"
+                      width="200"
+                      height="200"
+                      image={url}
+                    
+                    />
+                  </Grid>
+                );
+              })}
+          </Grid>
           <Typography variant="subtitle1" gutterBottom>
             {adData.title}
           </Typography>
+
           <Typography variant="body2" color="text.secondary" noWrap>
             {adData.description}
           </Typography>

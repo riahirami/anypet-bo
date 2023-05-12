@@ -57,7 +57,6 @@ const Update = () => {
   };
 
   const handleAddAvatar = async () => {
-    console.log("Avatar image:", avatarImg);
     const formData = new FormData();
     if (avatarImg) {
       formData.append("avatar", avatarImg);

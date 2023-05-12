@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   useChangeStatusAdsMutation,
   useGetAdsQuery,
+  useGetMediaByIdQuery,
   
 } from "../../redux/api/adsApi";
 import { Demo } from "./Advertise.style";
@@ -91,6 +92,13 @@ const AdvertiseRequest = () => {
       isError: errorChangeStatus,
     },
   ] = useChangeStatusAdsMutation();
+
+  const {
+    data: MediaData,
+    isLoading: MediaLoading,
+    isSuccess: MediaSuccess,
+  } = useGetMediaByIdQuery(undefined);
+
 
   useEffect(() => {
     setStatusParams({ ...statusParams });
@@ -207,7 +215,7 @@ const AdvertiseRequest = () => {
           <Grid container spacing={1}>
             {data?.data.map((ad: Ad) => (
               <Grid item key={ad.id} xs={12} sm={4} md={3} lg={3}>
-                {data && <AdCard adData={ad} />}
+                {data && <AdCard adData={ad} medias={MediaData}/>}
 
                 {/* <IconButton
                   color="error"

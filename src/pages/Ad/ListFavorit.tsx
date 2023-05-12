@@ -1,5 +1,5 @@
 import React from "react";
-import { useListFavoriteQuery } from "../../redux/api/adsApi";
+import { useGetMediaByIdQuery, useListFavoriteQuery } from "../../redux/api/adsApi";
 import AdCard from "components/Card/AdsCard";
 import Spinner from "components/Spinner/spinner";
 import { Grid } from "@mui/material";
@@ -31,6 +31,11 @@ interface AdData {
 }
 const ListFavorit = () => {
   const { data, isSuccess, isLoading, error } = useListFavoriteQuery(1);
+  const {
+    data: MediaData,
+    isLoading: MediaLoading,
+    isSuccess: MediaSuccess,
+  } = useGetMediaByIdQuery(undefined);
 
 
   if (isSuccess) {
@@ -38,7 +43,7 @@ const ListFavorit = () => {
         <Grid container alignItems="center">
         {data?.data?.map((item: any) => (
           <Grid key={item.id} item xs={4} sm={4} md={4}>
-            <AdCard adData={item.ad} />
+            <AdCard adData={item.ad} medias={MediaData} />
           </Grid>
         ))}
       </Grid>

@@ -24,7 +24,7 @@ import { useGetAllCategoriesQuery } from "../../redux/api/categoryApi";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import {message} from "../../core/constant/message";
+import { message } from "../../core/constant/message";
 
 const advertiseSchema = Yup.object().shape({
   title: Yup.string()
@@ -55,7 +55,7 @@ const advertiseSchema = Yup.object().shape({
 });
 const AddAdvertise = () => {
   const [showModal, setShowModal] = useState(false);
-
+  const [mediaValue, setMediaValue] = useState<File | null>(null);
   const item: Ad = {
     title: "",
     description: "",
@@ -65,9 +65,10 @@ const AddAdvertise = () => {
     street: "",
     postal_code: "",
     category_id: "",
-    created_at:"",
-    updated_at:"",
-    status:""
+    created_at: "",
+    updated_at: "",
+    status: "",
+    media: "",
   };
 
   const [ad, setAd] = useState(item);
@@ -91,25 +92,33 @@ const AddAdvertise = () => {
 
   function handleChangeForm(formikProps: any) {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, value } = event.target;
-      formikProps.setFieldValue(name, value);
+      const { name, value, files } = event.target;
+      if (files) {
+        formikProps.setFieldValue(name, Array.from(files));
+      } else {
+        formikProps.setFieldValue(name, value);
+      }
     };
   }
 
+
+
   const handleAddAd = async (values: any, { setSubmitting }: any) => {
-    await addAdvertise(values)
-    .unwrap()
-    .then(() => {
-      setShowModal(true);
-      setSubmitting(false);
-    })
-    .then(() => {
-      return new Promise(resolve => setTimeout(resolve, 2000)); 
-    })
-    .then(() => {
-      navigate("/Advertise");
-    });
+
+    await addAdvertise({ ...values}).unwrap()
+      .then(() => {
+        setShowModal(true);
+        setSubmitting(false);
+      })
+      .then(() => {
+        return new Promise(resolve => setTimeout(resolve, 2000));
+      })
+      .then(() => {
+        navigate("/Advertise");
+      });
   };
+
+ 
 
   return (
     <div>
@@ -130,6 +139,7 @@ const AddAdvertise = () => {
           city: "",
           street: "",
           postal_code: "",
+          media: [],
         }}
         validationSchema={advertiseSchema}
         onSubmit={handleAddAd}
@@ -145,6 +155,15 @@ const AddAdvertise = () => {
               as={CustomTextField}
               helperText={formikProps.touched.title && formikProps.errors.title}
               error={formikProps.touched.title && !!formikProps.errors.title}
+              onChange={handleChangeForm(formikProps)}
+            />
+            <TextField
+              label="media"
+              name="media"
+              id="media"
+              color="primary"
+              type="file"
+              inputProps={{ multiple: true }}
               onChange={handleChangeForm(formikProps)}
             />
             <CustomTextField

@@ -104,7 +104,8 @@ const RoutesConfig: RouteObject[] = [
   {
     path: PATHS.LISTFAVORIT,
     element: <ListFavorit />
-  }
+  },
+  
 ];
 
 export default RoutesConfig;

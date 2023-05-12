@@ -43,20 +43,36 @@ export const adsApi = createApi({
         street,
         postal_code,
         category_id,
+        media,
       }) => {
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("description", description);
+        formData.append("country", country);
+        formData.append("state", state);
+        formData.append("city", city);
+        formData.append("street", street);
+        formData.append("postal_code", postal_code);
+        formData.append("category_id", category_id);
+        for (let i = 0; i < media.length; i++) {
+          formData.append("media[]", media[i]);
+        }
         return {
           url: endpoints.Ads,
+       
           method: "post",
-          body: {
-            title,
-            description,
-            country,
-            state,
-            city,
-            street,
-            postal_code,
-            category_id,
-          },
+          body: formData,
+        };
+      },
+      invalidatesTags:['Ad']
+
+    }),
+    getMediaById: builder.query({
+      query: (id: any) => {
+        return {
+          url: endpoints.ADMEDIA + `${id}`,
+          method: "get",
+          providesTags: ["Ad"],
         };
       },
     }),
@@ -94,6 +110,7 @@ export const adsApi = createApi({
           body: id,
         };
       },
+      invalidatesTags:['Ad']
     }),
     getAdById: builder.query({
       query: (id: any) => {
@@ -129,7 +146,7 @@ export const adsApi = createApi({
     getAdsStats: builder.query({
       query: (column: any) => {
         return {
-          url: endpoints.statsAds+"?column="+column,
+          url: endpoints.statsAds + "?column=" + column,
           method: "get",
         };
       },
@@ -155,7 +172,7 @@ export const adsApi = createApi({
     setFavorite: builder.mutation({
       query: (id) => {
         return {
-          url: endpoints.SETASFAVORITE+id,
+          url: endpoints.SETASFAVORITE + id,
           method: "post",
           providesTags: ["Ad"],
         };
@@ -186,4 +203,5 @@ export const {
   useGetCountAdsPerDateQuery,
   useListFavoriteQuery,
   useSetFavoriteMutation,
+  useGetMediaByIdQuery
 } = adsApi;

@@ -11,6 +11,7 @@ export interface Ad {
   created_at?:string
   updated_at?:string
   status?:string
+  media?: string
 }
 
 

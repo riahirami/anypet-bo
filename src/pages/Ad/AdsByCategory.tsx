@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useGetAdsByCategoryQuery } from "../../redux/api/adsApi";
+import { useGetAdsByCategoryQuery, useGetMediaByIdQuery } from "../../redux/api/adsApi";
 import { useParams } from "react-router-dom";
 import { Grid } from "@mui/material";
 
@@ -21,7 +21,11 @@ const AdsByCategory = () => {
     setAds(adData);
   }, [adData]);
 
-
+  const {
+    data: MediaData,
+    isLoading: MediaLoading,
+    isSuccess: MediaSuccess,
+  } = useGetMediaByIdQuery(adData?.id);
 
   return (
     <>
@@ -29,7 +33,7 @@ const AdsByCategory = () => {
         {adData &&
           adData.map((item: Ad) => (
             <Grid item key={id} xs={12} md={4}>
-              {adData && <AdCard adData={item} />}
+              {adData && <AdCard adData={item} medias={MediaData}/>}
             </Grid>
           ))}
       </Grid>
