@@ -20,25 +20,22 @@ import { message } from "../../core/constant/message";
 const categorySchema = Yup.object().shape({
   title: Yup.string()
     .required("Title is required")
-    .min(6, "Title must be at least 6 characters")
+    .min(3, "Title must be at least 3 characters")
     .max(20, "Title must be at most 255 characters"),
-  description: Yup.string()
-    .required("Description is required")
-    .min(12, "description must be at least 12 characters"),
+ 
 });
 const AddCategory = () => {
   const [showModal, setShowModal] = useState(false);
 
   const item: Category = {
     title: "",
-    description: "",
   };
   const tokenValue = JSON.parse(localStorage.getItem("user") || "{}");
 
   const [category, setCategory] = useState(item);
   const [addCategory, { data, isSuccess, isLoading, isError }] =
     useAddCategoryMutation();
-  const { title, description } = category;
+  const { title } = category;
   const navigate = useNavigate();
 
   function handleChangeForm(formikProps: any) {
@@ -74,7 +71,6 @@ const AddCategory = () => {
       <Formik
         initialValues={{
           title: "",
-          description: "",
         }}
         validationSchema={categorySchema}
         onSubmit={handleAddcategory}
@@ -93,26 +89,7 @@ const AddCategory = () => {
               onChange={handleChangeForm(formikProps)}
             />
             <br />
-            <Field
-              id="description"
-              name="description"
-              label="description"
-              color="primary"
-              fullWidth
-              multiline
-              rows={4}
-              as={CustomTextField}
-              helperText={
-                formikProps.touched.description &&
-                formikProps.errors.description
-              }
-              error={
-                formikProps.touched.description &&
-                !!formikProps.errors.description
-              }
-              onChange={handleChangeForm(formikProps)}
-            />
-            <br />
+            
             <div style={{ display: "flex", justifyContent: "left" }}>
               <StyledButton
                 size="large"

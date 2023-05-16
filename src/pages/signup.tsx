@@ -25,15 +25,15 @@ import * as Yup from "yup";
 import AlertComponent from "./../components/Alert/Alert";
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string()
-    .required("name is required")
+  firstname: Yup.string()
+    .required("firstname is required")
+    .min(4, "firstname must be at least 4 characters"),
+  lastname: Yup.string()
+    .required("lastname is required")
     .min(4, "name must be at least 4 characters"),
   email: Yup.string()
     .required("email is required")
     .min(8, "email must be at least 8 characters"),
-  login: Yup.string()
-    .required("login is required")
-    .min(4, "login must be at least 4 characters"),
   phone: Yup.string()
     .required("phone is required")
     .min(8, "phone must be at least 8 characters"),
@@ -52,9 +52,9 @@ const theme = createTheme();
 
 function Signup() {
   const initialState = {
-    name: "",
+    firstname: "",
+    lastname: "",
     email: "",
-    login: "",
     phone: "",
     address: "",
     avatar: "",
@@ -63,9 +63,9 @@ function Signup() {
   let responseApi: RegisterResponse = {
     message: "",
     user: {
-      name: "",
+      firstname: "",
+      lastname: "",
       email: "",
-      login: "",
       phone: "",
       address: "",
       avatar: "",
@@ -75,7 +75,7 @@ function Signup() {
   };
   const [formValue, setFormValue] = useState(initialState);
 
-  const { name, login, email, password, phone, address } = formValue;
+  const { firstname, lastname, email, password, phone, address } = formValue;
   const user: User = { ...formValue };
   const [showModal, setShowModal] = useState(false);
   const [descriptionModal, setDescriptionModal] = useState("");
@@ -109,8 +109,8 @@ function Signup() {
 
   const handleRegistre = async () => {
     const userData: User = {
-      name: name,
-      login: login,
+      firstname: firstname,
+      lastname: lastname,
       email: email,
       password: password,
       phone: phone,
@@ -125,8 +125,8 @@ function Signup() {
     }
   };
   const initialValues = {
-    name: "",
-    login: "",
+    firstname: "",
+    lastname: "",
     email: "",
     password: "",
     phone: "",
@@ -174,32 +174,32 @@ function Signup() {
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
                     <TextField
-                      label="Name"
+                      label="Firstame"
                       fullWidth
                       type="text"
-                      id="name"
-                      name="name"
+                      id="firstname"
+                      name="firstname"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      value={formik.values.name}
+                      value={formik.values.firstname}
                     />
-                    {formik.touched.name && formik.errors.name ? (
-                      <Alert severity="error">{formik.errors.name}</Alert>
+                    {formik.touched.firstname && formik.errors.firstname ? (
+                      <Alert severity="error">{formik.errors.firstname}</Alert>
                     ) : null}
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
                       fullWidth
-                      label="nickname"
+                      label="lastname"
                       type="text"
-                      id="lastName"
-                      name="login"
+                      id="lastname"
+                      name="lastname"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      value={formik.values.login}
+                      value={formik.values.lastname}
                     />
-                    {formik.touched.login && formik.errors.login ? (
-                      <Alert severity="error">{formik.errors.login}</Alert>
+                    {formik.touched.lastname && formik.errors.lastname ? (
+                      <Alert severity="error">{formik.errors.lastname}</Alert>
                     ) : null}
                   </Grid>
                   <Grid item xs={12} sm={12}>

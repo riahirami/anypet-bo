@@ -1,7 +1,6 @@
 export interface Category {
   id?: string | undefined
   title: string,
-  description: string
 }
 
 export interface CategoryData {

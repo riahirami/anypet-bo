@@ -32,9 +32,9 @@ import CustomModal from "../components/Modal/CustomModal";
 import AlertComponent from "../components/Alert/Alert";
 import { ServerResponse } from "../core/models/authState.model";
 const initialState = {
-  name: "",
+  lastname: "",
+  firstname: "",
   email: "",
-  login: "",
   phone: "",
   address: "",
   avatar: "",
@@ -47,7 +47,7 @@ const Signin = () => {
   const [descriptionModal, setDescriptionModal] = useState("");
 
   const [formValue, setFormValue] = useState(initialState);
-  const { name, login, email, password, phone, address, avatar } = formValue;
+  const { firstname, lastname, email, password, phone, address, avatar } = formValue;
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
@@ -70,7 +70,6 @@ const Signin = () => {
     }
     if (isLoginError) {
       setShowModal(true);
-      console.log({ loginError });
     }
   }, [isLoginSuccess]);
 

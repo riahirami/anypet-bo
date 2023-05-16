@@ -14,9 +14,9 @@ import {message} from "../../../core/constant/message";
 import Profile from './../Profile';
 
 const initialState = {
-  name: "",
+  firstname: "",
+  lastname: "",
   email: "",
-  login: "",
   phone: "",
   address: "",
   avatar: "",
@@ -31,7 +31,7 @@ const Update = () => {
   const [descriptionModal, setDescriptionModal] = useState("");
 
   const [formValue, setFormValue] = useState(initialState);
-  const { name, login, email, password, phone, address, avatar } = formValue;
+  const { firstname, lastname, email, password, phone, address, avatar } = formValue;
 
   const [
     updateAvatar,

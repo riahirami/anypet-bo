@@ -1,8 +1,9 @@
+import { User } from "./user.model"
+
 export interface Ad {
   id?: string | undefined
   title: string
   description: string
-  country: string
   state: string
   city: string
   street: string
@@ -11,7 +12,9 @@ export interface Ad {
   created_at?:string
   updated_at?:string
   status?:string
-  media?: string
+  media?: string[]
+  user_id:string
+  user:User
 }
 
 

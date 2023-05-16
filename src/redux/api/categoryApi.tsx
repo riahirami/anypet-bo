@@ -23,20 +23,20 @@ export const categoryApi = createApi({
       providesTags: ["Category"],
     }),
     addCategory: builder.mutation({
-      query: ({ title, description }) => {
+      query: ({ title }) => {
         return {
           url: endpoints.Categories,
           method: "post",
-          body: { title, description },
+          body: { title },
         };
       },
       invalidatesTags: ["Category"],
     }),
     updateCategory: builder.mutation({
-      query: ({ id, title, description }) => ({
+      query: ({ id, title }) => ({
         url: `${endpoints.Categories}${id}`,
         method: "PUT",
-        body: { title, description },
+        body: { title },
       }),
     }),
     deleteCategory: builder.mutation({

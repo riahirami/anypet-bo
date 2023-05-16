@@ -15,6 +15,7 @@ export const endpoints = {
 
     AdsGlobal:"ads",
     Ads:"ads/",
+    MYADS:"ads/myads",
     ADMEDIA:"ads/media/",
     AdsByCategory:"ads/category/",
     AdsByDate:"ads/date/",

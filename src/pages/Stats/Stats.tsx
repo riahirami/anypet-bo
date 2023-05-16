@@ -23,7 +23,7 @@ import { statusToString } from '../../core/services/helpers';
 
 
 const Stats = () => {
-  const [column, setColumn] = useState("");
+  const [column, setColumn] = useState("category_id");
   const {
     data: Statsdata,
     isLoading,
@@ -139,7 +139,6 @@ const Stats = () => {
   const changeColumn = (event: React.ChangeEvent<HTMLInputElement>) => {
     setColumn(event.target.value);
     refetch();
-    console.log({ Statsdata });
   };
 
   return (
@@ -150,6 +149,8 @@ const Stats = () => {
         fullWidth
         variant="outlined"
         onChange={changeColumn}
+        defaultValue={column} 
+        
       >
         <MenuItem key="category_id" value="category_id">
           category

@@ -37,12 +37,9 @@ const advertiseSchema = Yup.object().shape({
   category_id: Yup.string().required(
     "Category is required ! please choose on of the list above"
   ),
-  country: Yup.string()
-    .required("Country is required")
-    .min(4, "Country must be at least 4 characters"),
   state: Yup.string()
     .required("State is required")
-    .min(4, "State must be at least 4 characters"),
+    .min(1, "State must be at least 1 characters"),
   city: Yup.string()
     .required("City is required")
     .min(4, "City must be at least 4 characters"),
@@ -59,7 +56,6 @@ const AddAdvertise = () => {
   const item: Ad = {
     title: "",
     description: "",
-    country: "",
     state: "",
     city: "",
     street: "",
@@ -68,7 +64,11 @@ const AddAdvertise = () => {
     created_at: "",
     updated_at: "",
     status: "",
-    media: "",
+    media: [],
+    user_id: "",
+    user:{
+      firstname:"", lastname:"", email:"", password:"",phone:"",address:""
+    }
   };
 
   const [ad, setAd] = useState(item);
@@ -77,7 +77,6 @@ const AddAdvertise = () => {
   const {
     title,
     description,
-    country,
     state,
     city,
     street,
@@ -134,7 +133,6 @@ const AddAdvertise = () => {
           title: "",
           description: "",
           category_id: "",
-          country: "",
           state: "",
           city: "",
           street: "",
@@ -197,22 +195,6 @@ const AddAdvertise = () => {
               error={
                 formikProps.touched.description &&
                 !!formikProps.errors.description
-              }
-              onChange={handleChangeForm(formikProps)}
-            />
-
-            <Field
-              id="country"
-              name="country"
-              label="country"
-              color="primary"
-              fullWidth
-              as={CustomTextField}
-              helperText={
-                formikProps.touched.country && formikProps.errors.country
-              }
-              error={
-                formikProps.touched.country && !!formikProps.errors.country
               }
               onChange={handleChangeForm(formikProps)}
             />

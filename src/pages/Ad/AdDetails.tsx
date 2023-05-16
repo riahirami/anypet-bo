@@ -36,7 +36,7 @@ const AdDetails: React.FC = () => {
     <Grid item xs={12} md={12}>
       {isLoading && <Spinner />}
     
-      {adData && <AdCard adData={adData} medias={MediaData}/>}
+      {adData && <AdCard adData={adData} />}
       <Grid>
         <Comment />
       </Grid>

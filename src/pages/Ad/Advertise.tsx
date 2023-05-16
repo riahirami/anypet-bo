@@ -89,12 +89,13 @@ const Advertise = () => {
   const { data, error, isLoading, isSuccess, refetch } =
     useGetAdsQuery(parameters);
 
+    
     const [idAds, setIdAds]= useState(undefined);
     const {
       data: MediaData,
       isLoading: MediaLoading,
       isSuccess: MediaSuccess,
-    } = useGetMediaByIdQuery(249);
+    } = useGetMediaByIdQuery(15);
 
   const debouncedSearchTerm = useDebounce(searchTerm, 700);
   useEffect(() => {
@@ -175,13 +176,7 @@ const Advertise = () => {
           </Grid>
         </Grid>
 
-        <Grid item md={4} container justifyContent="flex-end">
-          <Link to={PATHS.AddAdvertise}>
-            <Button variant="contained" endIcon={<PlusOneIcon />}>
-              Add Advertise
-            </Button>
-          </Link>
-        </Grid>
+     
       </Grid>
 
       <br />
@@ -196,7 +191,7 @@ const Advertise = () => {
             <Grid container spacing={2}>
               {data?.data.map((ad: Ad) => (
                 <Grid item key={ad.id} xs={12} sm={6} md={4} lg={3}>
-                  <AdCard adData={ad} medias={MediaData}/>
+                  <AdCard adData={ad} />
                 
                 </Grid>
               ))}

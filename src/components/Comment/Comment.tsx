@@ -133,7 +133,7 @@ const Comment = () => {
                 >
                   <Box>
                     <Typography variant="body1">
-                      {comment.user.login}
+                      {comment.user.firstname}
                     </Typography>
                     <Typography variant="body1">
                       {comment.description}
@@ -167,7 +167,7 @@ const Comment = () => {
                         <Avatar src={reply.user.avatar}></Avatar>
                       </Grid>
                       <Grid justifyContent="left" item xs zeroMinWidth>
-                        <Typography>{reply.user.name}</Typography>
+                        <Typography>{reply.user.firstname}</Typography>
                         <Typography>{reply.description}</Typography>
 
                         <StyledCommentTypography >

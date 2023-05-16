@@ -30,14 +30,11 @@ const advertiseSchema = Yup.object().shape({
     .required("Description is required")
     .min(12, "description must be at least 12 characters"),
   category_id: Yup.string().required(
-    "Category is required ! please choose on of the list above"
+    "Category is required ! please chose on of the list above"
   ),
-  country: Yup.string()
-    .required("Country is required")
-    .min(4, "Country must be at least 4 characters"),
   state: Yup.string()
     .required("State is required")
-    .min(4, "State must be at least 4 characters"),
+    .min(1, "State must be at least 1 characters"),
   city: Yup.string()
     .required("City is required")
     .min(4, "City must be at least 4 characters"),
@@ -56,7 +53,6 @@ const AdUpdate = () => {
   const item: Ad = {
     title: "",
     description: "",
-    country: "",
     state: "",
     city: "",
     street: "",
@@ -64,7 +60,13 @@ const AdUpdate = () => {
     category_id: "",
     created_at:"",
     updated_at:"",
-    status:""
+    status:"",
+    media: [],
+    user_id:"",
+    user:{
+      firstname:"", lastname:"", email:"", password:"",phone:"",address:""
+    }
+
   };
   const [ad, setAd] = useState(item);
 
@@ -78,8 +80,12 @@ const AdUpdate = () => {
 
   function handleChangeForm(formikProps: any) {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, value } = event.target;
-      formikProps.setFieldValue(name, value);
+      const { name, value, files } = event.target;
+      if (files) {
+        formikProps.setFieldValue(name, Array.from(files));
+      } else {
+        formikProps.setFieldValue(name, value);
+      }
     };
   }
 
@@ -116,12 +122,12 @@ const AdUpdate = () => {
           initialValues={{
             title: data?.data.title,
             description: data?.data.description,
-            country: data?.data.country,
             state: data?.data.state,
             city: data?.data.city,
             street: data?.data.street,
             postal_code: data?.data.postal_code,
             category_id: data?.data.category_id,
+            media: [],
           }}
           validationSchema={advertiseSchema}
           onSubmit={handleUpdate}
@@ -141,6 +147,15 @@ const AdUpdate = () => {
                 error={formikProps.touched.title && !!formikProps.errors.title}
                 onChange={handleChangeForm(formikProps)}
               />
+               <TextField
+              label="media"
+              name="media"
+              id="media"
+              color="primary"
+              type="file"
+              inputProps={{ multiple: true }}
+              onChange={handleChangeForm(formikProps)}
+            />
               <CustomTextField
                 select
                 name="category_id"
@@ -175,23 +190,6 @@ const AdUpdate = () => {
                 }
                 onChange={handleChangeForm(formikProps)}
               />
-
-              <Field
-                id="country"
-                name="country"
-                label="country"
-                color="primary"
-                fullWidth
-                as={CustomTextField}
-                helperText={
-                  formikProps.touched.country && formikProps.errors.country
-                }
-                error={
-                  formikProps.touched.country && !!formikProps.errors.country
-                }
-                onChange={handleChangeForm(formikProps)}
-              />
-
               <StateFormControl variant="filled">
                 <Field
                   id="state"

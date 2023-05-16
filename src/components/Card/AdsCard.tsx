@@ -26,12 +26,11 @@ import { useGetAllCategoriesQuery } from "../../redux/api/categoryApi";
 import { AdCardProps, Media } from "./AdsCard.type";
 import useDeleteAd from "customHooks/useDeleteAd";
 import {
-  useGetMediaByIdQuery,
   useListFavoriteQuery,
   useSetFavoriteMutation,
 } from "redux/api/adsApi";
 
-function AdCard({ adData,medias }: AdCardProps) {
+function AdCard({ adData }: AdCardProps) {
   const { data: CategoryData, refetch: RefetchCategory } =
     useGetAllCategoriesQuery(100);
   const [setFavorit, { data: datasetFavoris, isSuccess: successFavoris }] =
@@ -42,11 +41,7 @@ function AdCard({ adData,medias }: AdCardProps) {
 
   const { data, isSuccess, isLoading, refetch } = useListFavoriteQuery(1);
 
-  const {
-    data: MediaData,
-    isLoading: MediaLoading,
-    isSuccess: MediaSuccess,
-  } = useGetMediaByIdQuery(adData?.id);
+
 
   useEffect(() => {
     if (isSuccess) {
@@ -105,8 +100,7 @@ function AdCard({ adData,medias }: AdCardProps) {
       <Card key={adData.id}>
         <CardHeader
           avatar={
-            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-              R
+            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" src= {adData.user?.avatar}>         
             </Avatar>
           }
           action={
@@ -126,26 +120,23 @@ function AdCard({ adData,medias }: AdCardProps) {
               </Menu>
             </>
           }
-          title={`Advertise ${adData.id}`}
+          title={adData.user.firstname || "user"}
           subheader={formaDateTime(adData.created_at)}
         />
 
         <CardContent>
           <Grid container alignItems={"center"} >
-            {MediaSuccess &&
-              medias?.data.map((media: Media) => {
-                console.log({medias});
-                const url =
-                  "http://localhost/" +
-                  media.file_path.replace("public/", "storage/");
+            {adData &&
+              adData?.media?.map((media: any) => {
+               
                 return (
                   <Grid item key={media.id} xs={12} sm={4} md={4} lg={4}>
                     <CardMedia
                       component="img"
                       width="200"
                       height="200"
-                      image={url}
-                    
+                      image={media.file_path}
+                    key={media.id}
                     />
                   </Grid>
                 );
@@ -157,9 +148,6 @@ function AdCard({ adData,medias }: AdCardProps) {
 
           <Typography variant="body2" color="text.secondary" noWrap>
             {adData.description}
-          </Typography>
-          <Typography variant="body2" gutterBottom>
-            Country: {adData.country}
           </Typography>
           <Typography variant="body2" gutterBottom noWrap>
             State: {adData.state}

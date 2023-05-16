@@ -215,7 +215,7 @@ const AdvertiseRequest = () => {
           <Grid container spacing={1}>
             {data?.data.map((ad: Ad) => (
               <Grid item key={ad.id} xs={12} sm={4} md={3} lg={3}>
-                {data && <AdCard adData={ad} medias={MediaData}/>}
+                {data && <AdCard adData={ad} />}
 
                 {/* <IconButton
                   color="error"

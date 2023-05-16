@@ -127,7 +127,6 @@ const Categories = () => {
                 <TableRow>
                   <TableCell>Category ID</TableCell>
                   <TableCell>Category Title</TableCell>
-                  <TableCell>Category Description</TableCell>
                   <TableCell>Remove</TableCell>
                   <TableCell>Edit</TableCell>
                 </TableRow>
@@ -141,7 +140,6 @@ const Categories = () => {
                         {cat.title}
                       </Link>
                     </TableCell>
-                    <TableCell>{cat.description}</TableCell>
                     <TableCell>
                       <IconButton
                         color="primary"

@@ -11,6 +11,7 @@ export const PATHS = {
     showCategory: '/categoryshow/:id',
     Advertise: '/Advertise/',
     AddAdvertise: '/addadvertise/',
+    MYADVERTISES: '/myadvertises',
     showAdvertise: '/advertise/:id',
     updateAdvertise: '/advertise/update/:id',
     adsByCategory: '/advertise/category/:id',

@@ -73,7 +73,7 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
     isLoading,
   } = useProfileQuery(tokenValue.token);
 
-  const { login, name, email, phone, avatar } = dataProfile?.user ?? {};
+  const { firstname, lastname, email, phone, avatar } = dataProfile?.user ?? {};
 
 
   const [collapse, setCollapse] = useState(true);
@@ -108,7 +108,7 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   </div>
   <div style={{ marginTop: "20px", marginBottom: "20px" }}>
     <Typography variant="subtitle1" fontWeight={700} color="#0098e5">
-      Dashboard : {login}
+      {firstname} {lastname}
     </Typography>
   
   </div>

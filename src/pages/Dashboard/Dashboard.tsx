@@ -24,6 +24,9 @@ import { ProSidebarProvider } from "../../components/SidebarSrc/ProSidebarProvid
 import Profile from "./Profile";
 import { Playground } from "../../layouts/SideBar/SideBar";
 import { BrowserRouter } from "react-router-dom";
+import { Router } from "components/Router";
+import Topbar from "components/Topbar/Topbar";
+import useTheme from "customHooks/useTheme";
 
 function Dashboard() {
   // const { name } = useAppSelector(selectAuth);
@@ -35,6 +38,9 @@ function Dashboard() {
   const [showModal, setShowModal] = useState(false);
   const [descriptionModal, setDescriptionModal] = useState("");
 
+  const { mode, handleThemeChange, handleImageChange, hasImage } = useTheme();
+
+
   const {
     data: dataProfile,
     isError,
@@ -43,7 +49,7 @@ function Dashboard() {
     isLoading,
   } = useProfileQuery(tokenValue.token);
 
-  const { login, name, email, phone } = dataProfile?.user ?? {};
+  const { firstname, lastname, email, phone, avatar } = dataProfile?.user ?? {};
 
   const [
     logoutUser,

@@ -1,6 +1,6 @@
 export interface User {
-    name: string;
-    login: string;
+    firstname: string;
+    lastname: string;
     email: string;
     password: string;
     phone: string;
@@ -8,4 +8,5 @@ export interface User {
     avatar?: string;
     created_at?: string;
     updated_at?: string;
+    role_id?: number;
   }

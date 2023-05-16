@@ -17,20 +17,21 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ImageIcon from "@mui/icons-material/Image";
 import HideImageOutlinedIcon from "@mui/icons-material/HideImageOutlined";
 
-import { useLogoutUserMutation } from "../../redux/api/authApi";
+import { useLogoutUserMutation } from "redux/api/authApi";
 import { Link, useNavigate } from "react-router-dom";
-import { PATHS } from "../../routes/Path";
+import { PATHS } from "routes/Path";
 
-import { Theme } from "../../core/enums";
+import { Theme } from "core/enums";
 import { Props } from "./TopbarProps.type";
 import { useListFavoriteQuery } from "redux/api/adsApi";
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+
 
 const Topbar: React.FC<Props> = ({
   mode,
   handleThemeChange,
   handleImageChange,
-  hasImage,
+  hasImage
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -68,8 +69,8 @@ const Topbar: React.FC<Props> = ({
     <Box display="flex" justifyContent="space-between" p={2}>
       {/* SEARCH BAR */}
       <Box display="flex" borderRadius="3px">
-        <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />
-        <IconButton type="button" sx={{ p: 1 }}>
+        <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search"/>
+        <IconButton type="button" sx={{ p: 1 }} >
           <SearchIcon />
         </IconButton>
       </Box>

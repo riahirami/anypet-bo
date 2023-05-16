@@ -37,7 +37,6 @@ export const adsApi = createApi({
       query: ({
         title,
         description,
-        country,
         state,
         city,
         street,
@@ -48,7 +47,6 @@ export const adsApi = createApi({
         const formData = new FormData();
         formData.append("title", title);
         formData.append("description", description);
-        formData.append("country", country);
         formData.append("state", state);
         formData.append("city", city);
         formData.append("street", street);
@@ -59,13 +57,12 @@ export const adsApi = createApi({
         }
         return {
           url: endpoints.Ads,
-       
+
           method: "post",
           body: formData,
         };
       },
-      invalidatesTags:['Ad']
-
+      invalidatesTags: ["Ad"],
     }),
     getMediaById: builder.query({
       query: (id: any) => {
@@ -81,26 +78,32 @@ export const adsApi = createApi({
         id,
         title,
         description,
-        country,
         state,
         city,
         street,
         postal_code,
         category_id,
-      }) => ({
-        url: `${endpoints.Ads}${id}`,
-        method: "PUT",
-        body: {
-          title,
-          description,
-          country,
-          state,
-          city,
-          street,
-          postal_code,
-          category_id,
-        },
-      }),
+        media,
+      }) => {
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("description", description);
+        formData.append("state", state);
+        formData.append("city", city);
+        formData.append("street", street);
+        formData.append("postal_code", postal_code);
+        formData.append("category_id", category_id);
+        for (let i = 0; i < media.length; i++) {
+          formData.append("media[]", media[i]);
+        }
+
+        return {
+          url: `${endpoints.Ads}${id}`,
+          method: "PUT",
+          body: formData,
+        };
+      },
+      invalidatesTags: ["Ad"],
     }),
     deleteAd: builder.mutation({
       query: (id) => {
@@ -110,12 +113,21 @@ export const adsApi = createApi({
           body: id,
         };
       },
-      invalidatesTags:['Ad']
+      invalidatesTags: ["Ad"],
     }),
     getAdById: builder.query({
       query: (id: any) => {
         return {
           url: endpoints.Ads + `${id}`,
+          method: "get",
+          providesTags: ["Ad"],
+        };
+      },
+    }),
+    getAdsOfUser: builder.query({
+      query: () => {
+        return {
+          url: endpoints.MYADS,
           method: "get",
           providesTags: ["Ad"],
         };
@@ -203,5 +215,6 @@ export const {
   useGetCountAdsPerDateQuery,
   useListFavoriteQuery,
   useSetFavoriteMutation,
-  useGetMediaByIdQuery
+  useGetMediaByIdQuery,
+  useGetAdsOfUserQuery
 } = adsApi;

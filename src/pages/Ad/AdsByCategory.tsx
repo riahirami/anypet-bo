@@ -33,7 +33,7 @@ const AdsByCategory = () => {
         {adData &&
           adData.map((item: Ad) => (
             <Grid item key={id} xs={12} md={4}>
-              {adData && <AdCard adData={item} medias={MediaData}/>}
+              {adData && <AdCard adData={item}/>}
             </Grid>
           ))}
       </Grid>

@@ -20,7 +20,30 @@ import Home from "../pages/Stats/Home";
 import Users from "../pages/Users/Users";
 import Update from "../pages/Dashboard/Profile/Update";
 import ListFavorit from "pages/Ad/ListFavorit";
+import MyAdvertises from './../pages/Ad/MyAdvertises';
+import { useState,useEffect } from "react";
+import { useAppDispatch } from "redux/hooks";
+import { setUser } from "redux/slices/authSlice";
+import { Route, Navigate } from "react-router-dom";
 
+function ProtectedRoute({ element, ...rest }: { element: React.ReactNode }) {
+  const [isAuth, setIsAuth] = useState(false);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    try {
+      const userData = localStorage.getItem("user");
+      if (userData) {
+        const user = JSON.parse(userData);
+        dispatch(setUser(user));
+        setIsAuth(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+  return isAuth ? <>{element}</> : <Navigate to={PATHS.SIGNIN} />;
+}
 
 const RoutesConfig: RouteObject[] = [
   {
@@ -33,77 +56,81 @@ const RoutesConfig: RouteObject[] = [
   },
   {
     path: PATHS.PROFILE,
-    element: <Update />,
+    element: <ProtectedRoute element={<Update />} />,
   },
   {
     path: PATHS.PROFILEUpdate,
-    element: <Update />,
+    element: <ProtectedRoute element={<Update />} />,
   },
   {
     path: PATHS.DASHBOARD,
-    element: <Dashboard />,
+    element: <ProtectedRoute element={<Dashboard />} />,
   },
   {
     path: PATHS.EmailVerify,
-    element: <EmailVerify />,
+    element: <ProtectedRoute element={<EmailVerify />} />,
   },
   {
     path: PATHS.ResetPassword,
-    element: <ResetPassword />,
+    element: <ProtectedRoute element={<ResetPassword />} />,
   },
   {
     path: PATHS.Categories,
-    element: <Categories />,
+    element: <ProtectedRoute element={<Categories />} />,
   },
   {
     path: PATHS.AddCategories,
-    element: <AddCategory />,
+    element: <ProtectedRoute element={<AddCategory />} />,
   },
 
   {
     path: PATHS.showCategory,
-    element: <Categoryshow />,
+    element: <ProtectedRoute element={<Categoryshow />} />,
   },
   {
     path: PATHS.Advertise,
-    element: <Advertise />,
+    element: <ProtectedRoute element={<Advertise />} />,
   },
   {
     path: PATHS.AddAdvertise,
-    element: <AddAdvertise />,
+    element: <ProtectedRoute element={<AddAdvertise />} />,
   },
   {
     path: PATHS.showAdvertise,
-    element: <AdDetails />,
+    element: <ProtectedRoute element={<AdDetails />} />,
   },
   {
     path: PATHS.updateAdvertise,
-    element: <AdUpdate />,
+    element: <ProtectedRoute element={<AdUpdate />} />,
   },
   {
     path: PATHS.adsByCategory,
-    element: <AdsByCategory />,
+    element: <ProtectedRoute element={<AdsByCategory />} />,
   },
 
   {
     path: PATHS.ManageAds,
-    element: <AdvertiseRequest />,
+    element:<ProtectedRoute element= {<AdvertiseRequest />}/>,
   },
   {
     path: PATHS.Stats,
-    element: <Stats />
+    element:<ProtectedRoute element={ <Stats />}/>,
   },
   {
     path: PATHS.StatsHome,
-    element: <Home />
+    element: <ProtectedRoute element={<Home />} /> ,
   },
   {
     path: PATHS.Users,
-    element: <Users />
+    element: <ProtectedRoute element= {<Users />} />,
   },
   {
     path: PATHS.LISTFAVORIT,
-    element: <ListFavorit />
+    element: <ProtectedRoute element={<ListFavorit />} />,
+  },
+  {
+    path: PATHS.MYADVERTISES,
+    element: <ProtectedRoute element={<MyAdvertises />} />,
   },
   
 ];

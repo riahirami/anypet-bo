@@ -81,7 +81,7 @@ function Profile() {
     },
   ] = useUpdateAvatarMutation();
 
-  const { login, name, email, phone, avatar } = dataProfile?.user ?? {};
+  const { firstname, lastname, email, phone, avatar } = dataProfile?.user ?? {};
 
   function handleLogout() {
     // dispatch(logout);
@@ -145,11 +145,11 @@ function Profile() {
   if (isSuccess && dataProfile?.user)
     return (
       <>
-        <h2>Welcome {login}</h2>
+        <h2>Welcome {firstname}</h2>
         <Container>
           <Avatar sx={{ width: 90, height: 90 }} alt="avatar" src={avatar} />
-          <p>Username: {login}</p>
-          <p>Fullname: {name}</p>
+          <p>Firstname: {firstname}</p>
+          <p>Lastname: {lastname}</p>
           <p>email: {email}</p>
           <p>Phone: {phone}</p>
         </Container>
