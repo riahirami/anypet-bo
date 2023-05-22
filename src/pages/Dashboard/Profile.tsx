@@ -28,6 +28,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { getToken } from "core/utils/functionHelpers";
 
 function Profile() {
   // const { name } = useAppSelector(selectAuth);
@@ -35,7 +36,7 @@ function Profile() {
   const { token } = useAppSelector(selectAuth);
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const tokenValue = JSON.parse(localStorage.getItem("user") || "{}");
+  const tokenValue = getToken();
   const [showModal, setShowModal] = useState(false);
   const [descriptionModal, setDescriptionModal] = useState("");
 
@@ -45,6 +46,7 @@ function Profile() {
     isSuccess,
     isLoading,
   } = useProfileQuery(tokenValue.token);
+
 
   const [
     logoutUser,

@@ -21,7 +21,7 @@ import {
   Button,
   Fab,
   Pagination,
-  Grid,
+  Grid,Container,
   IconButton,
   TextField,
   Typography,
@@ -80,7 +80,7 @@ const AdvertiseRequest = () => {
     { value: StatusOption.Validated, label: "Validated" },
   ];
 
-  const { data, error, isLoading, isSuccess, refetch } =
+  const { data, error, isLoading, isSuccess, refetch,isFetching } =
     useGetAdsQuery(parameters);
 
   const [
@@ -93,16 +93,11 @@ const AdvertiseRequest = () => {
     },
   ] = useChangeStatusAdsMutation();
 
-  const {
-    data: MediaData,
-    isLoading: MediaLoading,
-    isSuccess: MediaSuccess,
-  } = useGetMediaByIdQuery(undefined);
 
 
   useEffect(() => {
     setStatusParams({ ...statusParams });
-  }, [statusParams]);
+  }, []);
 
   const handlePageChange = (event: any, page: number) => {
     setParameters({ ...parameters, page });
@@ -207,49 +202,18 @@ const AdvertiseRequest = () => {
           </Grid>
         </Grid>
 
+        <Grid>
         {isLoading && <Spinner />}
 
-        <Demo>
+        <Container>
           {}
 
           <Grid container spacing={1}>
-            {data?.data.map((ad: Ad) => (
-              <Grid item key={ad.id} xs={12} sm={4} md={3} lg={3}>
-                {data && <AdCard adData={ad} />}
-
-                {/* <IconButton
-                  color="error"
-                  aria-label="cancel"
-                  component="label"
-                  onClick={() =>
-                    handleStatusChange(ad.id, StatusOption.Canceled)
-                  }
-                >
-                  <CancelIcon />
-                </IconButton>
-
-                <IconButton
-                  color="success"
-                  aria-label="validate"
-                  component="label"
-                  onClick={() =>
-                    handleStatusChange(ad.id, StatusOption.Validated)
-                  }
-                >
-                  <CheckCircleIcon />
-                </IconButton>
-
-                <IconButton
-                  color="warning"
-                  aria-label="wating"
-                  component="label"
-                  onClick={() =>
-                    handleStatusChange(ad.id, StatusOption.Waiting)
-                  }
-                >
-                  <HourglassEmptyIcon />
-                </IconButton> */}
-                <Grid container justifyContent="space-between">
+            <Grid container spacing={2}>
+              {data?.data.map((ad: Ad) => (
+                <Grid item key={ad.id} xs={12} sm={6} md={4} lg={3}>
+                  {isFetching ? <Spinner /> : <AdCard adData={ad} />}
+                  <Grid container justifyContent="space-between">
                   <Grid item key={ad.id} xs={12} sm={4} md={3} lg={3}>
                     <Button
                       variant="contained"
@@ -285,10 +249,14 @@ const AdvertiseRequest = () => {
                     </Button>
                   </Grid>
                 </Grid>
-              </Grid>
-            ))}
+
+                </Grid>
+              ))}
+            </Grid>
           </Grid>
-        </Demo>
+          
+        </Container>
+      </Grid>
 
         <br></br>
         <br></br>

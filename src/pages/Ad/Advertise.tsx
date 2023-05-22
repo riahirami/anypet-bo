@@ -86,16 +86,8 @@ const Advertise = () => {
     date: undefined,
     status: undefined,
   });
-  const { data, error, isLoading, isSuccess, refetch } =
+  const { data, error, isLoading, isSuccess, refetch, isFetching } =
     useGetAdsQuery(parameters);
-
-    
-    const [idAds, setIdAds]= useState(undefined);
-    const {
-      data: MediaData,
-      isLoading: MediaLoading,
-      isSuccess: MediaSuccess,
-    } = useGetMediaByIdQuery(15);
 
   const debouncedSearchTerm = useDebounce(searchTerm, 700);
   useEffect(() => {
@@ -123,7 +115,7 @@ const Advertise = () => {
 
   useEffect(() => {
     refetch();
-  }, [data, refetch]);
+  }, []);
 
   const handlePerPageChange = (perPage: any) => {
     setParameters({ ...parameters, perPage });
@@ -142,41 +134,41 @@ const Advertise = () => {
   return (
     <div>
       {/* {isSuccessDelete && <AlertComponent title={message.ADVERRTISESDELETED} severity="success" />} */}
-      <Box display="flex" borderRadius="3px">
-        <InputBase
-          sx={{ ml: 2, flex: 1 }}
-          placeholder="Search"
-          defaultValue={key}
-          onChange={(event) => {
-            // setParameters({...parameters,keyword:event.target.value === '' ? undefined : event.target.value})
-            setSearchTerm(event.target.value);
-          }}
-        />
-        <IconButton type="button" sx={{ p: 1 }}>
-          <SearchIcon />
-        </IconButton>
-      </Box>
       <Typography align="left">Advertises</Typography>
-      <Grid container alignItems="center">
-        <Grid item md={4}>
-          <Grid container>
-            <Grid item>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DatePicker"]}>
-                  <DatePicker
-                    value={value}
-                    onChange={(newDate) => handlePicker(newDate)}
-                  />
-                </DemoContainer>
-              </LocalizationProvider>
-            </Grid>
-            <Grid item>
-              <Button onClick={handleReset}>Reset</Button>
-            </Grid>
-          </Grid>
+
+      <Grid container justifyContent="space-between" alignItems="flex-end">
+        <Grid item xs={12} sm={4} md={4} lg={4}>
+          <Box display="flex" borderRadius="3px">
+            <InputBase
+              sx={{ ml: 2, flex: 1 }}
+              placeholder="Search"
+              defaultValue={key}
+              onChange={(event) => {
+                // setParameters({...parameters,keyword:event.target.value === '' ? undefined : event.target.value})
+                setSearchTerm(event.target.value);
+              }}
+            />
+            <IconButton type="button" sx={{ p: 1 }}>
+              <SearchIcon />
+            </IconButton>
+          </Box>
         </Grid>
 
-     
+        <Grid item xs={12} sm={4} md={4}>
+          <Box display="flex" justifyContent="flex-end" alignItems="flex-end">
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["DatePicker"]}>
+                <DatePicker
+                  value={value}
+                  onChange={(newDate) => handlePicker(newDate)}
+                />
+              </DemoContainer>
+            </LocalizationProvider>
+            <Button onClick={handleReset} variant="text">
+              Reset
+            </Button>
+          </Box>
+        </Grid>
       </Grid>
 
       <br />
@@ -191,8 +183,7 @@ const Advertise = () => {
             <Grid container spacing={2}>
               {data?.data.map((ad: Ad) => (
                 <Grid item key={ad.id} xs={12} sm={6} md={4} lg={3}>
-                  <AdCard adData={ad} />
-                
+                  {isFetching ? <Spinner /> : <AdCard adData={ad} />}
                 </Grid>
               ))}
             </Grid>

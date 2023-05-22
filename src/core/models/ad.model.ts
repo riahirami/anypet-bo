@@ -9,20 +9,24 @@ export interface Ad {
   street: string
   postal_code: string
   category_id: string
-  created_at?:string
-  updated_at?:string
-  status?:string
-  media?: string[]
-  user_id:string
-  user:User
+  created_at?: string
+  updated_at?: string
+  status?: string
+  media?: any[]
+  user_id: string
+  user: User
 }
 
-
+export interface MyAdData {
+  data: Ad[] ;
+  count: number;
+}
 
 export interface AdData {
   current_page: number;
-  data: Ad[]; 
+  data: Ad[];
   first_page_url: string;
   from: number;
   last_page: number;
+  count: number;
 }

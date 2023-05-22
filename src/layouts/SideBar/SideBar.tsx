@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Sidebar,
   Menu,
@@ -28,8 +28,12 @@ import { Props } from "components/Topbar/TopbarProps.type";
 
 import { hexToRgba } from "../../core/services/helpers";
 import { useProfileQuery } from "redux/api/authApi";
-import { Spinner } from './../../components/Spinner/spinner';
-
+import { Spinner } from "./../../components/Spinner/spinner";
+import { getToken, getCurrentUser } from "core/utils/functionHelpers";
+import { useSelector, useDispatch } from "react-redux";
+import { getMyAds } from "redux/slices/adsSlice";
+import { useGetAdsQuery, useGetMyAdsQuery } from "redux/api/adsApi";
+import { parametersListing } from "core/models/parametersListing.model";
 export const Playground: React.FC<Props> = ({
   mode: theme,
   handleThemeChange,
@@ -38,16 +42,36 @@ export const Playground: React.FC<Props> = ({
 }) => {
   const { toggleSidebar, collapseSidebar, broken, collapsed } = useProSidebar();
 
+  const tokenValue = getToken();
 
-  const tokenValue = JSON.parse(localStorage.getItem("user") || "{}");
-
+  const currentUser = getCurrentUser();
+  const id = currentUser?.user?.id;
   const { data: dataProfile } = useProfileQuery(tokenValue.token);
+
+  const [parameters, setParameters] = useState<parametersListing>({
+    page: 1,
+    perPage: "4",
+    orderBy: undefined,
+    orderDirection: undefined,
+    keyword: undefined,
+    date: undefined,
+    status: "0",
+  });
+  const { data: DataAds } = useGetAdsQuery(parameters);
 
   const { firstname, lastname, email, phone, avatar, role_id } =
     dataProfile?.user ?? {};
 
+  const { data, isSuccess, isLoading } = useGetMyAdsQuery(id);
 
-  if (role_id === 1)
+  const [role, setRole] = useState(role_id);
+  const auth = useSelector((state: any) => state.auth);
+
+  useEffect(() => {
+    if (tokenValue) setRole(role_id);
+  }, []);
+
+  if (auth.user.role_id === 1)
     return (
       <div
         style={{
@@ -66,9 +90,7 @@ export const Playground: React.FC<Props> = ({
             color: themes[theme].sidebar.color,
           }}
         >
-          <div
-            style={{ display: "flex", flexDirection: "column", height: "100%" }}
-          >
+          <div style={{ display: "flex", flexDirection: "column" }}>
             <SidebarHeader
               style={{ marginBottom: "24px", marginTop: "16px" }}
             />
@@ -82,13 +104,23 @@ export const Playground: React.FC<Props> = ({
                   icon={<Diamond />}
                   suffix={
                     <Badge variant="danger" shape="circle">
-                      6
+                      {data?.count}
                     </Badge>
                   }
                 >
                   <MenuItem>
                     {" "}
-                    <Link to={PATHS.MYADVERTISES}>My advertises</Link>
+                    <Link to={PATHS.Advertise}>List advertises</Link>
+                  </MenuItem>
+                  <MenuItem
+                    suffix={
+                      <Badge variant="danger" shape="circle">
+                        {data?.count}
+                      </Badge>
+                    }
+                  >
+                    {" "}
+                    <Link to={"myadvertises/" + id}>My advertises</Link>
                   </MenuItem>
                   <MenuItem>
                     {" "}
@@ -112,7 +144,7 @@ export const Playground: React.FC<Props> = ({
       </div>
     );
 
-  if (role_id === 2)
+  if (auth.user.role_id === 2)
     return (
       <div
         style={{
@@ -131,23 +163,22 @@ export const Playground: React.FC<Props> = ({
             color: themes[theme].sidebar.color,
           }}
         >
-          <div
-            style={{ display: "flex", flexDirection: "column", height: "100%" }}
-          >
+          <div style={{ display: "flex", flexDirection: "column" }}>
             <SidebarHeader
               style={{ marginBottom: "24px", marginTop: "16px" }}
             />
             <div style={{ flex: 1, marginBottom: "32px" }}>
               <Menu menuItemStyles={menuItemStyles}>
-                <MenuItem icon={<Book />}>
-                  <Link to={PATHS.PROFILE}>Profil</Link>
-                </MenuItem>
+                <Link to={PATHS.PROFILE}>
+                  {" "}
+                  <MenuItem icon={<Book />}>Profil</MenuItem>
+                </Link>
                 <SubMenu
                   label="Advertise"
                   icon={<Diamond />}
                   suffix={
                     <Badge variant="danger" shape="circle">
-                      6
+                      {DataAds?.data?.length}
                     </Badge>
                   }
                 >
@@ -162,7 +193,7 @@ export const Playground: React.FC<Props> = ({
                   <MenuItem
                     suffix={
                       <Badge variant="danger" shape="circle">
-                        6
+                        {DataAds?.data?.length}
                       </Badge>
                     }
                   >
@@ -191,9 +222,10 @@ export const Playground: React.FC<Props> = ({
                 </SubMenu>
 
                 <Menu menuItemStyles={menuItemStyles}>
-                  <MenuItem icon={<Calendar />}>
-                    <Link to={PATHS.Users}>Users</Link>
-                  </MenuItem>
+                  <Link to={PATHS.Users}>
+                    {" "}
+                    <MenuItem icon={<Calendar />}>Users</MenuItem>
+                  </Link>
                 </Menu>
                 <SubMenu label="Statistics" icon={<BarChart />}>
                   <MenuItem>
@@ -218,7 +250,6 @@ export const Playground: React.FC<Props> = ({
         height: "100vh",
       }}
     >
-
       <Sidebar
         image="https://demos.themeselection.com/chameleon-admin-template/app-assets/images/backgrounds/04.jpg"
         breakPoint="lg"
@@ -230,13 +261,10 @@ export const Playground: React.FC<Props> = ({
           color: themes[theme].sidebar.color,
         }}
       >
-        <div
-          style={{ display: "flex", flexDirection: "column", height: "100%" }}
-        >
+        <div style={{ display: "flex", flexDirection: "column" }}>
           <Spinner />
         </div>
       </Sidebar>
     </div>
   );
-
 };

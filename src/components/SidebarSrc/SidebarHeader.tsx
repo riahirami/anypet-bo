@@ -7,6 +7,7 @@ import { IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Avatar } from "@mui/material";
 import { useProfileQuery } from "../../redux/api/authApi";
+import { getToken } from "core/utils/functionHelpers";
 interface SidebarHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
 }
@@ -32,8 +33,6 @@ const SidebarHeaderButton = styled(Button)({
 
 const StyledLogo = styled.div<{ rtl?: boolean }>`
   width: 100%;
-  margin-top: 5px;
-
   min-width: 35px;
   height: 35px;
   min-height: 35px;
@@ -65,7 +64,7 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   const { rtl } = useProSidebar();
   const { toggleSidebar, collapseSidebar, broken, collapsed } = useProSidebar();
 
-  const tokenValue = JSON.parse(localStorage.getItem("user") || "{}");
+  const tokenValue = getToken();
   const {
     data: dataProfile,
     isError,

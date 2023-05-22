@@ -87,7 +87,7 @@ const Categories = () => {
   }
   useEffect(() => {
     refetch();
-  }, [dataCategory, refetch]);
+  }, [dataCategory]);
 
   return (
     <div>

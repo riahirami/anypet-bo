@@ -27,6 +27,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Router } from "components/Router";
 import Topbar from "components/Topbar/Topbar";
 import useTheme from "customHooks/useTheme";
+import { getToken } from "core/utils/functionHelpers";
 
 function Dashboard() {
   // const { name } = useAppSelector(selectAuth);
@@ -34,7 +35,7 @@ function Dashboard() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const tokenValue = JSON.parse(localStorage.getItem("user") || "{}");
+  const tokenValue = getToken();
   const [showModal, setShowModal] = useState(false);
   const [descriptionModal, setDescriptionModal] = useState("");
 

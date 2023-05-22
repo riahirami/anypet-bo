@@ -20,32 +20,46 @@ import Home from "../pages/Stats/Home";
 import Users from "../pages/Users/Users";
 import Update from "../pages/Dashboard/Profile/Update";
 import ListFavorit from "pages/Ad/ListFavorit";
-import MyAdvertises from './../pages/Ad/MyAdvertises';
-import { useState,useEffect } from "react";
+import MyAdvertises from "./../pages/Ad/MyAdvertises";
 import { useAppDispatch } from "redux/hooks";
 import { setUser } from "redux/slices/authSlice";
-import { Route, Navigate } from "react-router-dom";
+import { Route, Navigate, Outlet } from "react-router-dom";
+import { useProfileQuery } from "redux/api/authApi";
+import { getCurrentUser, getToken } from "core/utils/functionHelpers";
+import { useSelector } from "react-redux";
+import { useAuthentication } from "customHooks/useAuthentication";
+import Unauthorized from "pages/error404";
+import { UserDetails } from "pages/Users/UserDetails";
 
-function ProtectedRoute({ element, ...rest }: { element: React.ReactNode }) {
-  const [isAuth, setIsAuth] = useState(false);
-  const dispatch = useAppDispatch();
+function ProtectedRoute({
+  element,
+  allowedRoles,
+  ...rest
+}: {
+  element: React.ReactNode;
+  allowedRoles: number[];
+}) {
+  const userAuth = useSelector((state: any) => state.auth);
+  const currentUser = userAuth?.user;
 
-  useEffect(() => {
-    try {
-      const userData = localStorage.getItem("user");
-      if (userData) {
-        const user = JSON.parse(userData);
-        dispatch(setUser(user));
-        setIsAuth(true);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-  return isAuth ? <>{element}</> : <Navigate to={PATHS.SIGNIN} />;
+  const isAuthorized = allowedRoles.includes(currentUser?.role_id ?? 1);
+
+  return currentUser && isAuthorized ? (
+    <> {element} </>
+  ) : (
+    <Navigate to={PATHS.NOtAUTHORIZED} />
+  );
 }
 
 const RoutesConfig: RouteObject[] = [
+  {
+    path: PATHS.NOtAUTHORIZED,
+    element: <Unauthorized />,
+  },
+  {
+    path: PATHS.USERDETAILS,
+    element: <UserDetails />,
+  },
   {
     path: PATHS.SIGNIN,
     element: <Signin />,
@@ -56,83 +70,94 @@ const RoutesConfig: RouteObject[] = [
   },
   {
     path: PATHS.PROFILE,
-    element: <ProtectedRoute element={<Update />} />,
+    element: <ProtectedRoute element={<Update />} allowedRoles={[1, 2]} />,
   },
   {
     path: PATHS.PROFILEUpdate,
-    element: <ProtectedRoute element={<Update />} />,
+    element: <ProtectedRoute element={<Update />} allowedRoles={[1, 2]} />,
   },
   {
     path: PATHS.DASHBOARD,
-    element: <ProtectedRoute element={<Dashboard />} />,
+    element: <ProtectedRoute element={<Dashboard />} allowedRoles={[1, 2]} />,
   },
   {
     path: PATHS.EmailVerify,
-    element: <ProtectedRoute element={<EmailVerify />} />,
+    element: <EmailVerify />,
   },
   {
     path: PATHS.ResetPassword,
-    element: <ProtectedRoute element={<ResetPassword />} />,
+    element: (
+      <ProtectedRoute element={<ResetPassword />} allowedRoles={[1, 2]} />
+    ),
   },
   {
     path: PATHS.Categories,
-    element: <ProtectedRoute element={<Categories />} />,
+    element: <ProtectedRoute element={<Categories />} allowedRoles={[1, 2]} />,
   },
   {
     path: PATHS.AddCategories,
-    element: <ProtectedRoute element={<AddCategory />} />,
+    element: <ProtectedRoute element={<AddCategory />} allowedRoles={[2]} />,
   },
 
   {
     path: PATHS.showCategory,
-    element: <ProtectedRoute element={<Categoryshow />} />,
+    element: (
+      <ProtectedRoute element={<Categoryshow />} allowedRoles={[1, 2]} />
+    ),
   },
   {
     path: PATHS.Advertise,
-    element: <ProtectedRoute element={<Advertise />} />,
+    element: <ProtectedRoute element={<Advertise />} allowedRoles={[1, 2]} />,
   },
   {
     path: PATHS.AddAdvertise,
-    element: <ProtectedRoute element={<AddAdvertise />} />,
+    element: (
+      <ProtectedRoute element={<AddAdvertise />} allowedRoles={[1, 2]} />
+    ),
   },
   {
     path: PATHS.showAdvertise,
-    element: <ProtectedRoute element={<AdDetails />} />,
+    element: <ProtectedRoute element={<AdDetails />} allowedRoles={[1, 2]} />,
   },
   {
     path: PATHS.updateAdvertise,
-    element: <ProtectedRoute element={<AdUpdate />} />,
+    element: <ProtectedRoute element={<AdUpdate />} allowedRoles={[1, 2]} />,
   },
   {
     path: PATHS.adsByCategory,
-    element: <ProtectedRoute element={<AdsByCategory />} />,
+    element: (
+      <ProtectedRoute element={<AdsByCategory />} allowedRoles={[1, 2]} />
+    ),
   },
 
   {
     path: PATHS.ManageAds,
-    element:<ProtectedRoute element= {<AdvertiseRequest />}/>,
+    element: (
+      <ProtectedRoute element={<AdvertiseRequest />} allowedRoles={[2]} />
+    ),
   },
   {
     path: PATHS.Stats,
-    element:<ProtectedRoute element={ <Stats />}/>,
+    element: <ProtectedRoute element={<Stats />} allowedRoles={[2]} />,
   },
   {
     path: PATHS.StatsHome,
-    element: <ProtectedRoute element={<Home />} /> ,
+    element: <ProtectedRoute element={<Home />} allowedRoles={[2]} />,
   },
   {
     path: PATHS.Users,
-    element: <ProtectedRoute element= {<Users />} />,
+    element: <ProtectedRoute element={<Users />} allowedRoles={[2]} />,
   },
   {
     path: PATHS.LISTFAVORIT,
-    element: <ProtectedRoute element={<ListFavorit />} />,
+    element: <ProtectedRoute element={<ListFavorit />} allowedRoles={[1, 2]} />,
   },
   {
     path: PATHS.MYADVERTISES,
-    element: <ProtectedRoute element={<MyAdvertises />} />,
+    element: (
+      <ProtectedRoute element={<MyAdvertises />} allowedRoles={[1, 2]} />
+    ),
   },
-  
 ];
 
 export default RoutesConfig;

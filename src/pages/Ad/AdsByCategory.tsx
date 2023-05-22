@@ -17,10 +17,6 @@ const AdsByCategory = () => {
   const [Ads, setAds] = useState();
 
 
-  useEffect(() => {
-    setAds(adData);
-  }, [adData]);
-
   const {
     data: MediaData,
     isLoading: MediaLoading,
@@ -29,10 +25,10 @@ const AdsByCategory = () => {
 
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid container>
         {adData &&
           adData.map((item: Ad) => (
-            <Grid item key={id} xs={12} md={4}>
+            <Grid item key={id} xs={12} md={4} >
               {adData && <AdCard adData={item}/>}
             </Grid>
           ))}

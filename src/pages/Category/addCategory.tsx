@@ -16,6 +16,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { message } from "../../core/constant/message";
+import { getToken } from "core/utils/functionHelpers";
 
 const categorySchema = Yup.object().shape({
   title: Yup.string()
@@ -30,7 +31,7 @@ const AddCategory = () => {
   const item: Category = {
     title: "",
   };
-  const tokenValue = JSON.parse(localStorage.getItem("user") || "{}");
+  const tokenValue = getToken();
 
   const [category, setCategory] = useState(item);
   const [addCategory, { data, isSuccess, isLoading, isError }] =

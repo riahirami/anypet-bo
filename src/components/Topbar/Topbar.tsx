@@ -24,22 +24,28 @@ import { PATHS } from "routes/Path";
 import { Theme } from "core/enums";
 import { Props } from "./TopbarProps.type";
 import { useListFavoriteQuery } from "redux/api/adsApi";
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import { getCurrentUser, getToken } from "core/utils/functionHelpers";
+import { logout } from "redux/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Topbar: React.FC<Props> = ({
   mode,
   handleThemeChange,
   handleImageChange,
-  hasImage
+  hasImage,
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const tokenValue = JSON.parse(localStorage.getItem("user") || "{}");
+  const authUser = useSelector((state: any) => state.auth.token);
+  const tokenValue = getToken();
 
-  const { data, isSuccess, isLoading, refetch } = useListFavoriteQuery(1);
+  const currentUser = getCurrentUser();
+  const { data, isSuccess, isLoading, refetch } = useListFavoriteQuery(
+    currentUser?.user?.id
+  );
 
-
+  console.log({currentUser});
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -48,35 +54,26 @@ const Topbar: React.FC<Props> = ({
     setAnchorEl(null);
   };
 
-  const [
-    logoutUser,
-    {
-      data: logoutData,
-      isSuccess: isLogoutSuccess,
-      isError: isLogoutError,
-      error: logoutError,
-    },
-  ] = useLogoutUserMutation(tokenValue);
+  const [logoutUser, { data: logoutData, isSuccess: isLogoutSuccess }] =
+    useLogoutUserMutation(tokenValue);
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const logoutFunction = async () => {
-    if (isLogoutSuccess) await logoutUser(tokenValue);
-    localStorage.setItem("user", "{}");
+    if (tokenValue) {
+      dispatch(logout());
+      await logoutUser(tokenValue);
+    }
+    localStorage.clear();
+
     navigate("/signin");
   };
 
   return (
-    <Box display="flex" justifyContent="space-between" p={2}>
-      {/* SEARCH BAR */}
-      <Box display="flex" borderRadius="3px">
-        <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search"/>
-        <IconButton type="button" sx={{ p: 1 }} >
-          <SearchIcon />
-        </IconButton>
-      </Box>
-
+    <Box display="flex" justifyContent="flex-end" p={2}>
       {/* ICONS */}
-      <Box display="flex">
+      <Box display="flex" alignItems={"end"}>
         <IconButton onClick={handleImageChange}>
           {hasImage == "true" ? <ImageIcon /> : <HideImageOutlinedIcon />}
         </IconButton>
@@ -96,8 +93,8 @@ const Topbar: React.FC<Props> = ({
         </IconButton>
 
         <IconButton>
-          <Link to="/favoritlist">
-            <FavoriteBorderOutlinedIcon  />
+          <Link to={"/favoritlist/" + currentUser?.user?.id}>
+            <FavoriteBorderOutlinedIcon />
           </Link>
           <Badge variant="danger" shape="circle">
             {data?.count}
@@ -130,8 +127,9 @@ const Topbar: React.FC<Props> = ({
               <ManageAccountsIcon></ManageAccountsIcon>
               <Link to={PATHS.PROFILEUpdate}>My account</Link>
             </MenuItem>
-            <MenuItem onClick={logoutFunction}>
-              <LogoutIcon></LogoutIcon>Logout
+            <MenuItem onClick={() => logoutFunction()}>
+              <LogoutIcon />
+              Logout
             </MenuItem>
           </Menu>
         </div>

@@ -9,7 +9,7 @@ import { Button, Grid,Typography } from "@mui/material";
 import { Ad } from "core/models/ad.model";
 import { User } from "core/models/user.model";
 import { PATHS } from "routes/Path";
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 interface ListFav {
   id: number;
@@ -36,19 +36,17 @@ interface AdData {
   data: ListFav[];
 }
 const ListFavorit = () => {
-  const { data, isSuccess, isLoading, error } = useListFavoriteQuery(1);
-  const {
-    data: MediaData,
-    isLoading: MediaLoading,
-    isSuccess: MediaSuccess,
-  } = useGetMediaByIdQuery(undefined);
+
+  const {id} = useParams() ;
+  const { data, isSuccess, isLoading, error } = useListFavoriteQuery(id);
+  
 
   if (isSuccess) {
     return (
       <Grid container alignItems="center">
         {data?.data?.map((item: any) => (
           <Grid key={item.id} item xs={4} sm={4} md={4}>
-            <AdCard adData={item} />
+            <AdCard adData={item.ad} />
           </Grid>
         ))}
       </Grid>

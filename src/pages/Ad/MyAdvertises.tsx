@@ -1,39 +1,54 @@
-import { Container,Grid } from '@mui/material';
-import AdCard from 'components/Card/AdsCard';
-import Spinner from 'components/Spinner/spinner';
-import { Ad } from 'core/models/ad.model';
-import React from 'react'
-import { useGetAdsOfUserQuery, useGetMediaByIdQuery } from 'redux/api/adsApi';
+import { Container, Grid } from "@mui/material";
+import AdCard from "components/Card/AdsCard";
+import Spinner from "components/Spinner/spinner";
+import { Ad } from "core/models/ad.model";
+import React from "react";
+import { useGetMyAdsQuery } from "redux/api/adsApi";
+import { Dispatch } from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from "react-redux";
+import { getMyAds } from "redux/slices/adsSlice";
+import { getToken } from "core/utils/functionHelpers";
+import { useProfileQuery } from "redux/api/authApi";
+import { useParams } from "react-router-dom";
+
 
 const MyAdvertises = () => {
+  
+  const {id} = useParams()
+  const tokenValue = getToken();
 
-    const {data,isSuccess,isLoading} = useGetAdsOfUserQuery(1);
-    const {
-        data: MediaData,
-        isLoading: MediaLoading,
-        isSuccess: MediaSuccess,
-      } = useGetMediaByIdQuery(15);
+
+  const { data: dataProfile } = useProfileQuery(tokenValue.token);
+
+  
+  const { firstname, lastname, email, phone, avatar, role_id } =
+  dataProfile?.user ?? {};
+  const { data: MyAds, isSuccess, isLoading } = useGetMyAdsQuery(id);
+
+  // const MyAds = useSelector((state: any) => state.ad);
+
+console.log({MyAds})
+
   return (
     <Grid>
+      {isLoading && <Spinner />}
 
-    {isLoading && <Spinner />}
+      <Container>
+        {}
 
-    <Container>
-      {}
-
-      <Grid container spacing={1}>
-        <Grid container spacing={2}>
-          {isSuccess && data?.data.map((ad: Ad) => (
-            <Grid item key={ad.id} xs={12} sm={6} md={4} lg={3}>
-              <AdCard adData={ad} />
-            
-            </Grid>
-          ))}
+        <Grid container spacing={1}>
+          <Grid container spacing={2}>
+            {
+              MyAds?.data.map((ad: Ad) => (
+                <Grid item key={ad.id} xs={12} sm={6} md={4} lg={3}>
+                  <AdCard adData={ad} />
+                </Grid>
+              ))}
+          </Grid>
         </Grid>
-      </Grid>
-    </Container>  
+      </Container>
     </Grid>
-)
-}
+  );
+};
 
-export default MyAdvertises
+export default MyAdvertises;

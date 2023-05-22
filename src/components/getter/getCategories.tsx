@@ -33,7 +33,7 @@ const GetCategories = () => {
       setCategory(dataCategory);
       dispatch(getCategories({ category: dataCategory }));
     }
-  });
+  },[]);
   return (
     <Select
       labelId="demo-simple-select-helper-label"

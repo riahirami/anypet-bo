@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 import { baseQueryConfig } from "./BaseQueryConfig";
 import { endpoints } from "../../core/constant/endpoints";
-import { Ad, AdData } from "../../core/models/ad.model";
+import { Ad, AdData, MyAdData } from "../../core/models/ad.model";
 
 function generateQueryParams(obj: { [key: string]: any }): string {
   const params = new URLSearchParams();
@@ -124,10 +124,10 @@ export const adsApi = createApi({
         };
       },
     }),
-    getAdsOfUser: builder.query({
-      query: () => {
+    getMyAds: builder.query<any, string|undefined>({
+      query: (id) => {
         return {
-          url: endpoints.MYADS,
+          url: endpoints.MYADS+id,
           method: "get",
           providesTags: ["Ad"],
         };
@@ -190,10 +190,10 @@ export const adsApi = createApi({
         };
       },
     }),
-    listFavorite: builder.query({
-      query: () => {
+    listFavorite: builder.query<AdData, string|number|undefined>({
+      query: (id) => {
         return {
-          url: endpoints.LISTFAVORITE,
+          url: endpoints.LISTFAVORITE +id,
           method: "get",
           providesTags: ["Ad"],
         };
@@ -216,5 +216,5 @@ export const {
   useListFavoriteQuery,
   useSetFavoriteMutation,
   useGetMediaByIdQuery,
-  useGetAdsOfUserQuery
+  useGetMyAdsQuery
 } = adsApi;

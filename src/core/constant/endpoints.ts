@@ -15,7 +15,7 @@ export const endpoints = {
 
     AdsGlobal:"ads",
     Ads:"ads/",
-    MYADS:"ads/myads",
+    MYADS:"ads/myads/",
     ADMEDIA:"ads/media/",
     AdsByCategory:"ads/category/",
     AdsByDate:"ads/date/",
@@ -25,11 +25,15 @@ export const endpoints = {
     statsAds : "ads/stats",
     COUNTADSPERDATE : "ads/statsdate",
     SETASFAVORITE : "ads/setfavorite/",
-    LISTFAVORITE : "ads/listfavorite",
+    LISTFAVORITE : "ads/listfavorite/",
 
 
     USERS: "users",
     VERIFIEDUSERS: "users/verified",
+    USERDETAILS: "users/",
+
+    SETADMIN: "role/setadmin/",
+    REVOKEADMIN: "role/revokeadmin/",
 
     LISTCOMMENTS: "comment/"
 }

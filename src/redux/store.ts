@@ -3,6 +3,7 @@ import {authApi} from "../redux/api/authApi";
 import {setupListeners} from "@reduxjs/toolkit/query/react" ;
 import authReducer from "../redux/slices/authSlice" ; 
 import categoryReducer from "../redux/slices/categorySlice" ; 
+import adsReducer from "../redux/slices/adsSlice" ; 
 import { categoryApi } from './api/categoryApi';
 import {adsApi} from './api/adsApi';
 import {userApi} from './api/userApi';
@@ -13,6 +14,7 @@ export const store = configureStore({
     reducer: {
         auth:authReducer,
         category:categoryReducer,
+        ad:adsReducer,
         [authApi.reducerPath]: authApi.reducer,
         [categoryApi.reducerPath]: categoryApi.reducer, 
         [adsApi.reducerPath]: adsApi.reducer, 

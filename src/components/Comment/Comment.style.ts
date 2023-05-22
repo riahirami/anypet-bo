@@ -2,7 +2,9 @@ import { styled } from "@mui/material/styles";
 import { Button, FormControl, TextField, Typography,Divider, Paper } from "@mui/material";
 
 export const StyledCommentButton = styled(Button)({
-    height: "100%",
+    // height: "100%",
+    marginTop: "9px",
+    marginLeft: "15px",
 
 });
 export const StyledCommentDivider = styled(Divider)({

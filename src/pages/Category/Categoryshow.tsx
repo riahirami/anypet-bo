@@ -42,7 +42,7 @@ const Categoryshow = () => {
   }
   useEffect(() => {
     refetch();
-  }, [isLoading, refetch]);
+  }, [isLoading]);
 
   const handleUpdate = async (values: any) => {
     await updateCategory({
