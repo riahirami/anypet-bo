@@ -44,6 +44,34 @@ export const userApi = createApi({
       },
       providesTags: ["User"],
     }),
+    listAllNotifications: builder.query<any, string | undefined>({
+      query: (id) => {
+        return {
+          url: endpoints.USERLISTNOTIFICATIONS + id,
+          method: "get",
+        };
+      },
+      providesTags: ["User"],
+    }),
+    listUnreadNotifications: builder.query<any, string | undefined>({
+      query: (id) => {
+        return {
+          url: endpoints.USERLISTUNREADNOTIFICATIONS + id,
+          method: "get",
+        };
+      },
+      providesTags: ["User"],
+    }),
+    markAllAsReadNotifications: builder.mutation<any, void>({
+      query: () => {
+        return {
+          url: endpoints.MARKAllASREADNOTIFICATIONS,
+          method: "post",
+        };
+      },
+      invalidatesTags: ["User"],
+    }),
+    
   }),
 });
 
@@ -53,4 +81,8 @@ export const {
   useSetAdminMutation,
   useRevokeAdminMutation,
   useUserDetailsQuery,
+  useListAllNotificationsQuery,
+  useListUnreadNotificationsQuery,
+  useMarkAllAsReadNotificationsMutation
+
 } = userApi;

@@ -31,9 +31,15 @@ export const endpoints = {
     USERS: "users",
     VERIFIEDUSERS: "users/verified",
     USERDETAILS: "users/",
+    USERLISTNOTIFICATIONS: "users/notifications/",
+    USERLISTUNREADNOTIFICATIONS: "users/notifications/unread/",
+    MARKAllASREADNOTIFICATIONS: "users/notifications/readall",
 
     SETADMIN: "role/setadmin/",
     REVOKEADMIN: "role/revokeadmin/",
 
-    LISTCOMMENTS: "comment/"
+    LISTCOMMENTS: "comment/",
+
+
+
 }

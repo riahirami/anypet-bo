@@ -30,6 +30,7 @@ import { useSelector } from "react-redux";
 import { useAuthentication } from "customHooks/useAuthentication";
 import Unauthorized from "pages/error404";
 import { UserDetails } from "pages/Users/UserDetails";
+import AllNotifications from "pages/Users/AllNotifications";
 
 function ProtectedRoute({
   element,
@@ -156,6 +157,12 @@ const RoutesConfig: RouteObject[] = [
     path: PATHS.MYADVERTISES,
     element: (
       <ProtectedRoute element={<MyAdvertises />} allowedRoles={[1, 2]} />
+    ),
+  },
+  {
+    path: PATHS.ALLNOTIFICATIONS,
+    element: (
+      <ProtectedRoute element={<AllNotifications />} allowedRoles={[1, 2]} />
     ),
   },
 ];

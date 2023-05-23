@@ -21,3 +21,17 @@ export const hexToRgba = (hex: string, alpha: number) => {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
 
+export const getNotificationMessage = (notification: any): string => {
+  if (notification.type === "App\\Notifications\\AdCommented") {
+    return "The ad "+notification?.data?.title+" has been commented";
+  }
+  if (notification.type === "App\\Notifications\\AdMatchingInterrestNotification") {
+    return "An ad as one of the categories that you interest has been added ";
+  }
+  if (notification.type === "App\\Notifications\\AdStatusUpdated") {
+    return "The status of your ad "+notification?.data?.title+ " has been "+statusToString(notification?.data?.status);
+  }
+  if (notification.type === "App\\Notifications\\RoleChangedNotification") {
+    return "Your role on AnyPet has been changed to "+notification?.data?.role;
+  }    return "";
+};

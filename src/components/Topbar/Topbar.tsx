@@ -1,16 +1,9 @@
-import { Box, IconButton } from "@mui/material";
-import { useEffect, useState } from "react";
-import InputBase from "@mui/material/InputBase";
+import { Box, IconButton,MenuItem,Menu } from "@mui/material";
+import {  useState } from "react";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import SearchIcon from "@mui/icons-material/Search";
 import { Badge } from "../SidebarSrc/Badge";
-
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Person2Icon from "@mui/icons-material/Person2";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
@@ -28,6 +21,8 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import { getCurrentUser, getToken } from "core/utils/functionHelpers";
 import { logout } from "redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import Notifications from "components/Notifications/Notifications";
+
 
 const Topbar: React.FC<Props> = ({
   mode,
@@ -44,9 +39,7 @@ const Topbar: React.FC<Props> = ({
   const { data, isSuccess, isLoading, refetch } = useListFavoriteQuery(
     currentUser?.user?.id
   );
-
-  console.log({currentUser});
-
+  
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -85,12 +78,7 @@ const Topbar: React.FC<Props> = ({
           )}
         </IconButton>
 
-        <IconButton>
-          <NotificationsOutlinedIcon />
-          <Badge variant="danger" shape="circle">
-            6
-          </Badge>
-        </IconButton>
+        <Notifications />
 
         <IconButton>
           <Link to={"/favoritlist/" + currentUser?.user?.id}>

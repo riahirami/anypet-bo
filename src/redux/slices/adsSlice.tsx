@@ -61,7 +61,7 @@ export const adsSlice = createSlice({
       state,
       action: PayloadAction<{ ad: MyAdData | undefined }>
     ) => {
-      state.data = action.payload.ad?.data ?? [];
+      state.data = action.payload.ad?.data ?? []; // dispatch(getMyAds(data))
       state.count = action.payload.ad?.count ?? 0;
     },
     

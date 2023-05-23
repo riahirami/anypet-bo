@@ -21,6 +21,7 @@ export const PATHS = {
     Users: '/users',
     LISTFAVORIT: '/favoritlist/:id',
     LISTCOMMENTS: '/comment/:id',
+    ALLNOTIFICATIONS: '/notifications/:id',
 
     NOtAUTHORIZED : '/notauthorized',
     USERDETAILS : '/user/details/:id'
