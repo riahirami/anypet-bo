@@ -31,28 +31,42 @@ import { useAuthentication } from "customHooks/useAuthentication";
 import Unauthorized from "pages/error404";
 import { UserDetails } from "pages/Users/UserDetails";
 import AllNotifications from "pages/Users/AllNotifications";
+import Messages from "pages/Users/Messages";
+import Conversations from "pages/Users/Conversations";
+import UserReservations from "pages/Users/UserReservations";
 
 function ProtectedRoute({
-  element,
+  children,
   allowedRoles,
   ...rest
 }: {
-  element: React.ReactNode;
+  children: React.ReactNode;
   allowedRoles: number[];
 }) {
-  const userAuth = useSelector((state: any) => state.auth);
-  const currentUser = userAuth?.user;
+  const user = getCurrentUser();
 
-  const isAuthorized = allowedRoles.includes(currentUser?.role_id ?? 1);
+  // const userAuth = useSelector((state: any) => state.auth);
+  const currentUser = user;
 
+
+
+  const isAuthorized = allowedRoles.includes(currentUser?.user?.role_id ?? 1);
+
+  
   return currentUser && isAuthorized ? (
-    <> {element} </>
+    <>
+      {children}
+    </>
   ) : (
     <Navigate to={PATHS.NOtAUTHORIZED} />
   );
 }
 
 const RoutesConfig: RouteObject[] = [
+  {
+    path: PATHS.MYRESERVATIONS,
+    element: <UserReservations />,
+  },
   {
     path: PATHS.NOtAUTHORIZED,
     element: <Unauthorized />,
@@ -71,15 +85,17 @@ const RoutesConfig: RouteObject[] = [
   },
   {
     path: PATHS.PROFILE,
-    element: <ProtectedRoute element={<Update />} allowedRoles={[1, 2]} />,
+    element: <ProtectedRoute allowedRoles={[1, 2]} >
+      <Update />
+    </ProtectedRoute>,
   },
   {
     path: PATHS.PROFILEUpdate,
-    element: <ProtectedRoute element={<Update />} allowedRoles={[1, 2]} />,
+    element: <ProtectedRoute allowedRoles={[1, 2]}><Update /></ProtectedRoute>,
   },
   {
     path: PATHS.DASHBOARD,
-    element: <ProtectedRoute element={<Dashboard />} allowedRoles={[1, 2]} />,
+    element: <ProtectedRoute allowedRoles={[1, 2]}><Dashboard /></ProtectedRoute>,
   },
   {
     path: PATHS.EmailVerify,
@@ -88,82 +104,91 @@ const RoutesConfig: RouteObject[] = [
   {
     path: PATHS.ResetPassword,
     element: (
-      <ProtectedRoute element={<ResetPassword />} allowedRoles={[1, 2]} />
+      <ProtectedRoute allowedRoles={[1, 2]}><ResetPassword /></ProtectedRoute>
     ),
   },
   {
     path: PATHS.Categories,
-    element: <ProtectedRoute element={<Categories />} allowedRoles={[1, 2]} />,
+    element: <ProtectedRoute allowedRoles={[1, 2]}><Categories /></ProtectedRoute>,
   },
   {
     path: PATHS.AddCategories,
-    element: <ProtectedRoute element={<AddCategory />} allowedRoles={[2]} />,
+    element: <ProtectedRoute allowedRoles={[2]}><AddCategory /></ProtectedRoute>
+    ,
   },
 
   {
     path: PATHS.showCategory,
     element: (
-      <ProtectedRoute element={<Categoryshow />} allowedRoles={[1, 2]} />
+      <ProtectedRoute allowedRoles={[1, 2]}><Categoryshow /></ProtectedRoute>
     ),
   },
   {
     path: PATHS.Advertise,
-    element: <ProtectedRoute element={<Advertise />} allowedRoles={[1, 2]} />,
+    element: <ProtectedRoute allowedRoles={[1, 2]}><Advertise /></ProtectedRoute>,
   },
   {
     path: PATHS.AddAdvertise,
     element: (
-      <ProtectedRoute element={<AddAdvertise />} allowedRoles={[1, 2]} />
+      <ProtectedRoute allowedRoles={[1, 2]}><AddAdvertise /></ProtectedRoute>
     ),
   },
   {
     path: PATHS.showAdvertise,
-    element: <ProtectedRoute element={<AdDetails />} allowedRoles={[1, 2]} />,
+    element: <ProtectedRoute allowedRoles={[1, 2]}><AdDetails /></ProtectedRoute>,
   },
   {
     path: PATHS.updateAdvertise,
-    element: <ProtectedRoute element={<AdUpdate />} allowedRoles={[1, 2]} />,
+    element: <ProtectedRoute allowedRoles={[1, 2]}><AdUpdate /></ProtectedRoute>,
   },
   {
     path: PATHS.adsByCategory,
     element: (
-      <ProtectedRoute element={<AdsByCategory />} allowedRoles={[1, 2]} />
+      <ProtectedRoute allowedRoles={[1, 2]}><AdsByCategory /></ProtectedRoute>
     ),
   },
 
   {
     path: PATHS.ManageAds,
     element: (
-      <ProtectedRoute element={<AdvertiseRequest />} allowedRoles={[2]} />
+      <ProtectedRoute allowedRoles={[2]}><AdvertiseRequest /></ProtectedRoute>
     ),
   },
   {
     path: PATHS.Stats,
-    element: <ProtectedRoute element={<Stats />} allowedRoles={[2]} />,
+    element: <ProtectedRoute allowedRoles={[2]}><Stats /></ProtectedRoute>,
   },
   {
     path: PATHS.StatsHome,
-    element: <ProtectedRoute element={<Home />} allowedRoles={[2]} />,
+    element: <ProtectedRoute allowedRoles={[2]}><Home /></ProtectedRoute>,
   },
   {
     path: PATHS.Users,
-    element: <ProtectedRoute element={<Users />} allowedRoles={[2]} />,
+    element: <ProtectedRoute allowedRoles={[2]}><Users /></ProtectedRoute>,
   },
   {
     path: PATHS.LISTFAVORIT,
-    element: <ProtectedRoute element={<ListFavorit />} allowedRoles={[1, 2]} />,
+    element: <ProtectedRoute allowedRoles={[1, 2]}><ListFavorit /></ProtectedRoute>,
   },
   {
     path: PATHS.MYADVERTISES,
     element: (
-      <ProtectedRoute element={<MyAdvertises />} allowedRoles={[1, 2]} />
+      <ProtectedRoute allowedRoles={[1, 2]}><MyAdvertises /></ProtectedRoute>
     ),
   },
   {
     path: PATHS.ALLNOTIFICATIONS,
     element: (
-      <ProtectedRoute element={<AllNotifications />} allowedRoles={[1, 2]} />
+      <ProtectedRoute allowedRoles={[1, 2]}><AllNotifications /></ProtectedRoute>
     ),
+  },
+  {
+    path: PATHS.MESSAGES,
+    element: <ProtectedRoute allowedRoles={[1, 2]}><Messages /></ProtectedRoute>,
+  },
+  {
+    path: PATHS.CONVERSATIONS,
+    element: <ProtectedRoute allowedRoles={[1, 2]}><Conversations /></ProtectedRoute>,
   },
 ];
 

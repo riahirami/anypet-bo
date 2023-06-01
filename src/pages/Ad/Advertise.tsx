@@ -134,10 +134,10 @@ const Advertise = () => {
   return (
     <div>
       {/* {isSuccessDelete && <AlertComponent title={message.ADVERRTISESDELETED} severity="success" />} */}
-      <Typography align="left">Advertises</Typography>
+      <Typography align="left">All Advertises</Typography>
 
-      <Grid container justifyContent="space-between" alignItems="flex-end">
-        <Grid item xs={12} sm={4} md={4} lg={4}>
+      <Grid container justifyContent="flex-start" alignItems="center">
+        <Grid item xs={12} sm={3} md={3} lg={3}>
           <Box display="flex" borderRadius="3px">
             <InputBase
               sx={{ ml: 2, flex: 1 }}
@@ -164,10 +164,28 @@ const Advertise = () => {
                 />
               </DemoContainer>
             </LocalizationProvider>
-            <Button onClick={handleReset} variant="text">
+            <Button onClick={handleReset} size="medium" variant="contained" style={{marginBottom:"2px",height:"53px",marginLeft:"5px",marginRight:"5px"}}>
               Reset
             </Button>
           </Box>
+        </Grid>
+
+        <Grid item xs={4} sm={4} md={4} style={{margin:"auto",display:"flex",justifyContent:"flex-end"}} >
+          <PerPageSelect
+            defaultValue={parameters.perPage}
+            value={parameters.perPage}
+            onChange={handlePerPageChange}
+          />
+          <OrderBy
+            defaultValue={parameters.orderBy}
+            value={parameters.orderBy}
+            onChange={handleOrderByChange}
+          />
+          <OrderDirection
+            defaultValue={parameters.orderDirection}
+            value={parameters.orderDirection}
+            onChange={handleOrderDirectionChange}
+          />
         </Grid>
       </Grid>
 
@@ -192,8 +210,8 @@ const Advertise = () => {
       </Grid>
       <br></br>
       <br></br>
-      <Grid container alignItems="center" justifyContent="space-between">
-        <Grid item>
+      <Grid container alignItems="center" justifyContent={"space-around"}>
+        <Grid item >
           <Pagination
             color="primary"
             count={data?.last_page}
@@ -203,23 +221,7 @@ const Advertise = () => {
             disabled={isLoading}
           />
         </Grid>
-        <Grid item xs={4} sm={6} md={8} container justifyContent="flex-end">
-          <PerPageSelect
-            defaultValue={parameters.perPage}
-            value={parameters.perPage}
-            onChange={handlePerPageChange}
-          />
-          <OrderBy
-            defaultValue={parameters.orderBy}
-            value={parameters.orderBy}
-            onChange={handleOrderByChange}
-          />
-          <OrderDirection
-            defaultValue={parameters.orderDirection}
-            value={parameters.orderDirection}
-            onChange={handleOrderDirectionChange}
-          />
-        </Grid>
+      
       </Grid>
     </div>
   );

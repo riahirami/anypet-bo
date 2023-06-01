@@ -11,7 +11,7 @@ import {
 
 import { SidebarFooter } from "../../components/SidebarSrc/SidebarFooter";
 import { Badge } from "../../components/SidebarSrc/Badge";
-import {} from "../../components/SidebarSrc/PackageBadges";
+import { } from "../../components/SidebarSrc/PackageBadges";
 import { SidebarHeader } from "../../components/SidebarSrc/SidebarHeader";
 
 import { Diamond } from "../../icons/Diamond";
@@ -34,6 +34,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getMyAds } from "redux/slices/adsSlice";
 import { useGetAdsQuery, useGetMyAdsQuery } from "redux/api/adsApi";
 import { parametersListing } from "core/models/parametersListing.model";
+import { Service } from "icons/Service";
 export const Playground: React.FC<Props> = ({
   mode: theme,
   handleThemeChange,
@@ -71,7 +72,7 @@ export const Playground: React.FC<Props> = ({
     if (tokenValue) setRole(role_id);
   }, []);
 
-  if (auth.user.role_id === 1)
+  if (currentUser?.user?.role_id === 1)
     return (
       <div
         style={{
@@ -96,9 +97,10 @@ export const Playground: React.FC<Props> = ({
             />
             <div style={{ flex: 1, marginBottom: "32px" }}>
               <Menu menuItemStyles={menuItemStyles}>
-                <MenuItem icon={<Book />}>
-                  <Link to={PATHS.PROFILE}>Profil</Link>
-                </MenuItem>
+                <Link to={PATHS.PROFILE}>
+                  <MenuItem icon={<Book />}>
+                    Profil
+                  </MenuItem></Link>
                 <SubMenu
                   label="Advertise"
                   icon={<Diamond />}
@@ -108,11 +110,11 @@ export const Playground: React.FC<Props> = ({
                     </Badge>
                   }
                 >
-                  <MenuItem>
+                  <Link to={PATHS.Advertise}><MenuItem>
                     {" "}
-                    <Link to={PATHS.Advertise}>List advertises</Link>
-                  </MenuItem>
-                  <MenuItem
+                    List advertises
+                  </MenuItem></Link>
+                  <Link to={"myadvertises/" + id}>  <MenuItem
                     suffix={
                       <Badge variant="danger" shape="circle">
                         {data?.count}
@@ -120,22 +122,22 @@ export const Playground: React.FC<Props> = ({
                     }
                   >
                     {" "}
-                    <Link to={"myadvertises/" + id}>My advertises</Link>
-                  </MenuItem>
-                  <MenuItem>
+                    My advertises
+                  </MenuItem></Link>
+                  <Link to={PATHS.AddAdvertise}>
+                    <MenuItem>
+                      {" "}
+                      Add advertise
+                    </MenuItem></Link>
+                </SubMenu>
+                <Link to={PATHS.CONVERSATIONS}>
+                  <MenuItem icon={<Service />}>
                     {" "}
-                    <Link to={PATHS.AddAdvertise}>Add advertise</Link>
-                  </MenuItem>
-                </SubMenu>
+                    Conversations
+                  </MenuItem></Link>
 
-                <SubMenu
-                  label="Messages"
-                  icon={<InkBottle />}
-                  suffix={<Badge variant="success">New</Badge>}
-                >
-                  <MenuItem> Dark</MenuItem>
-                  <MenuItem> Light</MenuItem>
-                </SubMenu>
+                <Link to={PATHS.MYRESERVATIONS}>
+                  <MenuItem icon={<Calendar />}> Reservations</MenuItem></Link>
               </Menu>
             </div>
             <SidebarFooter collapsed={collapsed} />
@@ -144,7 +146,7 @@ export const Playground: React.FC<Props> = ({
       </div>
     );
 
-  if (auth.user.role_id === 2)
+  if (currentUser?.user?.role_id === 2)
     return (
       <div
         style={{
@@ -202,6 +204,8 @@ export const Playground: React.FC<Props> = ({
                     <Link to={PATHS.ManageAds}>Advertises requests </Link>
                   </MenuItem>
                 </SubMenu>
+                <Link to={PATHS.MYRESERVATIONS}>
+                  <MenuItem> Reservations</MenuItem></Link>
                 <SubMenu label="Categories" icon={<Global />}>
                   <MenuItem>
                     {" "}
@@ -217,8 +221,12 @@ export const Playground: React.FC<Props> = ({
                   icon={<InkBottle />}
                   suffix={<Badge variant="success">New</Badge>}
                 >
-                  <MenuItem> Dark</MenuItem>
-                  <MenuItem> Light</MenuItem>
+                  <MenuItem>
+                    {" "}
+                    <Link to={PATHS.CONVERSATIONS}> Conversations</Link>
+                  </MenuItem>
+                  <Link to={PATHS.MYRESERVATIONS}>
+                    <MenuItem> Reservations</MenuItem></Link>
                 </SubMenu>
 
                 <Menu menuItemStyles={menuItemStyles}>

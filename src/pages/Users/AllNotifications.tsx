@@ -38,9 +38,9 @@ const AllNotifications = () => {
               </Typography>
             </Grid>
             <Grid item>
-              {notification?.data?.ad_url ? (
+              {notification?.data?.url ? (
                 <IconButton  >
-                  <Link to={notification?.data?.ad_url}>
+                  <Link to={notification?.data?.url}>
                   <VisibilityOutlinedIcon color="info"/>
                   </Link>
                 </IconButton>

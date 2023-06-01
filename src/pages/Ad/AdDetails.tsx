@@ -15,13 +15,20 @@ import {
   Button,
   CardMedia,
   Grid,
+  Divider,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  TextField
 } from "@mui/material";
 import { useGetAllCategoriesQuery } from "../../redux/api/categoryApi";
 
 import AdCard from "../../components/Card/AdsCard";
 import Comment from "components/Comment/Comment";
 import { Typography } from "@mui/joy";
-import { formaDateTime } from "core/services/helpers";
+import { formaDateTime, getState } from "core/services/helpers";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
@@ -30,16 +37,28 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MarkunreadMailboxIcon from "@mui/icons-material/MarkunreadMailbox";
 import LabelImportantIcon from "@mui/icons-material/LabelImportant";
 import { getCurrentUser } from "core/utils/functionHelpers";
+import { useCreateReservationsMutation } from "redux/api/reservationApi";
+
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs, { Dayjs } from "dayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 const AdDetails: React.FC = () => {
   const { id } = useParams();
   const { data: { data: adData } = {}, isLoading } = useGetAdByIdQuery(id);
   const [AdDetails, setAdDetails] = useState();
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
 
   const [setFavorit, { data: datasetFavoris, isSuccess: successFavoris }] =
     useSetFavoriteMutation();
 
-    const user = getCurrentUser();
+  const [makeReservation, { isSuccess: successReservation, isLoading: reservationLoading }] = useCreateReservationsMutation();
+
+  const user = getCurrentUser();
 
   const { data, refetch } = useListFavoriteQuery(user?.user?.id);
 
@@ -53,12 +72,16 @@ const AdDetails: React.FC = () => {
     return category?.title;
   };
 
-  console.log({ adData });
-
   useEffect(() => {
     setAdDetails(adData);
   }, [adData]);
 
+  useEffect(() => {
+    if (successReservation)
+      setOpen(false)
+  }, [successReservation]);
+
+  // TODO optimise this function or replace it by a slice
   const checkIsFavorit = async (id: any) => {
     const favoris = data?.data.find((fav: any) => fav.ad_id == id);
     if (favoris) {
@@ -78,14 +101,93 @@ const AdDetails: React.FC = () => {
     setIsFavorit(true);
   };
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleChangeMessageField = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setMessage(e.target.value);
+  };
+  const [selectedPicker, setSelectedPicker] = useState(false);
+
+  const [dateValue, setDateValue] = useState<string>("");
+  const [timeValue, setTimeValue] = useState<string>("");
+
+
+  const handleDatePicker = (date: dayjs.Dayjs | null | string) => {
+    setSelectedPicker(true);
+    const datePicker = dayjs(date).format("YYYY-MM-DDTHH:mm:ss");
+    const dateString = datePicker?.substring(0, 10).replace(/-/g, "");
+    setDateValue(dateString);
+  };
+  const handleTimeChange = (time: any) => {
+    const formattedTime = dayjs(time).format("HH:mm:ss");
+    setTimeValue(formattedTime);
+  };
+
+  const makeReservationHandler = async () => {
+    await makeReservation({
+      receiver_id: adData?.user?.id,
+      ad_id: adData?.id,
+      message: message,
+      reservation_date: dateValue + " " + timeValue,
+    });
+  }
+
   return (
     <>
+
+      <Dialog
+        open={open}
+        keepMounted
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>{"Choose a date and add a message to your reservation request"}</DialogTitle>
+        <DialogContent>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer components={["DatePicker",'TimePicker']}>
+              <DatePicker
+                value={dateValue}
+                label="Choose your date"
+                onChange={(newDate) => handleDatePicker(newDate)}
+              />
+              <TimePicker
+                value={timeValue}
+                label="Schedule the time"
+                onChange={(newTime) => handleTimeChange(newTime)}
+              />
+            </DemoContainer>
+          </LocalizationProvider>
+
+          <TextField
+            autoFocus
+            margin="dense"
+            id="message"
+            label="message"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={message}
+            onChange={handleChangeMessageField}
+            disabled={reservationLoading}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => makeReservationHandler()} disabled={reservationLoading}>Valide</Button>
+        </DialogActions>
+      </Dialog>
+
+
       <Grid item xs={12} md={12}>
         {isLoading && <Spinner />}
 
-        {/* {adData && <AdCard adData={adData} />} */}
-
-        <Grid container xs={12} md={12} justifyContent="space-between">
+        <Grid container justifyContent="space-between">
           <Grid item xs={7} md={7}>
             <Box sx={{ p: "5px" }}>
               <Typography component="h1">{adData?.title}</Typography>
@@ -135,21 +237,35 @@ const AdDetails: React.FC = () => {
             })}
         </Grid>
 
-        <Grid container alignContent={"center"} sx={{ m: "10px", p: "5px" }}>
-          <Grid item> <Link to={"/user/details/" + adData?.user?.id}>
-            <Avatar src={adData?.user?.avatar}></Avatar>
-           </Link>
-
-          </Grid>
+        <Grid
+          container
+          sx={{ m: "10px", p: "5px" }}
+          justifyContent={"space-between"}
+        >
           <Grid item>
-            <Typography sx={{ ml: "10px", p: "5px" }}>
-          <Link to={"/user/details/" + adData?.user?.id}>
-              {adData?.user?.firstname} {adData?.user?.lastname}
+            <Link to={"/user/details/" + adData?.user?.id}>
+              <Avatar src={adData?.user?.avatar}></Avatar>
             </Link>
+            <Typography>
+              <Link to={"/user/details/" + adData?.user?.id}>
+                {adData?.user?.firstname} {adData?.user?.lastname}
+              </Link>
             </Typography>
           </Grid>
-        </Grid>
 
+          {user?.user?.id !== adData?.user_id &&
+            <>
+              <Grid item alignItems={"flex-end"}>
+                <Button onClick={handleClickOpen} variant="contained">reservation</Button>
+              </Grid><Grid item alignItems={"flex-end"}>
+                <Link to={"/users/messages/" + adData?.user?.id}>
+                  <Button variant="contained">send message</Button>
+                </Link>
+              </Grid>
+            </>
+          }
+        </Grid>
+        <Divider />
         <Typography variant="plain" sx={{ mb: "10px", p: "10px" }}>
           {adData?.description}
         </Typography>
@@ -158,7 +274,7 @@ const AdDetails: React.FC = () => {
       <Grid container sx={{ justifyContent: "space-between" }}>
         <Grid item sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <LocationOnIcon sx={{ color: "warning.main" }} />
-          <Typography>{adData?.city}</Typography>
+          <Typography>{getState(adData?.state)} - {adData?.city}</Typography>
         </Grid>
         <Grid item sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <LocationOnIcon sx={{ color: "warning.main" }} />
@@ -173,7 +289,7 @@ const AdDetails: React.FC = () => {
           <Typography>+216 {adData?.user?.phone}</Typography>
         </Grid>
       </Grid>
-     
+
       <Grid>
         <Comment />
       </Grid>

@@ -3,6 +3,10 @@ import { endpoints } from "../../core/constant/endpoints";
 import { baseQueryConfig } from "./BaseQueryConfig";
 import { User } from "../../core/models/user.model";
 import { UserDetails, UsersDetails } from "core/models/UserDetails.model";
+import { SendMessageRequest } from "core/models/sendMessageRequest.model";
+import { Message } from "core/models/Message.model";
+
+
 
 export const userApi = createApi({
   reducerPath: "userApi",
@@ -71,7 +75,28 @@ export const userApi = createApi({
       },
       invalidatesTags: ["User"],
     }),
-    
+    sendMessage: builder.mutation<any, SendMessageRequest>({
+      query: ({ receiver_id, message }) => ({
+        url: endpoints.MESSAGES + receiver_id,
+        method: 'POST',
+        body: { message },
+      }),
+      invalidatesTags: ['User'],
+    }),
+    getConversation: builder.query({
+      query: (user_id ) => ({
+        url: endpoints.CONVERSATION + user_id,
+        method: 'get',
+      }),
+      providesTags: ['User'],
+    }),
+    getListConversations: builder.query<Message[], void>({
+      query: ( ) => ({
+        url: endpoints.CONVERSATIONSLIST,
+        method: 'get',
+      }),
+      providesTags: ['User'],
+    }),
   }),
 });
 
@@ -83,6 +108,8 @@ export const {
   useUserDetailsQuery,
   useListAllNotificationsQuery,
   useListUnreadNotificationsQuery,
-  useMarkAllAsReadNotificationsMutation
-
+  useMarkAllAsReadNotificationsMutation,
+  useSendMessageMutation,
+  useGetConversationQuery,
+  useGetListConversationsQuery
 } = userApi;

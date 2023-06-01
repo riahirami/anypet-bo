@@ -22,8 +22,10 @@ export const usePopper = (options: PopperOptions): PopperResult => {
    * create popper instance only on first level submenu components and when sidebar is collapsed
    */
   React.useEffect(() => {
+    let popperInstance: ReturnType<typeof createPopper> | undefined;
+
     if (level === 0 && collapsed && contentRef.current && buttonRef.current) {
-      popperInstanceRef.current = createPopper(buttonRef.current, contentRef.current, {
+      popperInstance = createPopper(buttonRef.current, contentRef.current, {
         placement: 'right',
         strategy: 'fixed',
         modifiers: [
@@ -37,7 +39,11 @@ export const usePopper = (options: PopperOptions): PopperResult => {
       });
     }
 
-    return () => popperInstanceRef.current?.destroy();
+    // return () => {
+    //   if (popperInstance) {
+    //     popperInstance.destroy();
+    //   }
+    // };
   }, [level, collapsed, contentRef, buttonRef]);
 
   /**

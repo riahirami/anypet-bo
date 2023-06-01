@@ -1,4 +1,4 @@
-import { Button, FormControl, TextField, Typography } from "@mui/material";
+import { Button, Grid, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { Ad } from "../../core/models/ad.model";
 import CustomModal from "../../components/Modal/CustomModal";
@@ -15,16 +15,19 @@ import {
 import {
   CityFormControl,
   CustomTextField,
+  MediaField,
   PostalFormControl,
   StateFormControl,
   StreetFormControl,
   StyledButton,
+  TitleTextField,
 } from "./Advertise.style";
 import { useGetAllCategoriesQuery } from "../../redux/api/categoryApi";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { message } from "../../core/constant/message";
+import { StateTunisia } from "core/constant/StateTunisia";
 
 const advertiseSchema = Yup.object().shape({
   title: Yup.string()
@@ -70,6 +73,7 @@ const AddAdvertise = () => {
       firstname:"", lastname:"", email:"", password:"",phone:"",address:""
     }
   };
+
 
   const [ad, setAd] = useState(item);
   const [addAdvertise, { data, isSuccess, isLoading, isError }] =
@@ -120,7 +124,7 @@ const AddAdvertise = () => {
  
 
   return (
-    <div>
+    <Grid container>
       <Typography align="left">Add advertise</Typography>
 
       {isLoading && <Spinner />}
@@ -128,6 +132,8 @@ const AddAdvertise = () => {
       {showModal && (
         <CustomModal title="Add" description={message.ADVERRTISESADDED} />
       )}
+
+      <Grid item md={8} style={{paddingTop:"50px",margin:"auto"}}>
       <Formik
         initialValues={{
           title: "",
@@ -149,13 +155,12 @@ const AddAdvertise = () => {
               name="title"
               label="title"
               color="primary"
-              fullWidth
-              as={CustomTextField}
+              as={TitleTextField}
               helperText={formikProps.touched.title && formikProps.errors.title}
               error={formikProps.touched.title && !!formikProps.errors.title}
               onChange={handleChangeForm(formikProps)}
             />
-            <TextField
+            <MediaField
               label="media"
               name="media"
               id="media"
@@ -168,7 +173,6 @@ const AddAdvertise = () => {
               select
               name="category_id"
               id="category_id"
-              fullWidth
               label="Category"
               onChange={handleChangeForm(formikProps)}
               helperText="Please choose a category of your advertise"
@@ -199,8 +203,8 @@ const AddAdvertise = () => {
               onChange={handleChangeForm(formikProps)}
             />
 
-            <StateFormControl variant="filled">
-              <Field
+            <CustomTextField
+              select
                 id="state"
                 name="state"
                 label="state"
@@ -212,8 +216,13 @@ const AddAdvertise = () => {
                 }
                 error={formikProps.touched.state && !!formikProps.errors.state}
                 onChange={handleChangeForm(formikProps)}
-              />
-            </StateFormControl>
+              >
+                {StateTunisia.map((item : any) => (
+                <MenuItem key={item.id} value={item.id}>
+                  {item.name}
+                </MenuItem>
+              ))}
+            </CustomTextField>
             <CityFormControl variant="filled">
               <Field
                 id="city"
@@ -275,7 +284,9 @@ const AddAdvertise = () => {
           </Form>
         )}
       </Formik>
-    </div>
+      </Grid>
+     
+    </Grid>
   );
 };
 

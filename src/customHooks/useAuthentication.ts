@@ -18,7 +18,7 @@ const initialState = {
 export function useAuthentication() {
 
   const authUser = useSelector((state: any) => state.auth.user);
-  const dispatch: Dispatch = useAppDispatch();
+  // const authUser = getCurrentUser();
   const navigate = useNavigate();
 
   useEffect(() => {

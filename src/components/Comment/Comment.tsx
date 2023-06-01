@@ -112,6 +112,7 @@ const Comment = () => {
               name="description"
               value={comment}
               onChange={handleChangeCommentField}
+              focused
             />
           </Grid>
           <Grid item>
@@ -233,6 +234,7 @@ const Comment = () => {
                       <Grid item xs={12} sm={11} md={11} lg={10}>
                         <TextField
                           fullWidth
+                          focused
                           id={`reply-${comment.id}`}
                           name={`reply-${comment.id}`}
                           value={replyTexts[comment.id] || ""}
@@ -244,6 +246,7 @@ const Comment = () => {
                       <Grid item>
                         <StyledCommentButton
                           variant="contained"
+                          disabled={ReplyCommentLoading}
                           onClick={() => {
                             replyComment({
                               id: id,
@@ -254,7 +257,7 @@ const Comment = () => {
                             setReplyTexts({});
                           }}
                         >
-                          Comment
+                          Reply
                         </StyledCommentButton>
                       </Grid>
                     </Grid>

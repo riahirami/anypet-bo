@@ -22,7 +22,12 @@ export const PATHS = {
     LISTFAVORIT: '/favoritlist/:id',
     LISTCOMMENTS: '/comment/:id',
     ALLNOTIFICATIONS: '/notifications/:id',
+    MESSAGES: 'users/messages/:id',
+    CONVERSATIONS: 'users/conversations',
 
     NOtAUTHORIZED : '/notauthorized',
-    USERDETAILS : '/user/details/:id'
+    USERDETAILS : '/user/details/:id',
+
+
+    MYRESERVATIONS : '/reservation/my'
 }

@@ -8,6 +8,7 @@ import { categoryApi } from './api/categoryApi';
 import {adsApi} from './api/adsApi';
 import {userApi} from './api/userApi';
 import {commentApi} from './api/commentsApi';
+import { reservationApi } from './api/reservationApi';
 
 
 export const store = configureStore({
@@ -20,6 +21,7 @@ export const store = configureStore({
         [adsApi.reducerPath]: adsApi.reducer, 
         [userApi.reducerPath]: userApi.reducer, 
         [commentApi.reducerPath]: commentApi.reducer, 
+        [reservationApi.reducerPath]: reservationApi.reducer, 
     },
    
     middleware: (getDefaultMiddleware) =>
@@ -27,7 +29,8 @@ export const store = configureStore({
         .concat(categoryApi.middleware) 
         .concat(userApi.middleware)
         .concat(commentApi.middleware)
-        .concat(adsApi.middleware), 
+        .concat(adsApi.middleware) 
+        .concat(reservationApi.middleware), 
 
         
 })

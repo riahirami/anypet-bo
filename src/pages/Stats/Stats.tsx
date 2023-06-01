@@ -54,7 +54,7 @@ const Stats = () => {
         } else if (column == "category_id" && item?.category_id) {
           return changeIdtoCategory(item.category_id) || "Unknown category";
         } else {
-          return item?.city || "Unknown city";
+          return item?.state || "Unknown state";
         }
       }),
     },
@@ -88,7 +88,7 @@ const Stats = () => {
           };
         } else {
           return {
-            name: item?.city || "Unknown City",
+            name: item?.state || "Unknown state",
             value: item.total,
           };
         }
@@ -125,9 +125,9 @@ const Stats = () => {
               name: changeIdtoCategory(item?.category_id) || "loading",
               value: item?.total,
             };
-          } else if (item?.city) {
+          } else if (item?.state) {
             return {
-              name: item?.city || "loading",
+              name: item?.state || "loading",
               value: item.total,
             };
           }
@@ -158,8 +158,8 @@ const Stats = () => {
         <MenuItem key="status" value="status">
           status
         </MenuItem>
-        <MenuItem key="city" value="city">
-          city
+        <MenuItem key="state" value="state">
+          state
         </MenuItem>
       </TextField>
       
@@ -185,7 +185,7 @@ const Stats = () => {
                       ? "Status"
                       : column === "category_id"
                       ? "Category"
-                      : "City"}
+                      : "State"}
                   </TableCell>
                   <TableCell>Total</TableCell>
                 </TableRow>
@@ -198,7 +198,7 @@ const Stats = () => {
                         ? statusToString(item.status)
                         : column === "category_id"
                         ? changeIdtoCategory(item.category_id)
-                        : item.city}
+                        : item.state}
                     </TableCell>
                     <TableCell>{item.total}</TableCell>
                   </TableRow>

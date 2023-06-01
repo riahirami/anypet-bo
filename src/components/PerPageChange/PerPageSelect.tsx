@@ -12,7 +12,7 @@ const PerPageSelect = ({ value, onChange }: PerPageSelectProps) => {
     <StyledTextFieldList
       id="outlined-select-perPage"
       select
-      label="per page"
+      label="Select page"
       value={value}
       onChange={handleChange}
     >

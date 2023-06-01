@@ -25,11 +25,14 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useGetAllCategoriesQuery } from "../../redux/api/categoryApi";
 import { AdCardProps, Media } from "./AdsCard.type";
 import useDeleteAd from "customHooks/useDeleteAd";
-import { useListFavoriteQuery, useSetFavoriteMutation } from "redux/api/adsApi";
+import { useChangeStatusAdsMutation, useListFavoriteQuery, useSetFavoriteMutation } from "redux/api/adsApi";
 import { Spinner } from "components/Spinner/spinner";
 import { getCurrentUser } from "core/utils/functionHelpers";
+import SendIcon from "@mui/icons-material/Send";
+import { StatusOption } from "core/enums/status";
+import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 
-function AdCard({ adData }: AdCardProps) {
+function AdCard({ adData,user }: AdCardProps) {
   const { data: CategoryData, refetch: RefetchCategory } =
     useGetAllCategoriesQuery(100);
   const [setFavorit, { data: datasetFavoris, isSuccess: successFavoris }] =
@@ -50,11 +53,39 @@ function AdCard({ adData }: AdCardProps) {
 
   useEffect(() => {
     checkIsFavorit(adData.id);
-  }, []);
+  }, [data]);
 
   const { handleDeleteAd } = useDeleteAd();
 
   const [menuAnchor, setMenuAnchor] = useState(null);
+
+  const statusOptions = [
+    { value: StatusOption.All, label: "All" },
+    { value: StatusOption.Waiting, label: "Waiting" },
+    { value: StatusOption.Canceled, label: "Canceled" },
+    { value: StatusOption.Validated, label: "Validated" },
+  ];
+  const [
+    changeStatus,
+    {
+      data: dataChangeStatus,
+      isLoading: loadingUpdateStatus,
+      isSuccess: successChangeStatus,
+      isError: errorChangeStatus,
+    },
+  ] = useChangeStatusAdsMutation()
+  const handleStatusChange = async (
+    adId: string | number | undefined,
+    status: StatusOption
+  ) => {
+    changeStatus({ id: adId, status })
+      .unwrap()
+      .then(() => {
+        refetch();
+      });
+    // setStatusParams({ id: adId, status });
+  };
+
 
   const handleMenuOpen = (event: any) => {
     setMenuAnchor(event.currentTarget);
@@ -99,34 +130,33 @@ function AdCard({ adData }: AdCardProps) {
       <Card key={adData.id}>
         <CardHeader
           avatar={
-            <Avatar
-              sx={{ bgcolor: red[500] }}
-              aria-label="recipe"
-              src={adData.user?.avatar}
-            ></Avatar>
+            <Link to={"/user/details/" + adData?.user_id}>
+              <Avatar
+                sx={{ bgcolor: red[500] }}
+                aria-label="recipe"
+                src={user ? user?.avatar : adData.user?.avatar}
+              ></Avatar> </Link>
           }
           action={
             <>
               {(currentUser.user.id === adData.user_id ||
                 currentUser.user.role_id == "2") && (
-                <>
-                  <IconButton aria-label="settings" onClick={handleMenuOpen}>
-                    <MoreVertIcon />
-                  </IconButton>
-                  <Link to={"/user/details/" + adData?.user_id}>
-<Menu
-                    anchorEl={menuAnchor}
-                    open={Boolean(menuAnchor)}
-                    onClose={handleMenuClose}
-                  >
-                    <MenuItem onClick={handleDelete}>Delete</MenuItem>
-                    <MenuItem>
-                      <Link to={"/advertise/update/" + adData.id}>Update</Link>
-                    </MenuItem>
-                  </Menu>
-                  </Link>
-                </>
-              )}
+                  <>
+                    <IconButton aria-label="settings" onClick={handleMenuOpen}>
+                      <MoreVertIcon />
+                    </IconButton>
+                    <Menu
+                      anchorEl={menuAnchor}
+                      open={Boolean(menuAnchor)}
+                      onClose={handleMenuClose}
+                    >
+                      <MenuItem onClick={handleDelete}>Delete</MenuItem>
+                      <MenuItem>
+                        <Link to={"/advertise/update/" + adData.id}>Update</Link>
+                      </MenuItem>
+                    </Menu>
+                  </>
+                )}
             </>
           }
           title={adData.user ? adData.user.firstname : ""}
@@ -170,25 +200,25 @@ function AdCard({ adData }: AdCardProps) {
 
           {(currentUser.user.id === adData.user_id ||
             currentUser.user.role_id == "2") && (
-            <Typography
-              color="textSecondary"
-              noWrap
-              variant="body2"
-              gutterBottom
-              style={{
-                background:
-                  adData.status == "0"
-                    ? "orange"
-                    : adData.status == "1"
-                    ? "red"
-                    : adData.status == "2"
-                    ? "green"
-                    : "inherit",
-              }}
-            >
-              Status: {statusToString(adData.status)}
-            </Typography>
-          )}
+              <Typography
+                color="textSecondary"
+                noWrap
+                variant="body2"
+                gutterBottom
+                style={{
+                  color:
+                    adData.status == "0"
+                      ? "orange"
+                      : adData.status == "1"
+                        ? "red"
+                        : adData.status == "2"
+                          ? "green"
+                          : "inherit",
+                }}
+              >
+                Status:  {statusToString(adData.status)}
+              </Typography>
+            )}
         </CardContent>
         <CardActions disableSpacing>
           <Grid container justifyContent="space-between">
@@ -211,13 +241,51 @@ function AdCard({ adData }: AdCardProps) {
                 </IconButton>
               </Link>
             </Grid>
-            <Grid item xs={12} sm={4} md={3} lg={3}>
-              <IconButton aria-label="share">
-                <ShareIcon />
-              </IconButton>
-            </Grid>
+            {currentUser.user.id !== adData.user_id  && <Grid item xs={12} sm={4} md={3} lg={3}>
+              <Link to={"/users/messages/" + adData?.user_id}>
+                <IconButton aria-label="send">
+                  <ChatOutlinedIcon  />
+                </IconButton>
+              </Link>
+            </Grid>}
           </Grid>
+
+          {/* admin actions */}
+
+
         </CardActions>
+        {currentUser.user.role_id == "2" && <Grid container style={{ padding: "5px" }}>
+          <Grid item key={adData.id} xs={12} sm={4} md={4} lg={4} >
+            <Button
+              variant="contained"
+              color="warning"
+              disabled={loadingUpdateStatus}
+              onClick={() =>
+                handleStatusChange(adData.id, StatusOption.Waiting)
+              }
+            >Waiting</Button>
+          </Grid>
+          <Grid item key={adData.id} xs={12} sm={4} md={4} lg={4} >
+            <Button
+              variant="contained"
+              color="success"
+              disabled={loadingUpdateStatus}
+              onClick={() =>
+                handleStatusChange(adData.id, StatusOption.Validated)
+              }
+            >Valide</Button>
+          </Grid>
+          <Grid item key={adData.id} xs={12} sm={4} md={4} lg={4} >
+            <Button
+              variant="contained"
+              color="error"
+              disabled={loadingUpdateStatus}
+              onClick={() =>
+                handleStatusChange(adData.id, StatusOption.Canceled)
+              }
+            >Cancel</Button>
+          </Grid>
+        </Grid>}
       </Card>
     </>
   );

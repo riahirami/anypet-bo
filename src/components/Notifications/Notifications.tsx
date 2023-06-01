@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Badge } from "../SidebarSrc/Badge";
 import { Link } from "react-router-dom";
 import { PATHS } from "routes/Path";
@@ -23,6 +23,12 @@ const Notifications = () => {
   const [notifNumber, setNotifNumber] = useState(
     unreadNotifications?.data?.length
   );
+
+  useEffect(()=>(
+    setNotifNumber(unreadNotifications?.data?.length)
+  ),[unreadNotifications])
+
+
   const [notificationAnchorEl, setNotificationAnchorEl] =
     useState<null | HTMLElement>(null);
   const openNotificationMenu = Boolean(notificationAnchorEl);
@@ -65,9 +71,9 @@ const Notifications = () => {
             <MenuItem key={notification.id}>
               {getNotificationMessage(notification)}
               <Grid item>
-                {notification?.data?.ad_url ? (
+                {notification?.data?.url ? (
                   <IconButton>
-                    <Link to={notification?.data?.ad_url}>
+                    <Link to={notification?.data?.url}>
                       <VisibilityOutlinedIcon color="info" />
                     </Link>
                   </IconButton>

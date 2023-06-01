@@ -1,7 +1,9 @@
+import { User } from "core/models/user.model";
 import { Ad, AdData } from "../../core/models/ad.model";
 
 export interface AdCardProps {
   adData: Ad;
+  user?:User ;
   // medias: {
   //   data: Media[]
   // }

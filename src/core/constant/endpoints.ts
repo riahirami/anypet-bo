@@ -34,11 +34,20 @@ export const endpoints = {
     USERLISTNOTIFICATIONS: "users/notifications/",
     USERLISTUNREADNOTIFICATIONS: "users/notifications/unread/",
     MARKAllASREADNOTIFICATIONS: "users/notifications/readall",
+    MESSAGES: "users/message/",
+    CONVERSATION: "users/conversation/",
+    CONVERSATIONSLIST: "users/conversations/list",
 
     SETADMIN: "role/setadmin/",
     REVOKEADMIN: "role/revokeadmin/",
 
     LISTCOMMENTS: "comment/",
+
+
+    CREATERESERVATION: "reservation/create",
+    GETMYRESERVATION: "reservation/show/myreservation",
+    GETADRESERVATIONS: "reservation/show/ad",
+    RESPONSERESERVATIONS: "reservation/response",
 
 
 

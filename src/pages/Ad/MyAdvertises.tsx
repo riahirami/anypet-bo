@@ -27,7 +27,6 @@ const MyAdvertises = () => {
 
   // const MyAds = useSelector((state: any) => state.ad);
 
-console.log({MyAds})
 
   return (
     <Grid>

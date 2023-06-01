@@ -150,8 +150,8 @@ function Profile() {
         <h2>Welcome {firstname}</h2>
         <Container>
           <Avatar sx={{ width: 90, height: 90 }} alt="avatar" src={avatar} />
-          <p>Firstname: {firstname}</p>
-          <p>Lastname: {lastname}</p>
+          <p>First name: {firstname}</p>
+          <p>Last name: {lastname}</p>
           <p>email: {email}</p>
           <p>Phone: {phone}</p>
         </Container>

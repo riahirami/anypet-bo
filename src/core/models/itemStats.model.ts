@@ -3,5 +3,6 @@ export interface itemStats{
     status:string;
     category_id:string;
     city:string;
+    state:string;
     total:string;
   }

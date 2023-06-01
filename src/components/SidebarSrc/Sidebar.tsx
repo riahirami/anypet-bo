@@ -140,9 +140,8 @@ const StyledSidebar = styled.aside<StyledSidebarProps>`
 
 const StyledSidebarContainer = styled.div<StyledSidebarContainerProps>`
   position: relative;
-  height: 101vh;
-  overflow-y: auto;
-  overflow-x: hidden;
+  height: auto;
+  min-height: 100vh;
   z-index: 3;
 
   ${({ backgroundColor }) =>
@@ -152,7 +151,7 @@ const StyledSidebarContainer = styled.div<StyledSidebarContainerProps>`
 const StyledSidebarImage = styled.img`
   &.${sidebarClasses.image} {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     object-fit: cover;
     object-position: center;
     position: absolute;

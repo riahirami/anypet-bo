@@ -165,7 +165,8 @@ const AdvertiseRequest = () => {
       <Typography align="left">Advertises requests</Typography>
 
       <Grid item xs={12} md={12}>
-        <Grid container spacing={2} alignItems="center">
+     
+        <Grid container alignItems="center" style={{display:"flex",justifyContent:"space-evenly",marginBottom:"20px",paddingBottom:"20px",paddingTop:"20px"}}>
           <Grid item xs={12} sm={2} md={4}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
@@ -173,8 +174,6 @@ const AdvertiseRequest = () => {
                 onChange={(newDate) => handlePicker(newDate)}
               />
             </LocalizationProvider>
-          </Grid>
-          <Grid item xs={12} sm={2} md={4}>
             <Button onClick={handleReset}>
               <EventBusySharpIcon />
               reset
@@ -182,7 +181,7 @@ const AdvertiseRequest = () => {
           </Grid>
 
           <Grid item xs={12} sm={2} md={2}>
-            <Grid container spacing={2}>
+            <Grid container >
               <TextField
                 id="outlined-select-status"
                 select
@@ -199,79 +198,6 @@ const AdvertiseRequest = () => {
                 ))}
               </TextField>
             </Grid>
-          </Grid>
-        </Grid>
-
-        <Grid>
-        {isLoading && <Spinner />}
-
-        <Container>
-          {}
-
-          <Grid container spacing={1}>
-            <Grid container spacing={2}>
-              {data?.data.map((ad: Ad) => (
-                <Grid item key={ad.id} xs={12} sm={6} md={4} lg={3}>
-                  {isFetching ? <Spinner /> : <AdCard adData={ad} />}
-                  <Grid container justifyContent="space-between">
-                  <Grid item key={ad.id} xs={12} sm={4} md={3} lg={3}>
-                    <Button
-                      variant="contained"
-                      color="warning"
-                      onClick={() =>
-                        handleStatusChange(ad.id, StatusOption.Waiting)
-                      }
-                    >
-                      Waiting
-                    </Button>
-                  </Grid>
-                  <Grid item key={ad.id} xs={12} sm={4} md={3} lg={3}>
-                    <Button
-                      variant="contained"
-                      color="success"
-                      onClick={() =>
-                        handleStatusChange(ad.id, StatusOption.Validated)
-                      }
-                    >
-                      Valide
-                    </Button>
-                  </Grid>
-                  <Grid item key={ad.id} xs={12} sm={4} md={3} lg={3}>
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      color="error"
-                      onClick={() =>
-                        handleStatusChange(ad.id, StatusOption.Canceled)
-                      }
-                    >
-                      Cancel
-                    </Button>
-                  </Grid>
-                </Grid>
-
-                </Grid>
-              ))}
-            </Grid>
-          </Grid>
-          
-        </Container>
-      </Grid>
-
-        <br></br>
-        <br></br>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Stack spacing={2}>
-              <Pagination
-                color="primary"
-                count={data?.last_page}
-                defaultPage={parameters.page}
-                boundaryCount={1}
-                onChange={handlePageChange}
-                disabled={isLoading}
-              />
-            </Stack>
           </Grid>
 
           <Grid item>
@@ -291,6 +217,46 @@ const AdvertiseRequest = () => {
               onChange={handleOrderDirectionChange}
             />
           </Grid>
+        </Grid>
+
+        <Grid>
+        {isLoading && <Spinner />}
+
+        <Container>
+          {}
+
+          <Grid container spacing={1}>
+            <Grid container spacing={2}>
+              {data?.data.map((ad: Ad) => (
+                <Grid item key={ad.id} xs={12} sm={6} md={4} lg={3}>
+                  {isFetching ? <Spinner /> : <AdCard adData={ad} />}
+                
+
+                </Grid>
+              ))}
+            </Grid>
+          </Grid>
+          
+        </Container>
+      </Grid>
+
+        <br></br>
+        <br></br>
+        <Grid container justifyContent={"center"}>
+          <Grid item>
+            <Stack spacing={2}>
+              <Pagination
+                color="primary"
+                count={data?.last_page}
+                defaultPage={parameters.page}
+                boundaryCount={1}
+                onChange={handlePageChange}
+                disabled={isLoading}
+              />
+            </Stack>
+          </Grid>
+
+         
         </Grid>
       </Grid>
     </div>

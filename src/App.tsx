@@ -11,7 +11,6 @@ function App() {
   const { mode, handleThemeChange, handleImageChange, hasImage } = useTheme();
   const authUser = useAuthentication();
 
-
   
   if (authUser != null)
     return (

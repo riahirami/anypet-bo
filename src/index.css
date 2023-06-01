@@ -27,5 +27,6 @@ a,a:visited {
   flex: 1; /* Set playground container to 25% width */
   display: flex;
   flex-direction: column;
-  min-height: 721px;
-  height: 100vh;}
+  /* min-height: 721px; */
+  /* height: 100vh; */
+}
