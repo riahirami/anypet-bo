@@ -17,20 +17,14 @@ const AdsByCategory = () => {
   const [Ads, setAds] = useState();
 
 
-  const {
-    data: MediaData,
-    isLoading: MediaLoading,
-    isSuccess: MediaSuccess,
-  } = useGetMediaByIdQuery(adData?.id);
-
   return (
    
        <Container>
        {}
 
        <Grid container >
-           {adData &&
-             adData?.data?.map((item: Ad) => (
+           {
+             adData?.map((item: Ad) => (
                <Grid item key={item.id} xs={12} sm={4} md={4} lg={3}>
                  <AdCard adData={item} />
                </Grid>

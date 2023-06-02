@@ -2,7 +2,7 @@ import React from "react";
 import { Grid,Button, Typography } from "@mui/material";
 import { amber } from "@mui/material/colors";
 import { PATHS } from "routes/Path";
-import { Link } from "react-router-dom";
+import CustomLink from "components/CustomLink/CustomLink";
 
 const primary = amber[300];
 
@@ -15,9 +15,9 @@ export default function Unauthorized() {
         <Typography variant="h6">
           You are not authorized to access this page!
         </Typography>
-        <Button variant="contained"><Link to={PATHS.PROFILE}>
+        <Button variant="contained"><CustomLink to={PATHS.PROFILE}>
             Back Home
-            </Link>
+            </CustomLink>
             </Button>
       </Grid>
     </Grid>

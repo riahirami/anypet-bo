@@ -11,11 +11,6 @@ import {
   Fab,
   Grid,
   IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Stack,
   Typography,
   Table,
   TableBody,
@@ -26,14 +21,11 @@ import {
   Paper,
 } from "@mui/material";
 import {message} from "../../core/constant/message";
-
-import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import PlusOneIcon from "@mui/icons-material/PlusOne";
 import CustomModal from "../../components/Modal/CustomModal";
 import Spinner from "../../components/Spinner/spinner";
-import { Link } from "react-router-dom";
 import { PATHS } from "../../routes/Path";
 import { Category, CategoryData } from "../../core/models/category.model";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,6 +37,7 @@ import { Demo } from "./category.style";
 import { Playground } from "../../layouts/SideBar/SideBar";
 import { ProSidebarProvider } from "../../components/SidebarSrc/ProSidebarProvider";
 import Pagination from "@mui/material/Pagination";
+import CustomLink from "components/CustomLink/CustomLink"
 
 const Categories = () => {
   const [showModal, setShowModal] = useState(false);
@@ -109,11 +102,11 @@ const Categories = () => {
             />
           </Grid>
           <Grid item xs={4} container justifyContent="flex-end">
-            <Link to={PATHS.AddCategories}>
+            <CustomLink to={PATHS.AddCategories}>
               <Button variant="contained" endIcon={<PlusOneIcon />}>
                 Add category
               </Button>
-            </Link>
+            </CustomLink>
           </Grid>
         </Grid>
         {isFetching && <Spinner />}
@@ -136,9 +129,9 @@ const Categories = () => {
                   <TableRow key={cat.id}>
                     <TableCell>{cat.id}</TableCell>
                     <TableCell>
-                      <Link to={"/advertise/category/" + cat.id}>
+                      <CustomLink to={"/advertise/category/" + cat.id}>
                         {cat.title}
-                      </Link>
+                      </CustomLink>
                     </TableCell>
                     <TableCell>
                       <IconButton
@@ -152,7 +145,7 @@ const Categories = () => {
                       </IconButton>
                     </TableCell>
                     <TableCell>
-                      <Link to={"/categoryshow/" + cat.id}>
+                      <CustomLink to={"/categoryshow/" + cat.id}>
                         <IconButton
                           color="primary"
                           aria-label="edit"
@@ -160,7 +153,7 @@ const Categories = () => {
                         >
                           <EditIcon />
                         </IconButton>
-                      </Link>
+                      </CustomLink>
                     </TableCell>
                   </TableRow>
                 ))}

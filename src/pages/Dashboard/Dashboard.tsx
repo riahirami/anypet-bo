@@ -21,7 +21,7 @@ import { dashboard } from "../../core/constant/dashboard";
 import { resendEmailVerificationMsg } from "../../core/constant/resendEmailVerification";
 import CustomModal from "../../components/Modal/CustomModal";
 import { ProSidebarProvider } from "../../components/SidebarSrc/ProSidebarProvider";
-import Profile from "./Profile";
+import Profile from "./Profile/Profile/Profile";
 import { Playground } from "../../layouts/SideBar/SideBar";
 import { BrowserRouter } from "react-router-dom";
 import { Router } from "components/Router";

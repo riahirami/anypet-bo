@@ -20,6 +20,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import AlertComponent from "../../components/Alert/Alert";
 import {message} from "../../core/constant/message";
+import { StateTunisia } from "core/constant/StateTunisia";
 
 const advertiseSchema = Yup.object().shape({
   title: Yup.string()
@@ -190,23 +191,23 @@ const AdUpdate = () => {
                 }
                 onChange={handleChangeForm(formikProps)}
               />
-              <StateFormControl variant="filled">
-                <Field
-                  id="state"
-                  name="state"
-                  label="state"
-                  color="primary"
-                  fullWidth
-                  as={CustomTextField}
-                  helperText={
-                    formikProps.touched.state && formikProps.errors.state
-                  }
-                  error={
-                    formikProps.touched.state && !!formikProps.errors.state
-                  }
-                  onChange={handleChangeForm(formikProps)}
-                />
-              </StateFormControl>
+               <CustomTextField
+              select
+                id="state"
+                name="state"
+                label="state"
+                color="primary"
+                fullWidth
+                as={CustomTextField}
+                error={formikProps.touched.state && !!formikProps.errors.state}
+                onChange={handleChangeForm(formikProps)}
+              >
+                {StateTunisia.map((item : any) => (
+                <MenuItem key={item.id} value={item.id}>
+                  {item.name}
+                </MenuItem>
+              ))}
+            </CustomTextField>
               <CityFormControl variant="filled">
                 <Field
                   id="city"

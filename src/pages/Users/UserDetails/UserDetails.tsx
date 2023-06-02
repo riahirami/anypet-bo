@@ -15,22 +15,25 @@ import AdCard from "components/Card/AdsCard";
 import { Ad, AdData } from "core/models/ad.model";
 import React from "react";
 import { useUserDetailsQuery } from "redux/api/userApi";
-import { Link, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import { useGetAllCategoriesQuery } from "redux/api/categoryApi";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { formaDateTime } from "core/services/helpers";
+import CustomLink from "components/CustomLink/CustomLink"
+import {CustomGridAvatarName,CustomTypography,CustomBox} from "./UserDetails.style"
 
 const useStyles = makeStyles({
   root: {
     maxWidth: 550,
   },
 });
-export const UserDetails = () => {
+
+export const UserDetails = (Props?: {userId:string}) => {
   const classes = useStyles();
 
   const { id } = useParams();
-  const { data, isLoading } = useUserDetailsQuery(id);
+  const { data, isLoading } = useUserDetailsQuery(id || Props?.userId);
   const { data: CategoryData, refetch: RefetchCategory } =
     useGetAllCategoriesQuery(100);
 
@@ -43,7 +46,7 @@ export const UserDetails = () => {
 
   return (
     <>
-      <Grid container spacing={2} style={{ display: "flex", alignItems: "center", marginBottom: "10px", marginLeft: "10px" }}>
+      <CustomGridAvatarName container spacing={2} >
         <Grid item >
           <Avatar src={avatar}>Avatar</Avatar>
         </Grid>
@@ -53,7 +56,7 @@ export const UserDetails = () => {
             {data?.data?.firstname} {data?.data?.lastname}
           </Typography>
         </Grid>
-      </Grid>
+      </CustomGridAvatarName>
       <Grid container>
         <Grid container item spacing={2}>
           {data?.data?.ads?.map((adData: Ad) => (
@@ -73,24 +76,22 @@ export const UserDetails = () => {
                   <Typography gutterBottom variant="h5" component="h2">
                     {adData.title}
                   </Typography>
-                  <Box style={{ display: "flex", alignItems: "center" }}>
-                    <Typography
+                  <CustomBox >
+                    <CustomTypography
                       color="primary"
                       variant="body2"
-                      style={{ marginRight: "8px" }}
                     >
                       Category:
-                    </Typography>
+                    </CustomTypography>
                     <Typography
                       variant="body2"
                       component="p"
-                      style={{ color: "black" }}
                     >
-                      <Link to={`/advertise/category/${adData?.category_id}`}>
+                      <CustomLink to={`/advertise/category/${adData?.category_id}`}>
                         {changeIdtoCategory(adData?.category_id)}
-                      </Link>
+                      </CustomLink>
                     </Typography>
-                  </Box>
+                  </CustomBox>
 
                   <Typography
                     variant="body2"
@@ -101,29 +102,27 @@ export const UserDetails = () => {
                     {adData.description}
                   </Typography>
                   <Divider />
-                  <Box style={{ display: "flex", alignItems: "center" }}>
-                    <Typography
+                  <CustomBox >
+                    <CustomTypography
                       color="primary"
-                      style={{ marginRight: "8px" }}
                     >
                       Published:
-                    </Typography>
+                    </CustomTypography>
                     <Typography
                       variant="body2"
                       component="p"
-                      style={{ color: "black" }}
                     >
                       {formaDateTime(adData.created_at)}
                     </Typography>
-                  </Box>
+                  </CustomBox>
 
                   
                 </CardContent>
-                <Box style={{ display: "flex", justifyContent: "center" }}>
+                <CustomBox>
                     <Button variant="contained" color="info" >
-                      <Link to={"/advertise/" + adData.id}>details</Link>
+                      <CustomLink to={"/advertise/" + adData.id}>details</CustomLink>
                     </Button>
-                  </Box>
+                  </CustomBox>
 
               </Card>
             </Grid>
@@ -140,9 +139,9 @@ export const UserDetails = () => {
                     avatar={<Avatar src={comment?.user?.avatar}></Avatar>}
                     action={
                       <IconButton aria-label="settings">
-                        <Link to={"/advertise/" + comment.ad_id}>
+                        <CustomLink to={"/advertise/" + comment.ad_id}>
                           <ArrowForwardIosIcon />
-                        </Link>
+                        </CustomLink>
                       </IconButton>
                     }
                     title={comment.description}

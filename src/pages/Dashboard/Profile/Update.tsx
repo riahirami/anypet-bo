@@ -11,7 +11,9 @@ import Spinner from "../../../components/Spinner/spinner";
 import CustomModal from "../../../components/Modal/CustomModal";
 import AlertComponent from "../../../components/Alert/Alert";
 import {message} from "../../../core/constant/message";
-import Profile from './../Profile';
+import Profile from './Profile/Profile';
+import { UserDetails } from "pages/Users/UserDetails/UserDetails";
+import { getCurrentUser } from "core/utils/functionHelpers";
 
 const initialState = {
   firstname: "",
@@ -33,6 +35,7 @@ const Update = () => {
   const [formValue, setFormValue] = useState(initialState);
   const { firstname, lastname, email, password, phone, address, avatar } = formValue;
 
+  const currentUser = getCurrentUser();
   const [
     updateAvatar,
     {
@@ -132,6 +135,7 @@ const Update = () => {
           <TabPanel value="1">
             
             <Profile />
+            <UserDetails userId={currentUser?.user?.id} />
             
           </TabPanel>
 

@@ -32,6 +32,9 @@ import {
   StyledCommentTypography,
 } from "./Comment.style";
 import { getCurrentUser } from "core/utils/functionHelpers";
+import CustomLink from "components/CustomLink/CustomLink"
+import AlertComponent from "components/Alert/Alert";
+import { message } from "core/constant/message"
 
 const Comment = () => {
   const { id } = useParams();
@@ -100,6 +103,12 @@ const Comment = () => {
     <>
       {isLoading && <p>Loading...</p>}
       {/*  */}
+      {isSuccessDeleteComment && (
+                <AlertComponent
+                    title={message.COMMENTDELETED}
+                    severity="success"
+                />
+            )}
       <StyledCommentPaper>
         <Typography>Comments :</Typography>
         <Grid container justifyContent="center" p={4}>
@@ -142,9 +151,9 @@ const Comment = () => {
                 >
                   <Box>
                     <Typography variant="body1">
-                      <Link to={"/user/details/" + comment?.user_id}>
+                      <CustomLink to={"/user/details/" + comment?.user_id}>
                         {comment.user.firstname}
-                      </Link>
+                      </CustomLink>
                     </Typography>
                     <Typography variant="body1">
                       {comment.description}
@@ -177,14 +186,14 @@ const Comment = () => {
                   comment?.reply_comments?.map((reply: ReplyComment) => (
                     <Grid container wrap="nowrap" spacing={2}>
                       <Grid item>
-                        <Link to={"/user/details/" + reply?.user_id}>
+                        <CustomLink to={"/user/details/" + reply?.user_id}>
                           <Avatar src={reply.user.avatar}></Avatar>
-                        </Link>
+                        </CustomLink>
                       </Grid>
                       <Grid justifyContent="left" item xs zeroMinWidth>
-                        <Link to={"/user/details/" + reply?.user_id}>
+                        <CustomLink to={"/user/details/" + reply?.user_id}>
                           <Typography>{reply.user.firstname}</Typography>
-                        </Link>
+                        </CustomLink>
                         <Typography>{reply.description}</Typography>
 
                         <StyledCommentTypography>

@@ -19,7 +19,6 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import { red } from "@mui/material/colors";
 import { formaDateTime, statusToString } from "../../core/services/helpers";
-import { Link } from "react-router-dom";
 import { Ad, AdData } from "../../core/models/ad.model";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useGetAllCategoriesQuery } from "../../redux/api/categoryApi";
@@ -31,6 +30,11 @@ import { getCurrentUser } from "core/utils/functionHelpers";
 import SendIcon from "@mui/icons-material/Send";
 import { StatusOption } from "core/enums/status";
 import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
+import CustomLink from "components/CustomLink/CustomLink"
+
+import { message } from "core/constant/message"
+import AlertComponent from "components/Alert/Alert";
+
 
 function AdCard({ adData,user }: AdCardProps) {
   const { data: CategoryData, refetch: RefetchCategory } =
@@ -59,12 +63,7 @@ function AdCard({ adData,user }: AdCardProps) {
 
   const [menuAnchor, setMenuAnchor] = useState(null);
 
-  const statusOptions = [
-    { value: StatusOption.All, label: "All" },
-    { value: StatusOption.Waiting, label: "Waiting" },
-    { value: StatusOption.Canceled, label: "Canceled" },
-    { value: StatusOption.Validated, label: "Validated" },
-  ];
+
   const [
     changeStatus,
     {
@@ -127,15 +126,21 @@ function AdCard({ adData,user }: AdCardProps) {
 
   return (
     <>
+       {successChangeStatus && (
+                <AlertComponent
+                    title={message.ADVERTISESTATUSCHANGED}
+                    severity="success"
+                />
+            )}
       <Card key={adData.id}>
         <CardHeader
           avatar={
-            <Link to={"/user/details/" + adData?.user_id}>
+            <CustomLink to={"/user/details/" + adData?.user_id}>
               <Avatar
                 sx={{ bgcolor: red[500] }}
                 aria-label="recipe"
                 src={user ? user?.avatar : adData.user?.avatar}
-              ></Avatar> </Link>
+              ></Avatar> </CustomLink>
           }
           action={
             <>
@@ -152,7 +157,7 @@ function AdCard({ adData,user }: AdCardProps) {
                     >
                       <MenuItem onClick={handleDelete}>Delete</MenuItem>
                       <MenuItem>
-                        <Link to={"/advertise/update/" + adData.id}>Update</Link>
+                        <CustomLink to={"/advertise/update/" + adData.id}>Update</CustomLink>
                       </MenuItem>
                     </Menu>
                   </>
@@ -190,9 +195,9 @@ function AdCard({ adData,user }: AdCardProps) {
           </Typography>
           <Typography variant="body2" gutterBottom>
             Category :{" "}
-            <Link to={`/advertise/category/${adData?.category_id}`}>
+            <CustomLink to={`/advertise/category/${adData?.category_id}`}>
               {changeIdtoCategory(adData?.category_id)}
-            </Link>
+            </CustomLink>
           </Typography>
           <Typography variant="body1" color="text.secondary" noWrap>
             {adData.description}
@@ -231,7 +236,7 @@ function AdCard({ adData,user }: AdCardProps) {
               </IconButton>
             </Grid>
             <Grid item xs={12} sm={4} md={3} lg={3}>
-              <Link to={"/advertise/" + adData.id}>
+              <CustomLink to={"/advertise/" + adData.id}>
                 <IconButton
                   color="default"
                   aria-label="details"
@@ -239,14 +244,14 @@ function AdCard({ adData,user }: AdCardProps) {
                 >
                   <VisibilityIcon />
                 </IconButton>
-              </Link>
+              </CustomLink>
             </Grid>
             {currentUser.user.id !== adData.user_id  && <Grid item xs={12} sm={4} md={3} lg={3}>
-              <Link to={"/users/messages/" + adData?.user_id}>
+              <CustomLink to={"/users/messages/" + adData?.user_id}>
                 <IconButton aria-label="send">
                   <ChatOutlinedIcon  />
                 </IconButton>
-              </Link>
+              </CustomLink>
             </Grid>}
           </Grid>
 

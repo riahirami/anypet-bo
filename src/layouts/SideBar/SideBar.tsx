@@ -17,11 +17,9 @@ import { SidebarHeader } from "../../components/SidebarSrc/SidebarHeader";
 import { Diamond } from "../../icons/Diamond";
 import { BarChart } from "../../icons/BarChart";
 import { Global } from "../../icons/Global";
-import { InkBottle } from "../../icons/InkBottle";
 import { Book } from "../../icons/Book";
 import { Calendar } from "../../icons/Calendar";
 import { PATHS } from "../../routes/Path";
-import { Link } from "react-router-dom";
 
 import { menuItemStyles, themes } from "./SideBar.style";
 import { Props } from "components/Topbar/TopbarProps.type";
@@ -35,6 +33,8 @@ import { getMyAds } from "redux/slices/adsSlice";
 import { useGetAdsQuery, useGetMyAdsQuery } from "redux/api/adsApi";
 import { parametersListing } from "core/models/parametersListing.model";
 import { Service } from "icons/Service";
+import CustomLink from "components/CustomLink/CustomLink"
+
 export const Playground: React.FC<Props> = ({
   mode: theme,
   handleThemeChange,
@@ -97,10 +97,10 @@ export const Playground: React.FC<Props> = ({
             />
             <div style={{ flex: 1, marginBottom: "32px" }}>
               <Menu menuItemStyles={menuItemStyles}>
-                <Link to={PATHS.PROFILE}>
+                <CustomLink to={PATHS.PROFILE}>
                   <MenuItem icon={<Book />}>
                     Profil
-                  </MenuItem></Link>
+                  </MenuItem></CustomLink>
                 <SubMenu
                   label="Advertise"
                   icon={<Diamond />}
@@ -110,11 +110,11 @@ export const Playground: React.FC<Props> = ({
                     </Badge>
                   }
                 >
-                  <Link to={PATHS.Advertise}><MenuItem>
+                  <CustomLink to={PATHS.Advertise}><MenuItem>
                     {" "}
                     List advertises
-                  </MenuItem></Link>
-                  <Link to={"myadvertises/" + id}>  <MenuItem
+                  </MenuItem></CustomLink>
+                  <CustomLink to={"myadvertises/" + id}>  <MenuItem
                     suffix={
                       <Badge variant="danger" shape="circle">
                         {data?.count}
@@ -123,21 +123,21 @@ export const Playground: React.FC<Props> = ({
                   >
                     {" "}
                     My advertises
-                  </MenuItem></Link>
-                  <Link to={PATHS.AddAdvertise}>
+                  </MenuItem></CustomLink>
+                  <CustomLink to={PATHS.AddAdvertise}>
                     <MenuItem>
                       {" "}
                       Add advertise
-                    </MenuItem></Link>
+                    </MenuItem></CustomLink>
                 </SubMenu>
-                <Link to={PATHS.CONVERSATIONS}>
+                <CustomLink to={PATHS.CONVERSATIONS}>
                   <MenuItem icon={<Service />}>
                     {" "}
                     Conversations
-                  </MenuItem></Link>
+                  </MenuItem></CustomLink>
 
-                <Link to={PATHS.MYRESERVATIONS}>
-                  <MenuItem icon={<Calendar />}> Reservations</MenuItem></Link>
+                <CustomLink to={PATHS.MYRESERVATIONS}>
+                  <MenuItem icon={<Calendar />}> Reservations</MenuItem></CustomLink>
               </Menu>
             </div>
             <SidebarFooter collapsed={collapsed} />
@@ -173,17 +173,17 @@ export const Playground: React.FC<Props> = ({
               <Menu menuItemStyles={menuItemStyles}>
                 <SubMenu label="Statistics" icon={<BarChart />}>
                   <MenuItem>
-                    <Link to={PATHS.StatsHome}> Home</Link>
+                    <CustomLink to={PATHS.StatsHome}> Home</CustomLink>
                   </MenuItem>
                   <MenuItem>
-                    <Link to={PATHS.Stats}> Advertises</Link>
+                    <CustomLink to={PATHS.Stats}> Advertises</CustomLink>
                   </MenuItem>
                 </SubMenu>
 
-                <Link to={PATHS.PROFILE}>
+                <CustomLink to={PATHS.PROFILE}>
                   {" "}
                   <MenuItem icon={<Book />}>Profil</MenuItem>
-                </Link>
+                </CustomLink>
                 <SubMenu
                   label="Advertise"
                   icon={<Diamond />}
@@ -195,11 +195,11 @@ export const Playground: React.FC<Props> = ({
                 >
                   <MenuItem>
                     {" "}
-                    <Link to={PATHS.Advertise}>List advertises</Link>
+                    <CustomLink to={PATHS.Advertise}>List advertises</CustomLink>
                   </MenuItem>
                   <MenuItem>
                     {" "}
-                    <Link to={PATHS.AddAdvertise}>Add advertise</Link>
+                    <CustomLink to={PATHS.AddAdvertise}>Add advertise</CustomLink>
                   </MenuItem>
                   <MenuItem
                     suffix={
@@ -210,19 +210,19 @@ export const Playground: React.FC<Props> = ({
                   >
                     {" "}
                     {/* TODO :  change the badge value*/}
-                    <Link to={PATHS.ManageAds}>Advertises requests </Link>
+                    <CustomLink to={PATHS.ManageAds}>Advertises requests </CustomLink>
                   </MenuItem>
                 </SubMenu>
-                <Link to={PATHS.MYRESERVATIONS}>
-                  <MenuItem icon={<Calendar />}> Reservations</MenuItem></Link>
+                <CustomLink to={PATHS.MYRESERVATIONS}>
+                  <MenuItem icon={<Calendar />}> Reservations</MenuItem></CustomLink>
                 <SubMenu label="Categories" icon={<Global />}>
                   <MenuItem>
                     {" "}
-                    <Link to={PATHS.Categories}>List categories</Link>
+                    <CustomLink to={PATHS.Categories}>List categories</CustomLink>
                   </MenuItem>
                   <MenuItem>
                     {" "}
-                    <Link to={PATHS.AddCategories}>Add categories</Link>
+                    <CustomLink to={PATHS.AddCategories}>Add categories</CustomLink>
                   </MenuItem>
                 </SubMenu>
                 <SubMenu
@@ -232,17 +232,17 @@ export const Playground: React.FC<Props> = ({
                 >
                   <MenuItem>
                     {" "}
-                    <Link to={PATHS.CONVERSATIONS}> Conversations</Link>
+                    <CustomLink to={PATHS.CONVERSATIONS}> Conversations</CustomLink>
                   </MenuItem>
-                  <Link to={PATHS.MYRESERVATIONS}>
-                    <MenuItem> Reservations</MenuItem></Link>
+                  <CustomLink to={PATHS.MYRESERVATIONS}>
+                    <MenuItem> Reservations</MenuItem></CustomLink>
                 </SubMenu>
 
                 <Menu menuItemStyles={menuItemStyles}>
-                  <Link to={PATHS.Users}>
+                  <CustomLink to={PATHS.Users}>
                     {" "}
                     <MenuItem icon={<Calendar />}>Users</MenuItem>
-                  </Link>
+                  </CustomLink>
                 </Menu>
 
               </Menu>

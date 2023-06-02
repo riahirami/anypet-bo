@@ -1,38 +1,32 @@
 import React from "react";
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../../../redux/hooks";
 import {
-  logout,
+
   selectAuth,
-  resendEmailVerification,
-} from "../../redux/slices/authSlice";
+} from "../../../../redux/slices/authSlice";
 import {
-  useLogoutUserMutation,
   useProfileQuery,
   useResendEmailVerificationMutation,
-  useResetPasswordMutation,
-  useUpdateAvatarMutation,
-} from "../../redux/api/authApi";
-import { Alert, AlertTitle, Avatar, CardMedia, Container } from "@mui/material";
-import Spinner from "../../components/Spinner/spinner";
+
+} from "../../../../redux/api/authApi";
+import { Alert, AlertTitle, Avatar, Container } from "@mui/material";
+import Spinner from "../../../../components/Spinner/spinner";
 import { useTranslation } from "react-i18next";
-import { dashboard } from "../../core/constant/dashboard";
-import { resendEmailVerificationMsg } from "../../core/constant/resendEmailVerification";
-import CustomModal from "../../components/Modal/CustomModal";
+import { dashboard } from "../../../../core/constant/dashboard";
+import { resendEmailVerificationMsg } from "../../../../core/constant/resendEmailVerification";
+import CustomModal from "../../../../components/Modal/CustomModal";
 import {
   Button,
-  FormControl,
-  InputLabel,
-  OutlinedInput,
-  TextField,
-  Typography,
+  Grid,
+  Typography, Divider
 } from "@mui/material";
 import { getToken } from "core/utils/functionHelpers";
 
+import {CustomContainerProfile,CustomGlobalGrid, CustomGridCover,CustomGridProfileInformations} from "./Profile.style"
+
 function Profile() {
-  // const { name } = useAppSelector(selectAuth);
-  const dispatch = useAppDispatch();
   const { token } = useAppSelector(selectAuth);
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -49,16 +43,6 @@ function Profile() {
 
 
   const [
-    logoutUser,
-    {
-      data: loginData,
-      isSuccess: isLogoutSuccess,
-      isError: isLogoutError,
-      error: logoutError,
-    },
-  ] = useLogoutUserMutation(tokenValue);
-
-  const [
     resendEmail,
     {
       data: resendEmailData,
@@ -68,20 +52,7 @@ function Profile() {
     },
   ] = useResendEmailVerificationMutation();
 
-  const [
-    resetPassword,
-    { data: resetData, isSuccess: resetSuccess, isError: resetError },
-  ] = useResetPasswordMutation();
 
-  const [
-    updateAvatar,
-    {
-      data: avatarData,
-      isSuccess: avatarSuccess,
-      isError: avatarError,
-      isLoading: AvatarLoading,
-    },
-  ] = useUpdateAvatarMutation();
 
   const { firstname, lastname, email, phone, avatar } = dataProfile?.user ?? {};
 
@@ -147,14 +118,33 @@ function Profile() {
   if (isSuccess && dataProfile?.user)
     return (
       <>
-        <h2>Welcome {firstname}</h2>
-        <Container>
-          <Avatar sx={{ width: 90, height: 90 }} alt="avatar" src={avatar} />
-          <p>First name: {firstname}</p>
-          <p>Last name: {lastname}</p>
-          <p>email: {email}</p>
-          <p>Phone: {phone}</p>
-        </Container>
+        <CustomGlobalGrid>
+          <CustomContainerProfile>
+            <CustomGridCover item>
+              <Avatar sx={{ width: 120, height: 120 }} alt="avatar" src={avatar} />
+            </CustomGridCover>
+            <Divider>
+              <Typography variant="h5" style={{ padding: '15px' }}>Welcome {firstname}</Typography>
+            </Divider>
+            <CustomGridProfileInformations container >
+              <Grid item>
+                <Typography>First name: {firstname}</Typography>
+              </Grid>
+              <Grid item>
+                <Typography>Last name: {lastname}</Typography>
+              </Grid>
+              <Grid item>
+                <Typography>email: {email}</Typography>
+              </Grid>
+              <Grid item>
+                <Typography>Phone: {phone}</Typography>
+              </Grid>
+            </CustomGridProfileInformations>
+            <Divider/>
+          </CustomContainerProfile>
+        </CustomGlobalGrid>
+
+
       </>
     );
   else return <p>{t("profile.user_not_found")}</p>;

@@ -13,7 +13,7 @@ import {
   useGetConversationQuery,
 } from "redux/api/userApi";
 import Pusher from "pusher-js";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getCurrentUser } from "core/utils/functionHelpers";
 import { formaDateTime } from "core/services/helpers";
 import SendIcon from "@mui/icons-material/Send";
@@ -21,6 +21,14 @@ import { Message } from "core/models/Message.model";
 import { Spinner } from "components/Spinner/spinner";
 import { PATHS } from "routes/Path";
 import ArrowBackIosOutlinedIcon from "@mui/icons-material/ArrowBackIosOutlined";
+import CustomLink from "components/CustomLink/CustomLink"
+
+import {
+  CustomSendButton, CustomTextFieldMessage, CustomGlobalGrid, CustomGrid,
+  CustomBox
+} from "./Messages.style"
+import { pusherConfig } from "core/constant/Pusher"
+
 const Messages = () => {
   const { id } = useParams();
   const currentUser = getCurrentUser();
@@ -46,8 +54,8 @@ const Messages = () => {
   useEffect(() => {
     Pusher.logToConsole = false;
 
-    var pusher = new Pusher("2e0246b200d740c82f52", {
-      cluster: "eu",
+    var pusher = new Pusher(pusherConfig.id, {
+      cluster: pusherConfig.cluster,
     });
 
     var channel = pusher.subscribe("chat");
@@ -78,94 +86,46 @@ const Messages = () => {
     <>
       {isLoading && <Spinner />}
       <Button variant="text">
-        <Link to={"/users/conversations/"}>
+        <CustomLink to={"/users/conversations/"}>
           <ArrowBackIosOutlinedIcon />
-        </Link>
+        </CustomLink>
       </Button>
-      <Grid style={{ height: "500px", overflowY: "scroll" }}>
+      <CustomGlobalGrid >
         <Box>
           {isSuccess &&
             allMessages?.map((message: Message) => (
-              <Grid
-                key={message?.id}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems:
-                    message.receiver_id === currentUser?.user?.id
-                      ? "flex-start"
-                      : "flex-end",
-                }}
-              >
+              <CustomGrid message={message} currentUser={currentUser}>
                 {message?.message?.length > 0 && (
                   <>
-                    {/* <Typography>
-                      {message.sender_id === currentUser?.user?.id
-                        ? "sender"
-                        : "receiver"}{" "}
-                      {message?.sender?.firstname}
-                    </Typography> */}
-                    <Avatar
-                      src={message?.sender_avatar || message?.sender?.avatar}
-                      sx={{ width: 24, height: 24 }}
-                    />
+                    <Avatar src={message?.sender_avatar || message?.sender?.avatar} sx={{ width: 24, height: 24 }} />
                   </>
                 )}
-                <Box
-                  style={{
-                    backgroundColor:
-                      message.sender_id === currentUser?.user?.id
-                        ? "cornflowerblue"
-                        : message.receiver_id === currentUser?.user?.id
-                          ? "chartreuse"
-                          : "inherit",
-                    marginLeft:
-                      message.sender_id === currentUser?.user?.id
-                        ? "20px"
-                        : "20px",
-                    textAlign: "left",
-                    borderRadius: "10px",
-                    padding: "15px",
-                    marginBottom: "20px",
-                    width: "300px",
-                  }}
-                >
+                <CustomBox message={message} currentUser={currentUser}>
                   <Typography variant="body1">{message?.message}</Typography>
-                  <Typography variant="caption">
-                    {message?.created_at && formaDateTime(message?.created_at)}
-                  </Typography>
-                </Box>
-              </Grid>
+                  <Typography variant="caption">{message?.created_at && formaDateTime(message?.created_at)}</Typography>
+                </CustomBox>
+              </CustomGrid>
             ))}
         </Box>
-      </Grid>
+      </CustomGlobalGrid>
       <Grid>
         <Grid>
-          <TextField
+          <CustomTextFieldMessage
             id="message"
             name="message"
             value={message}
             onChange={handleChange}
             focused
-            style={{
-              paddingLeft: "30px",
-              paddingTop: "20px",
-              paddingBottom: "50px",
-              width: "90%",
-              borderColor: "aqua",
-              marginTop: "15px",
-            }}
-          ></TextField>
-          <Button
+          ></CustomTextFieldMessage>
+          <CustomSendButton
             type="button"
             onClick={() => handleSendMessage(id)}
             color="primary"
             variant="contained"
             disabled={loadingSendMsg}
-            style={{ marginTop: "40px", marginLeft: "5px" }}
           >
             <SendIcon />
-          </Button>
+          </CustomSendButton>
         </Grid>
       </Grid>
     </>

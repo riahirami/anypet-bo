@@ -11,7 +11,7 @@ import ImageIcon from "@mui/icons-material/Image";
 import HideImageOutlinedIcon from "@mui/icons-material/HideImageOutlined";
 
 import { useLogoutUserMutation } from "redux/api/authApi";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { PATHS } from "routes/Path";
 
 import { Theme } from "core/enums";
@@ -22,6 +22,7 @@ import { getCurrentUser, getToken } from "core/utils/functionHelpers";
 import { logout } from "redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Notifications from "components/Notifications/Notifications";
+import CustomLink from "components/CustomLink/CustomLink";
 
 
 const Topbar: React.FC<Props> = ({
@@ -81,9 +82,9 @@ const Topbar: React.FC<Props> = ({
         <Notifications />
 
         <IconButton>
-          <Link to={"/favoritlist/" + currentUser?.user?.id}>
+          <CustomLink to={"/favoritlist/" + currentUser?.user?.id}>
             <FavoriteBorderOutlinedIcon />
-          </Link>
+          </CustomLink>
           <Badge variant="danger" shape="circle">
             {data?.count}
           </Badge>
@@ -109,11 +110,11 @@ const Topbar: React.FC<Props> = ({
           >
             <MenuItem onClick={handleClose}>
               <Person2Icon></Person2Icon>
-              <Link to={PATHS.PROFILE}>Profile</Link>
+              <CustomLink to={PATHS.PROFILE}>Profile</CustomLink>
             </MenuItem>
             <MenuItem onClick={handleClose}>
               <ManageAccountsIcon></ManageAccountsIcon>
-              <Link to={PATHS.PROFILEUpdate}>My account</Link>
+              <CustomLink to={PATHS.PROFILEUpdate}>My account</CustomLink>
             </MenuItem>
             <MenuItem onClick={() => logoutFunction()}>
               <LogoutIcon />

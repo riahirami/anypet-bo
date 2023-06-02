@@ -34,41 +34,23 @@ import {
 } from "@mui/material";
 
 import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
-import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import { styled } from "@mui/material/styles";
-import PlusOneIcon from "@mui/icons-material/PlusOne";
-import CustomModal from "../../components/Modal/CustomModal";
 import Spinner from "../../components/Spinner/spinner";
-import { Link } from "react-router-dom";
-import { PATHS } from "../../routes/Path";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { DateCalendar } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { Demo } from "./Advertise.style";
-import EventBusyIcon from "@mui/icons-material/EventBusy";
 import SearchIcon from "@mui/icons-material/Search";
 import { Container } from "@mui/joy";
 import useDebounce from "../../customHooks/useDebounce";
 import { parametersListing } from "../../core/models/parametersListing.model";
-import { formaDateTime } from "../../core/services/helpers";
 import PerPageSelect from "../../components/PerPageChange/PerPageSelect";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { red } from "@mui/material/colors";
 import AdCard from "../../components/Card/AdsCard";
-import AlertComponent from "../../components/Alert/Alert";
-import { message } from "../../core/constant/message";
 import OrderBy from "components/OrderBy/OrderBy";
 import OrderDirection from "components/OrderDirection/OrderDirection";
+import { message } from "core/constant/message"
+import AlertComponent from "components/Alert/Alert";
 
 const Advertise = () => {
   const [showModal, setShowModal] = useState(false);
@@ -133,7 +115,6 @@ const Advertise = () => {
   };
   return (
     <div>
-      {/* {isSuccessDelete && <AlertComponent title={message.ADVERRTISESDELETED} severity="success" />} */}
       <Typography align="left">All Advertises</Typography>
 
       <Grid container justifyContent="flex-start" alignItems="center">

@@ -6,8 +6,8 @@ import {
 import { getNotificationMessage, formaDateTime } from "core/services/helpers";
 import { getCurrentUser } from "core/utils/functionHelpers";
 import { Typography, Grid, IconButton, Divider } from "@mui/material";
-import { Link} from "react-router-dom"
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import CustomLink from "components/CustomLink/CustomLink"
 
 const AllNotifications = () => {
   const currentUser = getCurrentUser();
@@ -40,9 +40,9 @@ const AllNotifications = () => {
             <Grid item>
               {notification?.data?.url ? (
                 <IconButton  >
-                  <Link to={notification?.data?.url}>
+                  <CustomLink to={notification?.data?.url}>
                   <VisibilityOutlinedIcon color="info"/>
-                  </Link>
+                  </CustomLink>
                 </IconButton>
               ) : (
                 <></>

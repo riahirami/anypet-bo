@@ -1,6 +1,5 @@
 import React, { useState,useEffect } from "react";
 import { Badge } from "../SidebarSrc/Badge";
-import { Link } from "react-router-dom";
 import { PATHS } from "routes/Path";
 import { getCurrentUser } from "core/utils/functionHelpers";
 import {
@@ -12,6 +11,7 @@ import { IconButton, Typography, Menu, Grid, MenuItem } from "@mui/material";
 
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import CustomLink from "components/CustomLink/CustomLink";
 
 const Notifications = () => {
   const [markAllAsRead] = useMarkAllAsReadNotificationsMutation();
@@ -73,9 +73,9 @@ const Notifications = () => {
               <Grid item>
                 {notification?.data?.url ? (
                   <IconButton>
-                    <Link to={notification?.data?.url}>
+                    <CustomLink to={notification?.data?.url}>
                       <VisibilityOutlinedIcon color="info" />
-                    </Link>
+                    </CustomLink>
                   </IconButton>
                 ) : (
                   <></>
@@ -89,11 +89,11 @@ const Notifications = () => {
           </MenuItem>
         )}
         <MenuItem onClick={() => handleNotificationClose()}>
-          <Link to={PATHS.ALLNOTIFICATIONS  +currentUser?.user?.id}>
+          <CustomLink to={PATHS.ALLNOTIFICATIONS  +currentUser?.user?.id}>
             <Typography align="center" color={"darkcyan"}>
               See All
             </Typography>
-          </Link>
+          </CustomLink>
         </MenuItem>
       </Menu>
     </div>

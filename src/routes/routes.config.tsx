@@ -10,7 +10,6 @@ import AddAdvertise from "../pages/Ad/AddAdvertise";
 import AdUpdate from "../pages/Ad/AdUpdate";
 import AdDetails from "../pages/Ad/AdDetails";
 import AdsByCategory from "../pages/Ad/AdsByCategory";
-import Profile from "../pages/Dashboard/Profile";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import EmailVerify from "../pages/Dashboard/emailVerify";
 import ResetPassword from "../pages/Dashboard/resetPassword";
@@ -21,19 +20,14 @@ import Users from "../pages/Users/Users";
 import Update from "../pages/Dashboard/Profile/Update";
 import ListFavorit from "pages/Ad/ListFavorit";
 import MyAdvertises from "./../pages/Ad/MyAdvertises";
-import { useAppDispatch } from "redux/hooks";
-import { setUser } from "redux/slices/authSlice";
-import { Route, Navigate, Outlet } from "react-router-dom";
-import { useProfileQuery } from "redux/api/authApi";
+import { Navigate } from "react-router-dom";
 import { getCurrentUser, getToken } from "core/utils/functionHelpers";
-import { useSelector } from "react-redux";
-import { useAuthentication } from "customHooks/useAuthentication";
 import Unauthorized from "pages/error404";
-import { UserDetails } from "pages/Users/UserDetails";
+import { UserDetails } from "pages/Users/UserDetails/UserDetails";
 import AllNotifications from "pages/Users/AllNotifications";
-import Messages from "pages/Users/Messages";
-import Conversations from "pages/Users/Conversations";
-import UserReservations from "pages/Users/UserReservations";
+import Messages from "pages/Users/Messages/Messages";
+import Conversations from "pages/Users/Conversations/Conversations";
+import UserReservations from "pages/Users/Reservations/UserReservations";
 
 function ProtectedRoute({
   children,
@@ -52,7 +46,7 @@ function ProtectedRoute({
 
   const isAuthorized = allowedRoles.includes(currentUser?.user?.role_id ?? 1);
 
-  
+
   return currentUser && isAuthorized ? (
     <>
       {children}
@@ -73,7 +67,7 @@ const RoutesConfig: RouteObject[] = [
   },
   {
     path: PATHS.USERDETAILS,
-    element: <UserDetails />,
+    element: <UserDetails userId="" />,
   },
   {
     path: PATHS.SIGNIN,

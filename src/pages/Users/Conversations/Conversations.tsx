@@ -6,10 +6,14 @@ import { Message } from "core/models/Message.model";
 import { Link } from "react-router-dom";
 import { getCurrentUser } from "core/utils/functionHelpers";
 import Spinner from "components/Spinner/spinner";
+import CustomLink from "components/CustomLink/CustomLink"
+import {CustomConversationBox,GridVerticalDivider} from "./Conversations.style"
 
 const Conversations = () => {
   const { data, isLoading } = useGetListConversationsQuery();
   const currentUser = getCurrentUser();
+
+  
 
   return (
     <>
@@ -18,20 +22,14 @@ const Conversations = () => {
       <Grid container>
         {data &&
           data?.map((conversations: Message) => (
-            <Grid
+            <CustomConversationBox
               item
               md={12}
               key={conversations?.id}
-              style={{
-                display: "flex",
-                backgroundColor: "ghostwhite",
-                borderBottom: "1px solid skyblue",
-                borderRadius: "20px",
-                margin: "5px",
-              }}
+           
             >
               <Grid item sx={{ m: "20px" }}>
-                <Link to={"/users/messages/" + conversations?.receiver_id}>
+                <CustomLink to={"/users/messages/" + conversations?.receiver_id}>
                   <Avatar
                     src={
                       conversations?.receiver_id === currentUser?.user?.id
@@ -44,21 +42,21 @@ const Conversations = () => {
                       ? conversations?.sender?.firstname
                       : conversations?.receiver?.firstname}
                   </Typography>
-                </Link>
+                </CustomLink>
               </Grid>
-              <Grid
+              <GridVerticalDivider
                 item
                 sx={{ m: "20px" }}
-                style={{ borderLeft: "1px solid skyblue", paddingLeft: "25px" }}
+                
               >
-                <Link to={"/users/messages/" + conversations?.receiver_id}>
+                <CustomLink to={"/users/messages/" + conversations?.receiver_id}>
                   <Typography>Message: {conversations?.message}</Typography>
                   <Typography>
                     {formaDateTime(conversations?.created_at)}
                   </Typography>
-                </Link>
-              </Grid>
-            </Grid>
+                </CustomLink>
+              </GridVerticalDivider>
+            </CustomConversationBox>
           ))}
       </Grid>
     </>

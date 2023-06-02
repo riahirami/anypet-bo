@@ -6,7 +6,7 @@ import {
   useSetFavoriteMutation,
 } from "../../redux/api/adsApi";
 import { Ad } from "../../core/models/ad.model";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Spinner from "../../components/Spinner/spinner";
 import {
   Avatar,
@@ -45,6 +45,10 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import CustomLink from "components/CustomLink/CustomLink"
+import AlertComponent from "components/Alert/Alert";
+import {message as CONSTMessage} from "core/constant/message"
+
 
 const AdDetails: React.FC = () => {
   const { id } = useParams();
@@ -97,7 +101,7 @@ const AdDetails: React.FC = () => {
 
   const setfavorit = async (id: any) => {
     await setFavorit(id);
-    await checkIsFavorit(id) ;
+    await checkIsFavorit(id);
     refetch();
   };
 
@@ -125,7 +129,7 @@ const AdDetails: React.FC = () => {
     const dateString = datePicker?.substring(0, 10).replace(/-/g, "");
     setDateValue(dateString);
   };
-  
+
   const handleTimeChange = (time: any) => {
     const formattedTime = dayjs(time).format("HH:mm");
     setTimeValue(formattedTime);
@@ -138,11 +142,18 @@ const AdDetails: React.FC = () => {
       message: message,
       reservation_date: dateValue + " " + timeValue,
     });
+
+    
   }
 
   return (
     <>
-
+      {successReservation && (
+        <AlertComponent
+          title={CONSTMessage.RESERVATIONSEND}
+          severity="success"
+        />
+      )}
       <Dialog
         open={open}
         keepMounted
@@ -196,9 +207,9 @@ const AdDetails: React.FC = () => {
             <Typography sx={{ mb: "10px", p: "5px" }}>
               <LabelImportantIcon color="primary"></LabelImportantIcon>
               Category:{" "}
-              <Link to={`/advertise/category/${adData?.category_id}`}>
+              <CustomLink to={`/advertise/category/${adData?.category_id}`}>
                 {changeIdtoCategory(adData?.category_id)}
-              </Link>{" "}
+              </CustomLink>{" "}
             </Typography>
           </Grid>
 
@@ -244,13 +255,13 @@ const AdDetails: React.FC = () => {
           justifyContent={"space-between"}
         >
           <Grid item>
-            <Link to={"/user/details/" + adData?.user?.id}>
+            <CustomLink to={"/user/details/" + adData?.user?.id}>
               <Avatar src={adData?.user?.avatar}></Avatar>
-            </Link>
+            </CustomLink>
             <Typography>
-              <Link to={"/user/details/" + adData?.user?.id}>
+              <CustomLink to={"/user/details/" + adData?.user?.id}>
                 {adData?.user?.firstname} {adData?.user?.lastname}
-              </Link>
+              </CustomLink>
             </Typography>
           </Grid>
 
@@ -259,9 +270,9 @@ const AdDetails: React.FC = () => {
               <Grid item alignItems={"flex-end"}>
                 <Button onClick={handleClickOpen} variant="contained">reservation</Button>
               </Grid><Grid item alignItems={"flex-end"}>
-                <Link to={"/users/messages/" + adData?.user?.id}>
+                <CustomLink to={"/users/messages/" + adData?.user?.id}>
                   <Button variant="contained">send message</Button>
-                </Link>
+                </CustomLink>
               </Grid>
             </>
           }

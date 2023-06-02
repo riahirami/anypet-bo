@@ -6,7 +6,8 @@ import { Button, Grid, Typography, Container } from "@mui/material";
 import { Ad } from "core/models/ad.model";
 import { User } from "core/models/user.model";
 import { PATHS } from "routes/Path";
-import { Link, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
+import CustomLink from "components/CustomLink/CustomLink"
 
 interface ListFav {
   id: number;
@@ -74,7 +75,7 @@ const ListFavorit = () => {
     <div>
       <Typography>No favorite advertises </Typography>
       <Button variant="text">
-        <Link to={PATHS.Advertise}>See all</Link>
+        <CustomLink to={PATHS.Advertise}>See all</CustomLink>
       </Button>
     </div>
   );
