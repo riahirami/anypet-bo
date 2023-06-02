@@ -26,7 +26,7 @@ const Messages = () => {
   const currentUser = getCurrentUser();
 
   const [message, setMessage] = useState("");
-  const [sendMessage, { data: NewMessage, isLoading:loadingSendMsg }] = useSendMessageMutation();
+  const [sendMessage, { data: NewMessage, isLoading: loadingSendMsg, isSuccess: msgSuccess }] = useSendMessageMutation();
 
   const {
     data: ConversationData,
@@ -35,15 +35,16 @@ const Messages = () => {
     refetch,
   } = useGetConversationQuery(id);
 
-  const [allMessages, setAllMessages] = useState<Message[]>([]); // Initialize with an empty array
+  const [allMessages, setAllMessages] = useState<Message[]>([]);
 
   useEffect(() => {
     if (isSuccess && ConversationData) {
-      setAllMessages((prevMessages) => [...prevMessages, ...ConversationData]); // Use spread operator to add ConversationData items to the array
+      setAllMessages((prevMessages) => [...prevMessages, ...ConversationData]);
     }
   }, [isSuccess]);
+
   useEffect(() => {
-    Pusher.logToConsole = true;
+    Pusher.logToConsole = false;
 
     var pusher = new Pusher("2e0246b200d740c82f52", {
       cluster: "eu",
@@ -51,17 +52,16 @@ const Messages = () => {
 
     var channel = pusher.subscribe("chat");
     channel.bind("message", function (data: Message) {
-      if (isSuccess) {
-        setAllMessages((prevMessages) => [...prevMessages, data]);
-   
-      }
+
+      setAllMessages((prevMessages) => [...prevMessages, data]);
+
     });
 
-    // return () => {
-    //   pusher.unsubscribe("chat");
-    //   pusher.disconnect();
-    // };
-  }, []);
+    return () => {
+      pusher.unsubscribe("chat");
+      pusher.disconnect();
+    };
+  }, [msgSuccess]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -88,7 +88,6 @@ const Messages = () => {
             allMessages?.map((message: Message) => (
               <Grid
                 key={message?.id}
-                md={12}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -107,7 +106,7 @@ const Messages = () => {
                       {message?.sender?.firstname}
                     </Typography> */}
                     <Avatar
-                      src={message?.sender?.avatar}
+                      src={message?.sender_avatar || message?.sender?.avatar}
                       sx={{ width: 24, height: 24 }}
                     />
                   </>
@@ -118,8 +117,8 @@ const Messages = () => {
                       message.sender_id === currentUser?.user?.id
                         ? "cornflowerblue"
                         : message.receiver_id === currentUser?.user?.id
-                        ? "chartreuse"
-                        : "inherit",
+                          ? "chartreuse"
+                          : "inherit",
                     marginLeft:
                       message.sender_id === currentUser?.user?.id
                         ? "20px"
@@ -163,7 +162,7 @@ const Messages = () => {
             color="primary"
             variant="contained"
             disabled={loadingSendMsg}
-            style={{ marginTop: "40px", marginLeft:"5px" }}
+            style={{ marginTop: "40px", marginLeft: "5px" }}
           >
             <SendIcon />
           </Button>

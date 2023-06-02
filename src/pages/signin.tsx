@@ -86,8 +86,11 @@ const Signin = () => {
           token: loginData?.data.token,
         })
       );
-    
+    if(loginData?.data?.user?.role_id==1)
       navigate('/profile');
+      else
+      navigate('/stats/home');
+
     }
   };
 

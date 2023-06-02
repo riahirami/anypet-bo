@@ -19,7 +19,7 @@ import ReactECharts from "echarts-for-react";
 import { Spinner } from "../../components/Spinner/spinner";
 import {Category} from "../../core/models/category.model";
 import { itemStats } from "../../core/models/itemStats.model";
-import { statusToString } from '../../core/services/helpers';
+import { getState, statusToString } from '../../core/services/helpers';
 
 
 const Stats = () => {
@@ -54,7 +54,7 @@ const Stats = () => {
         } else if (column == "category_id" && item?.category_id) {
           return changeIdtoCategory(item.category_id) || "Unknown category";
         } else {
-          return item?.state || "Unknown state";
+          return getState(item?.state) || "Unknown state";
         }
       }),
     },
@@ -88,7 +88,7 @@ const Stats = () => {
           };
         } else {
           return {
-            name: item?.state || "Unknown state",
+            name: getState(item?.state) || "Unknown state",
             value: item.total,
           };
         }
@@ -127,7 +127,7 @@ const Stats = () => {
             };
           } else if (item?.state) {
             return {
-              name: item?.state || "loading",
+              name: getState(item?.state) || "loading",
               value: item.total,
             };
           }
@@ -198,7 +198,7 @@ const Stats = () => {
                         ? statusToString(item.status)
                         : column === "category_id"
                         ? changeIdtoCategory(item.category_id)
-                        : item.state}
+                        : getState(item.state)}
                     </TableCell>
                     <TableCell>{item.total}</TableCell>
                   </TableRow>

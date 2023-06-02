@@ -1,15 +1,24 @@
 import {
     Grid, Typography, Button, Tab, Box, Avatar, Card,
-    CardMedia,
+    CardMedia, Badge,
     CardContent,
-    CardActions
+    CardActions, AvatarGroup
 } from '@mui/material';
 import React from 'react'
 import { useGetMyReservationsQuery, useResponseOnReservationsMutation } from 'redux/api/reservationApi';
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { ReservationDateTime, formaDateTime, statusToString } from 'core/services/helpers';
 import { Link } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
 
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+
+
+const SmallAvatar = styled(Avatar)(({ theme }) => ({
+    width: 22,
+    height: 22,
+    border: `2px solid ${theme.palette.background.paper}`,
+}));
 
 const UserReservations = () => {
 
@@ -38,15 +47,24 @@ const UserReservations = () => {
                     </TabList>
                 </Box>
                 <TabPanel value="1">
-                    <Grid container >
+                    <Grid container spacing={3}>
                         {data?.data?.received?.map((item) => (
-                            <Grid item md={4}>
-                                <Card sx={{ maxWidth: 345, height: 435 }} >
-                                    <Link to={"/user/details/" + item?.sender_id}> <Avatar
-                                        sx={{ width: 200, height: 200, margin: "auto" }}
-                                        src={item?.sender?.avatar}
-                                        title={item?.sender?.firstname}
-                                    ></Avatar>    </Link>
+                            <Grid item md={4} key={item?.id}>
+                                <Card sx={{ maxWidth: 345, height: 435 }}  >
+
+                                    <Grid style={{ display: "flex", justifyContent: "center" }}>
+                                        <Badge
+                                            overlap="circular"
+                                            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                            badgeContent={
+                                                <Link to={"/user/details/" + item?.sender_id}>
+                                                    <SmallAvatar alt={item?.sender?.firstname} src={item?.sender?.avatar} sx={{ width: 70, height: 70 }} />
+                                                </Link>}
+                                        >
+                                            <Link to={"/advertise/" + item?.ad_id}>
+                                                <Avatar alt={item?.advertisement?.title} src={item?.advertisement?.media?.[0].file_path} sx={{ width: 180, height: 180 }} />
+                                            </Link>
+                                        </Badge></Grid>
                                     <CardContent>
                                         <Link to={"/user/details/" + item?.sender_id}>
 
@@ -101,13 +119,39 @@ const UserReservations = () => {
                 <TabPanel value="2">
                     <Grid container spacing={3}>
                         {data?.data?.send?.map((item) => (
-                            <Grid item md={4}>
-                                <Card sx={{ maxWidth: 345, height: 470 }}>
-                                    <Link to={"/user/details/" + item?.sender_id}>   <Avatar
-                                        sx={{ width: 250, height: 250, margin: "auto" }}
-                                        src={item?.receiver?.avatar}
-                                        title={item?.receiver?.firstname}
-                                    ></Avatar>   </Link>
+                            <Grid item md={4} key={item?.id}>
+                                <Card sx={{ maxWidth: 345, height: 435 }}>
+                                    <Grid style={{ display: "flex", justifyContent: "center" }}>
+
+                                        <Badge
+                                            overlap="circular"
+                                            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                            badgeContent={
+                                                <Link to={"/user/details/" + item?.sender_id}>
+                                                    <SmallAvatar alt={item?.receiver?.avatar} src={item?.receiver?.avatar} sx={{ width: 70, height: 70 }} />
+                                                </Link>
+                                            }
+                                        >
+                                            <Link to={"/advertise/" + item?.ad_id}>
+                                                <Avatar alt={item?.advertisement?.title} src={item?.advertisement?.media?.[0].file_path} sx={{ width: 180, height: 180 }} />
+                                            </Link>
+                                        </Badge>
+                                    </Grid>
+                                    {/* <AvatarGroup max={3}>
+
+                                        <Link to={"/user/details/" + item?.sender_id}>   <Avatar
+                                            sx={{ width: 150, height: 150 }}
+                                            src={item?.receiver?.avatar}
+                                            title={item?.receiver?.firstname}
+                                        ></Avatar>   </Link>
+                                        <SwapHorizIcon />
+                                        <Link to={"/user/details/" + item?.ad_id}>   <Avatar
+                                            sx={{ width: 150, height: 150 }}
+                                            src={item?.advertisement?.media?.[0].file_path}
+                                            title={item?.advertisement?.media?.[0].file_name}
+                                        ></Avatar>
+                                        </Link>
+                                    </AvatarGroup> */}
                                     <CardContent>
                                         <Link to={"/user/details/" + item?.receiver_id}>
                                             <Typography gutterBottom variant="h5" component="div">
@@ -119,12 +163,7 @@ const UserReservations = () => {
                                                 Advertise : {item?.advertisement?.title}
                                             </Typography>
                                         </Link>
-                                        <Link to={"/user/details/" + item?.ad_id}>   <Avatar
-                                            sx={{ width: 25, height: 25, margin: "auto" }}
-                                            src={item?.advertisement?.media?.[0].file_path}
-                                            title={item?.advertisement?.media?.[0].file_name}
-                                        ></Avatar>
-                                        </Link>
+
                                         <Typography >
                                             Reservation : {ReservationDateTime(item?.reservation_date)}
                                         </Typography>
@@ -146,7 +185,7 @@ const UserReservations = () => {
                                         <Typography variant="body2" color="text.secondary">
                                             Created at :  {formaDateTime(item?.created_at)}
                                         </Typography>
-                                        <CardActions style={{ display: "flex", justifyContent: "center" }}>
+                                        <CardActions style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
                                             {item?.status === 0 &&
                                                 <Button size="small" variant='contained' color='error' disabled={loadingResponse} onClick={() => responseOnReservationHandler(item?.id, 1)}>Cancel</Button>
                                             }
@@ -163,7 +202,7 @@ const UserReservations = () => {
                 </TabPanel>
 
 
-            </TabContext>
+            </TabContext >
 
         </>
     )

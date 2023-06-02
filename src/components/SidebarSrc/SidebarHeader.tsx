@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import React, { useState } from "react";
 import { useProSidebar } from "../../components/SidebarSrc";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, Grid } from "@mui/material";
 import { Switch } from "./Switch";
 import { IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -93,25 +93,25 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
           <MenuIcon />
         </Button>
       </SidebarHeaderButton>
-      <div>
+      <Grid>
         <StyledLogo rtl={rtl}>AnyPet</StyledLogo>
-      </div>
+      </Grid>
       <StyledSidebarHeader {...rest}>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-  <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-    <Avatar
-      alt="Avatar"
-      src={avatar}
-      sx={{ width: 100, height: 100 }}
-    />
-  </div>
-  <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-    <Typography variant="subtitle1" fontWeight={700} color="#0098e5">
-      {firstname} {lastname}
-    </Typography>
-  
-  </div>
-</div>
+        <Grid style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Grid style={{ marginTop: "20px", marginBottom: "20px" }}>
+            <Avatar
+              alt="Avatar"
+              src={avatar}
+              sx={{ width: 100, height: 100 }}
+            />
+          </Grid>
+          <Grid style={{ marginTop: "20px", marginBottom: "20px" }}>
+            <Typography variant="subtitle1" fontWeight={700} color="#0098e5">
+              {firstname} {lastname}
+            </Typography>
+
+          </Grid>
+        </Grid>
 
       </StyledSidebarHeader>
     </>

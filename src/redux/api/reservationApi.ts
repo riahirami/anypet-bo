@@ -1,62 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 import { baseQueryConfig } from "./BaseQueryConfig";
 import { endpoints } from "core/constant/endpoints";
-import { User } from "core/models/user.model";
-import { Ad } from "core/models/ad.model";
 import dayjs, { Dayjs } from "dayjs";
+import { ResponseData,Reservation,
+    RequestResponse,
+    BodyResponseOnReservation,
+    BodyCreateReservation } from "core/models/reservations.model";
 
-interface Reservation {
-    id: number;
-    ad_id: number;
-    sender_id: number;
-    receiver_id: number;
-    message: string;
-    status: number;
-    confirmed_at: string;
-    created_at: string;
-    updated_at: string;
-    advertisement: Ad;
-    receiver?: User;
-    sender?:User;
-    reservation_date:string ;
 
-}
-
-interface ResponseData<T> {
-    data: {
-        send: T[];
-        received: T[];
-    }
-}
-
-interface BodyResponseOnReservation {
-    id: number | string;
-    status: number;
-}
-
-interface RequestResponse {
-
-    id: number;
-    ad_id: number;
-    sender_id: number;
-    receiver_id: number;
-    message: string;
-    reservation_date:string ;
-    status: number;
-    confirmed_at: string;
-    created_at: string;
-    updated_at: string;
-    receiver: User;
-    advertisement?: Ad;
-    sender?:User
-}
-
-interface BodyCreateReservation {
-    receiver_id: number | undefined;
-    ad_id: number | undefined;
-    message?: string;
-    reservation_date:string ;
-}
 export const reservationApi = createApi({
     reducerPath: "reservationApi",
     baseQuery: fetchBaseQuery(baseQueryConfig),
@@ -66,7 +17,7 @@ export const reservationApi = createApi({
             query: () => endpoints.GETMYRESERVATION,
             providesTags: ["Reservation"],
         }),
-        getAdReservationsById: builder.query<ResponseData<Reservation>, number | string>({
+        getAdReservationsById: builder.query<ResponseData<Reservation>, number | string | undefined>({
             query: (adId) => `${endpoints.GETADRESERVATIONS}/${adId}`,
             providesTags: ["Reservation"],
         }),

@@ -17,7 +17,7 @@ export const userApi = createApi({
       query: (page) => `${endpoints.USERS}?page=${page}`,
       providesTags: ["User"],
     }),
-    verifiedUsers: builder.query({
+    verifiedUsers: builder.query<any, void>({
       query: () => `${endpoints.VERIFIEDUSERS}`,
       providesTags: ["User"],
     }),

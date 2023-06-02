@@ -9,4 +9,6 @@ export interface Message {
     updated_at: string;
     sender: null | User; 
     receiver: null | User; 
+    sender_avatar?:  string; 
+    receiver_avatar?: string; 
   }

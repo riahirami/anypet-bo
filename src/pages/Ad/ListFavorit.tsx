@@ -39,11 +39,10 @@ const ListFavorit = () => {
   const [favoritList, setfavoritList] = useState(data);
 
   useEffect(() => {
-    refetch();
     setfavoritList(data);
+    refetch();
   }, [data]);
 
-  console.log({favoritList});
 
   if (isLoading) return <Spinner />;
 

@@ -83,7 +83,7 @@ const AdDetails: React.FC = () => {
 
   // TODO optimise this function or replace it by a slice
   const checkIsFavorit = async (id: any) => {
-    const favoris = data?.data.find((fav: any) => fav.ad_id == id);
+    const favoris = await data?.data.find((fav: any) => fav.ad_id == id);
     if (favoris) {
       setIsFavorit(true);
     } else {
@@ -93,12 +93,12 @@ const AdDetails: React.FC = () => {
 
   useEffect(() => {
     checkIsFavorit(adData?.id);
-  }, [data]);
+  }, [setFavorit]);
 
   const setfavorit = async (id: any) => {
     await setFavorit(id);
+    await checkIsFavorit(id) ;
     refetch();
-    setIsFavorit(true);
   };
 
   const handleClickOpen = () => {
@@ -125,8 +125,9 @@ const AdDetails: React.FC = () => {
     const dateString = datePicker?.substring(0, 10).replace(/-/g, "");
     setDateValue(dateString);
   };
+  
   const handleTimeChange = (time: any) => {
-    const formattedTime = dayjs(time).format("HH:mm:ss");
+    const formattedTime = dayjs(time).format("HH:mm");
     setTimeValue(formattedTime);
   };
 
@@ -151,7 +152,7 @@ const AdDetails: React.FC = () => {
         <DialogTitle>{"Choose a date and add a message to your reservation request"}</DialogTitle>
         <DialogContent>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={["DatePicker",'TimePicker']}>
+            <DemoContainer components={["DatePicker", 'TimePicker']}>
               <DatePicker
                 value={dateValue}
                 label="Choose your date"

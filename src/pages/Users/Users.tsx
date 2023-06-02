@@ -18,6 +18,7 @@ import {
 import { formaDateTime } from "../../core/services/helpers";
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import GppBadOutlinedIcon from '@mui/icons-material/GppBadOutlined';
+import { Link } from "react-router-dom";
 
 
 const Users = () => {
@@ -69,13 +70,12 @@ const Users = () => {
                     <Avatar src={item.avatar}></Avatar>{" "}
                   </TableCell>
                   <TableCell>
+                    <Link to={"/user/details/" + item.id} >
                     {item.firstname} {item.lastname}
-                  </TableCell>
-                  <TableCell>{item.email}</TableCell>
-                  <TableCell>{item.phone}</TableCell>
-                  <TableCell>{item.role_id === 2 ? "Admin" : "user"}</TableCell>
-                  <TableCell>{formaDateTime(item.created_at)}</TableCell>
-                  <TableCell>
+                  </Link>
+                </TableCell>
+                
+                <TableCell>{item.email}</TableCell><TableCell>{item.phone}</TableCell><TableCell>{item.role_id === 2 ? "Admin" : "user"}</TableCell><TableCell>{formaDateTime(item.created_at)}</TableCell><TableCell>
                     {item.role_id === 1 ? (
                       <IconButton
                         color="success"

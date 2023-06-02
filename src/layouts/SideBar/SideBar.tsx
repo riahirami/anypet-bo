@@ -171,6 +171,15 @@ export const Playground: React.FC<Props> = ({
             />
             <div style={{ flex: 1, marginBottom: "32px" }}>
               <Menu menuItemStyles={menuItemStyles}>
+                <SubMenu label="Statistics" icon={<BarChart />}>
+                  <MenuItem>
+                    <Link to={PATHS.StatsHome}> Home</Link>
+                  </MenuItem>
+                  <MenuItem>
+                    <Link to={PATHS.Stats}> Advertises</Link>
+                  </MenuItem>
+                </SubMenu>
+
                 <Link to={PATHS.PROFILE}>
                   {" "}
                   <MenuItem icon={<Book />}>Profil</MenuItem>
@@ -205,7 +214,7 @@ export const Playground: React.FC<Props> = ({
                   </MenuItem>
                 </SubMenu>
                 <Link to={PATHS.MYRESERVATIONS}>
-                  <MenuItem> Reservations</MenuItem></Link>
+                  <MenuItem icon={<Calendar />}> Reservations</MenuItem></Link>
                 <SubMenu label="Categories" icon={<Global />}>
                   <MenuItem>
                     {" "}
@@ -218,7 +227,7 @@ export const Playground: React.FC<Props> = ({
                 </SubMenu>
                 <SubMenu
                   label="Messages"
-                  icon={<InkBottle />}
+                  icon={<Service />}
                   suffix={<Badge variant="success">New</Badge>}
                 >
                   <MenuItem>
@@ -235,14 +244,7 @@ export const Playground: React.FC<Props> = ({
                     <MenuItem icon={<Calendar />}>Users</MenuItem>
                   </Link>
                 </Menu>
-                <SubMenu label="Statistics" icon={<BarChart />}>
-                  <MenuItem>
-                    <Link to={PATHS.StatsHome}> Home</Link>
-                  </MenuItem>
-                  <MenuItem>
-                    <Link to={PATHS.Stats}> Advertises</Link>
-                  </MenuItem>
-                </SubMenu>
+
               </Menu>
             </div>
             <SidebarFooter collapsed={collapsed} />
