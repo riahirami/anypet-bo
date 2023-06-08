@@ -16,11 +16,8 @@ import {message} from "../../core/constant/message";
 const categorySchema = Yup.object().shape({
   title: Yup.string()
     .required("Title is required")
-    .min(6, "Title must be at least 6 characters")
-    .max(20, "Title must be at most 255 characters"),
-  description: Yup.string()
-    .required("Description is required")
-    .min(12, "description must be at least 12 characters"),
+    .min(3, "Title must be at least 3 characters")
+    .max(20, "Title must be at most 20 characters"),
 });
 const Categoryshow = () => {
   const { id } = useParams();
@@ -29,7 +26,6 @@ const Categoryshow = () => {
   const navigate = useNavigate();
   const item: Category = {
     title: "",
-    description: "",
   };
   const [category, setCategory] = useState(item);
 
@@ -46,7 +42,7 @@ const Categoryshow = () => {
   }
   useEffect(() => {
     refetch();
-  }, [isLoading, refetch]);
+  }, [isLoading]);
 
   const handleUpdate = async (values: any) => {
     await updateCategory({
@@ -105,26 +101,7 @@ const Categoryshow = () => {
                 error={formikProps.touched.title && !!formikProps.errors.title}
                 onChange={handleChangeForm(formikProps)}
               />
-              <br />
-              <Field
-                id="description"
-                name="description"
-                label="description"
-                color="primary"
-                fullWidth
-                multiline
-                rows={4}
-                as={CustomTextField}
-                helperText={
-                  formikProps.touched.description &&
-                  formikProps.errors.description
-                }
-                error={
-                  formikProps.touched.description &&
-                  !!formikProps.errors.description
-                }
-                onChange={handleChangeForm(formikProps)}
-              />
+            
               <br />
               <div style={{ display: "flex", justifyContent: "left" }}>
                 <StyledButton

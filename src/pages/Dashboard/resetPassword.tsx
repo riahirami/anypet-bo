@@ -19,13 +19,14 @@ import {
 } from "@mui/material";
 import CustomModal from "../../components/Modal/CustomModal";
 import { resetPasswordMsg } from "../../core/constant/resetPassword";
+import { getToken } from "core/utils/functionHelpers";
 
 const ResetPassword = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
 
-  const tokenValue = JSON.parse(localStorage.getItem("user") || "{}");
+  const tokenValue =getToken();
 
   const [showModal, setShowModal] = useState(false);
   const [descriptionModal, setDescriptionModal] = useState("");

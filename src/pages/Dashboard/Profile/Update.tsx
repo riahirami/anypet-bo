@@ -11,12 +11,14 @@ import Spinner from "../../../components/Spinner/spinner";
 import CustomModal from "../../../components/Modal/CustomModal";
 import AlertComponent from "../../../components/Alert/Alert";
 import {message} from "../../../core/constant/message";
-import Profile from './../Profile';
+import Profile from './Profile/Profile';
+import { UserDetails } from "pages/Users/UserDetails/UserDetails";
+import { getCurrentUser } from "core/utils/functionHelpers";
 
 const initialState = {
-  name: "",
+  firstname: "",
+  lastname: "",
   email: "",
-  login: "",
   phone: "",
   address: "",
   avatar: "",
@@ -31,8 +33,9 @@ const Update = () => {
   const [descriptionModal, setDescriptionModal] = useState("");
 
   const [formValue, setFormValue] = useState(initialState);
-  const { name, login, email, password, phone, address, avatar } = formValue;
+  const { firstname, lastname, email, password, phone, address, avatar } = formValue;
 
+  const currentUser = getCurrentUser();
   const [
     updateAvatar,
     {
@@ -57,7 +60,6 @@ const Update = () => {
   };
 
   const handleAddAvatar = async () => {
-    console.log("Avatar image:", avatarImg);
     const formData = new FormData();
     if (avatarImg) {
       formData.append("avatar", avatarImg);
@@ -133,6 +135,7 @@ const Update = () => {
           <TabPanel value="1">
             
             <Profile />
+            <UserDetails userId={currentUser?.user?.id} />
             
           </TabPanel>
 

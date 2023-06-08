@@ -1,51 +1,45 @@
 import "./App.css";
-import { BrowserRouter } from "react-router-dom";
-import { useAppDispatch } from "./redux/hooks";
-import { useEffect } from "react";
-import { setUser } from "./redux/slices/authSlice";
 import { Router } from "./components/Router";
 import { Playground } from "./layouts/SideBar/SideBar";
 import { ProSidebarProvider } from "./components/SidebarSrc/ProSidebarProvider";
 import Topbar from "./components/Topbar/Topbar";
-import Dashboard from "./pages/Dashboard/Dashboard";
 import useTheme from "./customHooks/useTheme";
+import Signin from "pages/signin";
+import { useAuthentication } from "customHooks/useAuthentication";
 
 function App() {
-  const dispatch = useAppDispatch();
-  const { mode, handleThemeChange, handleImageChange,hasImage } = useTheme();
+  const { mode, handleThemeChange, handleImageChange, hasImage } = useTheme();
+  const authUser = useAuthentication();
 
-  ///////////////////////
+  
+  if (authUser != null)
+    return (
+      <div className="App">
+        <ProSidebarProvider>
+          <div className="playground-container">
+            <Playground
+              mode={mode}
+              handleThemeChange={handleThemeChange}
+              handleImageChange={handleImageChange}
+              hasImage={hasImage}
+            />
+          </div>
 
-  useEffect(() => {
-    try {
-      const userData = localStorage.getItem("user");
-      if (userData) {
-        const user = JSON.parse(userData);
-        dispatch(setUser(user));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
+          <div className="router-container">
+            <Topbar
+              mode={mode}
+              handleThemeChange={handleThemeChange}
+              handleImageChange={handleImageChange}
+              hasImage={hasImage}
+            />
 
-  return (
-    <div className="App">
-      <BrowserRouter>
-        <Dashboard />
-        <div className="playground-container">
-          <ProSidebarProvider>
-            <Playground mode={mode} handleThemeChange={handleThemeChange} handleImageChange={handleImageChange} hasImage={hasImage}/>
-          </ProSidebarProvider>
-        </div>
-        <div className="router-container">
-          <ProSidebarProvider>
-            <Topbar mode={mode} handleThemeChange={handleThemeChange}  handleImageChange={handleImageChange} hasImage={hasImage}/>
-          </ProSidebarProvider>
-          <Router />
-        </div>
-      </BrowserRouter>
-    </div>
-  );
+            <Router />
+          </div>
+        </ProSidebarProvider>
+      </div>
+    );
+
+  return <Signin />;
 }
 
 export default App;

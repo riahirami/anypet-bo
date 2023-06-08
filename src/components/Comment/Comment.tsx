@@ -17,7 +17,7 @@ import {
   useReplyCommentsMutation,
   useDeleteCommentMutation,
 } from "../../redux/api/commentsApi";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { formaDateTime } from "../../core/services/helpers";
 import { tokens } from "../theme";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -25,7 +25,16 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 import { Comments, ReplyComment } from "./Comments.type";
-import { StyledCommentButton,StyledCommentDivider,StyledCommentPaper,StyledCommentTypography } from "./Comment.style";
+import {
+  StyledCommentButton,
+  StyledCommentDivider,
+  StyledCommentPaper,
+  StyledCommentTypography,
+} from "./Comment.style";
+import { getCurrentUser } from "core/utils/functionHelpers";
+import CustomLink from "components/CustomLink/CustomLink"
+import AlertComponent from "components/Alert/Alert";
+import { message } from "core/constant/message"
 
 const Comment = () => {
   const { id } = useParams();
@@ -40,6 +49,8 @@ const Comment = () => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  const currentUser = getCurrentUser();
 
   const [
     addComment,
@@ -92,7 +103,13 @@ const Comment = () => {
     <>
       {isLoading && <p>Loading...</p>}
       {/*  */}
-      <StyledCommentPaper >
+      {isSuccessDeleteComment && (
+                <AlertComponent
+                    title={message.COMMENTDELETED}
+                    severity="success"
+                />
+            )}
+      <StyledCommentPaper>
         <Typography>Comments :</Typography>
         <Grid container justifyContent="center" p={4}>
           <Grid item xs={12} sm={11} md={11} lg={10}>
@@ -104,6 +121,7 @@ const Comment = () => {
               name="description"
               value={comment}
               onChange={handleChangeCommentField}
+              focused
             />
           </Grid>
           <Grid item>
@@ -121,7 +139,7 @@ const Comment = () => {
 
         {data?.map((comment: Comments) => (
           <>
-            <Grid container wrap="nowrap" spacing={2}>
+            <Grid key={comment.id} container wrap="nowrap" spacing={2}>
               <Grid item>
                 <Avatar src={comment.user.avatar}></Avatar>
               </Grid>
@@ -133,63 +151,73 @@ const Comment = () => {
                 >
                   <Box>
                     <Typography variant="body1">
-                      {comment.user.login}
+                      <CustomLink to={"/user/details/" + comment?.user_id}>
+                        {comment.user.firstname}
+                      </CustomLink>
                     </Typography>
                     <Typography variant="body1">
                       {comment.description}
                     </Typography>
                   </Box>
-                  <IconButton
-                    color="error"
-                    sx={{
-                      "&:hover": {
-                        background: "inherit",
-                      },
-                    }}
-                    onClick={() => {
-                      deleteComment(comment.id);
-                    }}
-                    disabled={DeleteCommentLoading}
-                  >
-                    <DeleteForeverIcon />
-                  </IconButton>
+                  {currentUser.user.id == comment.user_id && (
+                    <IconButton
+                      color="error"
+                      sx={{
+                        "&:hover": {
+                          background: "inherit",
+                        },
+                      }}
+                      onClick={() => {
+                        deleteComment(comment.id);
+                      }}
+                      disabled={DeleteCommentLoading}
+                    >
+                      <DeleteForeverIcon />
+                    </IconButton>
+                  )}
                 </Box>
 
-                <StyledCommentTypography >
+                <StyledCommentTypography>
                   Created at: {formaDateTime(comment.created_at)}
                 </StyledCommentTypography>
-                <StyledCommentDivider variant="fullWidth"/>
+                <StyledCommentDivider variant="fullWidth" />
 
                 {comment.reply_comments &&
                   comment?.reply_comments?.map((reply: ReplyComment) => (
                     <Grid container wrap="nowrap" spacing={2}>
                       <Grid item>
-                        <Avatar src={reply.user.avatar}></Avatar>
+                        <CustomLink to={"/user/details/" + reply?.user_id}>
+                          <Avatar src={reply.user.avatar}></Avatar>
+                        </CustomLink>
                       </Grid>
                       <Grid justifyContent="left" item xs zeroMinWidth>
-                        <Typography>{reply.user.name}</Typography>
+                        <CustomLink to={"/user/details/" + reply?.user_id}>
+                          <Typography>{reply.user.firstname}</Typography>
+                        </CustomLink>
                         <Typography>{reply.description}</Typography>
 
-                        <StyledCommentTypography >
+                        <StyledCommentTypography>
                           Created at: {formaDateTime(reply.created_at)}
                         </StyledCommentTypography>
-                      <StyledCommentDivider variant="fullWidth"/>
+                        <StyledCommentDivider variant="fullWidth" />
                       </Grid>
 
-                      <IconButton
-                        color="error"
-                        sx={{
-                          "&:hover": {
-                            background: "inherit",
-                          },
-                        }}
-                        onClick={() => {
-                          deleteComment(reply.id);
-                        }}
-                        disabled={DeleteCommentLoading}
-                      >
-                        <DeleteForeverIcon />
-                      </IconButton>
+                      {currentUser.user.id == reply.user_id && (
+                        <IconButton
+                          color="error"
+                          sx={{
+                            "&:hover": {
+                              background: "inherit",
+                            },
+                          }}
+                          onClick={() => {
+                            deleteComment(reply.id);
+                          }}
+                          disabled={DeleteCommentLoading}
+                        >
+                          <DeleteForeverIcon />
+                        </IconButton>
+                      )}
                     </Grid>
                   ))}
                 <Button
@@ -214,9 +242,8 @@ const Comment = () => {
                     <Grid container justifyContent="center" p={2}>
                       <Grid item xs={12} sm={11} md={11} lg={10}>
                         <TextField
-                          multiline
-                          rows={1}
                           fullWidth
+                          focused
                           id={`reply-${comment.id}`}
                           name={`reply-${comment.id}`}
                           value={replyTexts[comment.id] || ""}
@@ -228,6 +255,7 @@ const Comment = () => {
                       <Grid item>
                         <StyledCommentButton
                           variant="contained"
+                          disabled={ReplyCommentLoading}
                           onClick={() => {
                             replyComment({
                               id: id,
@@ -237,9 +265,8 @@ const Comment = () => {
                             });
                             setReplyTexts({});
                           }}
-                         
                         >
-                          Comment
+                          Reply
                         </StyledCommentButton>
                       </Grid>
                     </Grid>
@@ -247,7 +274,7 @@ const Comment = () => {
                 )}
               </Grid>
             </Grid>
-            <StyledCommentDivider variant="fullWidth"/>
+            <StyledCommentDivider variant="fullWidth" />
           </>
         ))}
       </StyledCommentPaper>

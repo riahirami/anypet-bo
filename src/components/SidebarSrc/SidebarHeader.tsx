@@ -1,12 +1,13 @@
 import styled from "@emotion/styled";
 import React, { useState } from "react";
 import { useProSidebar } from "../../components/SidebarSrc";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, Grid } from "@mui/material";
 import { Switch } from "./Switch";
 import { IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Avatar } from "@mui/material";
 import { useProfileQuery } from "../../redux/api/authApi";
+import { getToken } from "core/utils/functionHelpers";
 interface SidebarHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
 }
@@ -32,8 +33,6 @@ const SidebarHeaderButton = styled(Button)({
 
 const StyledLogo = styled.div<{ rtl?: boolean }>`
   width: 100%;
-  margin-top: 5px;
-
   min-width: 35px;
   height: 35px;
   min-height: 35px;
@@ -65,7 +64,7 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   const { rtl } = useProSidebar();
   const { toggleSidebar, collapseSidebar, broken, collapsed } = useProSidebar();
 
-  const tokenValue = JSON.parse(localStorage.getItem("user") || "{}");
+  const tokenValue = getToken();
   const {
     data: dataProfile,
     isError,
@@ -73,7 +72,7 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
     isLoading,
   } = useProfileQuery(tokenValue.token);
 
-  const { login, name, email, phone, avatar } = dataProfile?.user ?? {};
+  const { firstname, lastname, email, phone, avatar } = dataProfile?.user ?? {};
 
 
   const [collapse, setCollapse] = useState(true);
@@ -94,25 +93,25 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
           <MenuIcon />
         </Button>
       </SidebarHeaderButton>
-      <div>
+      <Grid>
         <StyledLogo rtl={rtl}>AnyPet</StyledLogo>
-      </div>
+      </Grid>
       <StyledSidebarHeader {...rest}>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-  <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-    <Avatar
-      alt="Avatar"
-      src={avatar}
-      sx={{ width: 100, height: 100 }}
-    />
-  </div>
-  <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-    <Typography variant="subtitle1" fontWeight={700} color="#0098e5">
-      Dashboard : {login}
-    </Typography>
-  
-  </div>
-</div>
+        <Grid style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Grid style={{ marginTop: "20px", marginBottom: "20px" }}>
+            <Avatar
+              alt="Avatar"
+              src={avatar}
+              sx={{ width: 100, height: 100 }}
+            />
+          </Grid>
+          <Grid style={{ marginTop: "20px", marginBottom: "20px" }}>
+            <Typography variant="subtitle1" fontWeight={700} color="#0098e5">
+              {firstname} {lastname}
+            </Typography>
+
+          </Grid>
+        </Grid>
 
       </StyledSidebarHeader>
     </>

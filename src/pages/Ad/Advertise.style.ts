@@ -6,30 +6,30 @@ export const StyledButton = styled(Button)({
     mb: 2,
 });
 export const StateFormControl = styled(FormControl)({
-    width: '47%',
+    width: '20%',
     marginTop: '8px',
     marginBottom: '8px',
 
 });
 
 export const CityFormControl = styled(FormControl)({
-    width: '52%',
+    width: '35%',
     marginTop: '8px',
     marginBottom: '8px',
-    marginLeft: '8px',
     
 
 });
 
 export const StreetFormControl = styled(FormControl)({
-    width: '72%',
+    width: '43%',
     marginTop: '8px',
     marginBottom: '8px',
+    marginLeft: '8px',
 
 });
 
 export const PostalFormControl = styled(FormControl)({
-    width: '27%',
+    width: '20%',
     marginTop: '8px',
     marginBottom: '8px',
     marginLeft: '8px',
@@ -42,6 +42,19 @@ export const CustomTextField = styled(TextField)({
     marginBottom: '8px',
 
 });
+
+export const TitleTextField = styled(TextField)({
+    width: '55%',
+    marginTop: '8px',
+    marginBottom: '8px',
+    marginRight: '10px',
+})
+export const MediaField = styled(TextField)({
+    width: '42%',
+    marginTop: '8px',
+    marginBottom: '8px',
+    marginLeft: '9px',
+})
 
 export const Demo = styled("div")(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,

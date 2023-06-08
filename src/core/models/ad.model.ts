@@ -1,24 +1,32 @@
+import { User } from "./user.model"
+
 export interface Ad {
   id?: string | undefined
   title: string
   description: string
-  country: string
   state: string
   city: string
   street: string
   postal_code: string
   category_id: string
-  created_at?:string
-  updated_at?:string
-  status?:string
+  created_at?: string
+  updated_at?: string
+  status?: string
+  media?: any[]
+  user_id: string
+  user: User
 }
 
-
+export interface MyAdData {
+  data: Ad[] ;
+  count: number;
+}
 
 export interface AdData {
   current_page: number;
-  data: Ad[]; 
+  data: Ad[];
   first_page_url: string;
   from: number;
   last_page: number;
+  count: number;
 }

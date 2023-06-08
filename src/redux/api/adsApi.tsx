@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 import { baseQueryConfig } from "./BaseQueryConfig";
 import { endpoints } from "../../core/constant/endpoints";
-import { Ad, AdData } from "../../core/models/ad.model";
+import { Ad, AdData, MyAdData } from "../../core/models/ad.model";
 
 function generateQueryParams(obj: { [key: string]: any }): string {
   const params = new URLSearchParams();
@@ -37,26 +37,39 @@ export const adsApi = createApi({
       query: ({
         title,
         description,
-        country,
         state,
         city,
         street,
         postal_code,
         category_id,
+        media,
       }) => {
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("description", description);
+        formData.append("state", state);
+        formData.append("city", city);
+        formData.append("street", street);
+        formData.append("postal_code", postal_code);
+        formData.append("category_id", category_id);
+        for (let i = 0; i < media.length; i++) {
+          formData.append("media[]", media[i]);
+        }
         return {
           url: endpoints.Ads,
+
           method: "post",
-          body: {
-            title,
-            description,
-            country,
-            state,
-            city,
-            street,
-            postal_code,
-            category_id,
-          },
+          body: formData,
+        };
+      },
+      invalidatesTags: ["Ad"],
+    }),
+    getMediaById: builder.query({
+      query: (id: any) => {
+        return {
+          url: endpoints.ADMEDIA + `${id}`,
+          method: "get",
+          providesTags: ["Ad"],
         };
       },
     }),
@@ -65,26 +78,32 @@ export const adsApi = createApi({
         id,
         title,
         description,
-        country,
         state,
         city,
         street,
         postal_code,
         category_id,
-      }) => ({
-        url: `${endpoints.Ads}${id}`,
-        method: "PUT",
-        body: {
-          title,
-          description,
-          country,
-          state,
-          city,
-          street,
-          postal_code,
-          category_id,
-        },
-      }),
+        media,
+      }) => {
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("description", description);
+        formData.append("state", state);
+        formData.append("city", city);
+        formData.append("street", street);
+        formData.append("postal_code", postal_code);
+        formData.append("category_id", category_id);
+        for (let i = 0; i < media.length; i++) {
+          formData.append("media[]", media[i]);
+        }
+
+        return {
+          url: `${endpoints.Ads}${id}`,
+          method: "PUT",
+          body: formData,
+        };
+      },
+      invalidatesTags: ["Ad"],
     }),
     deleteAd: builder.mutation({
       query: (id) => {
@@ -94,11 +113,21 @@ export const adsApi = createApi({
           body: id,
         };
       },
+      invalidatesTags: ["Ad"],
     }),
     getAdById: builder.query({
       query: (id: any) => {
         return {
           url: endpoints.Ads + `${id}`,
+          method: "get",
+          providesTags: ["Ad"],
+        };
+      },
+    }),
+    getMyAds: builder.query<any, string|undefined>({
+      query: (id) => {
+        return {
+          url: endpoints.MYADS+id,
           method: "get",
           providesTags: ["Ad"],
         };
@@ -129,7 +158,7 @@ export const adsApi = createApi({
     getAdsStats: builder.query({
       query: (column: any) => {
         return {
-          url: endpoints.statsAds+"?column="+column,
+          url: endpoints.statsAds + "?column=" + column,
           method: "get",
         };
       },
@@ -155,16 +184,16 @@ export const adsApi = createApi({
     setFavorite: builder.mutation({
       query: (id) => {
         return {
-          url: endpoints.SETASFAVORITE+id,
+          url: endpoints.SETASFAVORITE + id,
           method: "post",
           providesTags: ["Ad"],
         };
       },
     }),
-    listFavorite: builder.query({
-      query: () => {
+    listFavorite: builder.query<AdData, string|number|undefined>({
+      query: (id) => {
         return {
-          url: endpoints.LISTFAVORITE,
+          url: endpoints.LISTFAVORITE +id,
           method: "get",
           providesTags: ["Ad"],
         };
@@ -186,4 +215,6 @@ export const {
   useGetCountAdsPerDateQuery,
   useListFavoriteQuery,
   useSetFavoriteMutation,
+  useGetMediaByIdQuery,
+  useGetMyAdsQuery
 } = adsApi;

@@ -1,21 +1,21 @@
-import React from 'react';
-import styled, { CSSObject } from '@emotion/styled';
-import classnames from 'classnames';
-import { useSidebar } from './hooks/useSidebar';
-import { useMediaQuery } from './hooks/useMediaQuery';
-import { sidebarClasses } from './utils/utilityClasses';
-import { StyledBackdrop } from './styles/StyledBackdrop';
+import React from "react";
+import styled, { CSSObject } from "@emotion/styled";
+import classnames from "classnames";
+import { useSidebar } from "./hooks/useSidebar";
+import { useMediaQuery } from "./hooks/useMediaQuery";
+import { sidebarClasses } from "./utils/utilityClasses";
+import { StyledBackdrop } from "./styles/StyledBackdrop";
 
-type BreakPoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'always';
+type BreakPoint = "xs" | "sm" | "md" | "lg" | "xl" | "xxl" | "always";
 
 const BREAK_POINTS: Record<BreakPoint, string> = {
-  xs: '480px',
-  sm: '576px',
-  md: '768px',
-  lg: '992px',
-  xl: '1200px',
-  xxl: '1600px',
-  always: 'always',
+  xs: "480px",
+  sm: "576px",
+  md: "768px",
+  lg: "992px",
+  xl: "1200px",
+  xxl: "1600px",
+  always: "always",
 };
 
 export interface SidebarProps extends React.HTMLAttributes<HTMLHtmlElement> {
@@ -72,14 +72,14 @@ export interface SidebarProps extends React.HTMLAttributes<HTMLHtmlElement> {
   children?: React.ReactNode;
 }
 
-interface StyledSidebarProps extends Omit<SidebarProps, 'backgroundColor'> {
+interface StyledSidebarProps extends Omit<SidebarProps, "backgroundColor"> {
   collapsed?: boolean;
   toggled?: boolean;
   broken?: boolean;
   rtl?: boolean;
 }
 
-type StyledSidebarContainerProps = Pick<SidebarProps, 'backgroundColor'>;
+type StyledSidebarContainerProps = Pick<SidebarProps, "backgroundColor">;
 
 const StyledSidebar = styled.aside<StyledSidebarProps>`
   position: relative;
@@ -87,7 +87,8 @@ const StyledSidebar = styled.aside<StyledSidebarProps>`
   border-right-style: solid;
   border-color: #efefef;
 
-  transition: ${({ transitionDuration }) => `width, left, right, ${transitionDuration}ms`};
+  transition: ${({ transitionDuration }) =>
+    `width, left, right, ${transitionDuration}ms`};
 
   width: ${({ width }) => width};
   min-width: ${({ width }) => width};
@@ -107,18 +108,18 @@ const StyledSidebar = styled.aside<StyledSidebarProps>`
 
   &.${sidebarClasses.broken} {
     position: fixed;
-    height: 100%;
+    height: 100vh;
     top: 0px;
     z-index: 100;
 
-    ${({ rtl, width }) => (!rtl ? `left: -${width};` : '')}
+    ${({ rtl, width }) => (!rtl ? `left: -${width};` : "")}
 
     &.${sidebarClasses.collapsed} {
-      ${({ rtl, collapsedWidth }) => (!rtl ? `left: -${collapsedWidth}; ` : '')}
+      ${({ rtl, collapsedWidth }) => (!rtl ? `left: -${collapsedWidth}; ` : "")}
     }
 
     &.${sidebarClasses.toggled} {
-      ${({ rtl }) => (!rtl ? `left: 0;` : '')}
+      ${({ rtl }) => (!rtl ? `left: 0;` : "")}
     }
 
     &.${sidebarClasses.rtl} {
@@ -139,18 +140,18 @@ const StyledSidebar = styled.aside<StyledSidebarProps>`
 
 const StyledSidebarContainer = styled.div<StyledSidebarContainerProps>`
   position: relative;
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
+  height: auto;
+  min-height: 100vh;
   z-index: 3;
 
-  ${({ backgroundColor }) => (backgroundColor ? `background-color:${backgroundColor};` : '')}
+  ${({ backgroundColor }) =>
+    backgroundColor ? `background-color:${backgroundColor};` : ""}
 `;
 
 const StyledSidebarImage = styled.img`
   &.${sidebarClasses.image} {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     object-fit: cover;
     object-position: center;
     position: absolute;
@@ -160,26 +161,29 @@ const StyledSidebarImage = styled.img`
   }
 `;
 
-const SidebarFR: React.ForwardRefRenderFunction<HTMLHtmlElement, SidebarProps> = (
+const SidebarFR: React.ForwardRefRenderFunction<
+  HTMLHtmlElement,
+  SidebarProps
+> = (
   {
-    width = '250px',
-    collapsedWidth = '80px',
+    width = "250px",
+    collapsedWidth = "80px",
     defaultCollapsed = false,
     className,
     children,
     breakPoint,
     customBreakPoint,
-    backgroundColor = 'rgb(249, 249, 249, 0.7)',
+    backgroundColor = "rgb(249, 249, 249, 0.7)",
     transitionDuration = 300,
     image,
     rtl,
     rootStyles,
     ...rest
   },
-  ref,
+  ref
 ) => {
   const broken = useMediaQuery(
-    customBreakPoint ?? (breakPoint ? BREAK_POINTS[breakPoint] : breakPoint),
+    customBreakPoint ?? (breakPoint ? BREAK_POINTS[breakPoint] : breakPoint)
   );
 
   const {
@@ -199,7 +203,7 @@ const SidebarFR: React.ForwardRefRenderFunction<HTMLHtmlElement, SidebarProps> =
 
   React.useEffect(() => {
     updateSidebarState({ width, collapsedWidth, broken, rtl });
-  }, [width, collapsedWidth, broken, updateSidebarState, rtl]);
+  }, [width, collapsedWidth, broken, rtl]);
 
   React.useEffect(() => {
     updateSidebarState({
@@ -207,7 +211,7 @@ const SidebarFR: React.ForwardRefRenderFunction<HTMLHtmlElement, SidebarProps> =
       transitionDuration,
       toggled: false,
     });
-  }, [defaultCollapsed, transitionDuration, updateSidebarState]);
+  }, [defaultCollapsed, transitionDuration]);
 
   return (
     <StyledSidebar
@@ -226,7 +230,7 @@ const SidebarFR: React.ForwardRefRenderFunction<HTMLHtmlElement, SidebarProps> =
           [sidebarClasses.broken]: brokenContext,
           [sidebarClasses.rtl]: rtlContext,
         },
-        className,
+        className
       )}
       {...rest}
     >
@@ -262,4 +266,6 @@ const SidebarFR: React.ForwardRefRenderFunction<HTMLHtmlElement, SidebarProps> =
   );
 };
 
-export const Sidebar = React.forwardRef<HTMLHtmlElement, SidebarProps>(SidebarFR);
+export const Sidebar = React.forwardRef<HTMLHtmlElement, SidebarProps>(
+  SidebarFR
+);

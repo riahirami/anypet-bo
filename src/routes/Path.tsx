@@ -11,6 +11,7 @@ export const PATHS = {
     showCategory: '/categoryshow/:id',
     Advertise: '/Advertise/',
     AddAdvertise: '/addadvertise/',
+    MYADVERTISES: '/myadvertises/:id',
     showAdvertise: '/advertise/:id',
     updateAdvertise: '/advertise/update/:id',
     adsByCategory: '/advertise/category/:id',
@@ -18,6 +19,15 @@ export const PATHS = {
     Stats: '/stats',
     StatsHome: '/stats/home',
     Users: '/users',
-    LISTFAVORIT: '/favoritlist',
+    LISTFAVORIT: '/favoritlist/:id',
     LISTCOMMENTS: '/comment/:id',
+    ALLNOTIFICATIONS: '/notifications/:id',
+    MESSAGES: 'users/messages/:id',
+    CONVERSATIONS: 'users/conversations',
+
+    NOtAUTHORIZED : '/notauthorized',
+    USERDETAILS : '/user/details/:id',
+
+
+    MYRESERVATIONS : '/reservation/my'
 }

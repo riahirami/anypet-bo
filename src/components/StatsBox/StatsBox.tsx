@@ -1,8 +1,8 @@
 import { Box, Button, Typography, useTheme } from "@mui/material";
 import { tokens } from "../theme";
 import { StyledBox } from "./StatsBox.style";
-import { Link } from "react-router-dom";
 import {StatBoxProps} from "./StatsBox.type" ;
+import CustomLink from "components/CustomLink/CustomLink";
 
 
 const StatBox = ({ title, subtitle, icon, value,backgroundCol,details }: StatBoxProps) => {
@@ -26,7 +26,7 @@ const StatBox = ({ title, subtitle, icon, value,backgroundCol,details }: StatBox
         <Typography variant="h5" fontStyle="italic">
           {value}
         </Typography>
-      <Button variant="contained" ><Link to={details}>details</Link></Button>
+      <Button variant="contained" ><CustomLink to={details}>details</CustomLink></Button>
       
       </Box>
     </StyledBox>

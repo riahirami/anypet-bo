@@ -21,9 +21,13 @@ import { dashboard } from "../../core/constant/dashboard";
 import { resendEmailVerificationMsg } from "../../core/constant/resendEmailVerification";
 import CustomModal from "../../components/Modal/CustomModal";
 import { ProSidebarProvider } from "../../components/SidebarSrc/ProSidebarProvider";
-import Profile from "./Profile";
+import Profile from "./Profile/Profile/Profile";
 import { Playground } from "../../layouts/SideBar/SideBar";
 import { BrowserRouter } from "react-router-dom";
+import { Router } from "components/Router";
+import Topbar from "components/Topbar/Topbar";
+import useTheme from "customHooks/useTheme";
+import { getToken } from "core/utils/functionHelpers";
 
 function Dashboard() {
   // const { name } = useAppSelector(selectAuth);
@@ -31,9 +35,12 @@ function Dashboard() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const tokenValue = JSON.parse(localStorage.getItem("user") || "{}");
+  const tokenValue = getToken();
   const [showModal, setShowModal] = useState(false);
   const [descriptionModal, setDescriptionModal] = useState("");
+
+  const { mode, handleThemeChange, handleImageChange, hasImage } = useTheme();
+
 
   const {
     data: dataProfile,
@@ -43,7 +50,7 @@ function Dashboard() {
     isLoading,
   } = useProfileQuery(tokenValue.token);
 
-  const { login, name, email, phone } = dataProfile?.user ?? {};
+  const { firstname, lastname, email, phone, avatar } = dataProfile?.user ?? {};
 
   const [
     logoutUser,

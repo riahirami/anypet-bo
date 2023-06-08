@@ -2,13 +2,14 @@ import React from "react";
 import {  useNavigate, useParams } from "react-router-dom";
 import { useEmailVerificationMutation } from "../../redux/api/authApi";
 import { Alert, Button } from "@mui/material";
+import { getToken } from "core/utils/functionHelpers";
 
 const EmailVerify = () => {
   const [verifyEmail, { data, isSuccess, isError, isLoading, error }] =
     useEmailVerificationMutation();
   const navigate = useNavigate();
 
-  const tokenValue = JSON.parse(localStorage.getItem("user") || "{}");
+  const tokenValue = getToken();
 
   const params = useParams();
 

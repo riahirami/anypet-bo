@@ -19,11 +19,11 @@ import ReactECharts from "echarts-for-react";
 import { Spinner } from "../../components/Spinner/spinner";
 import {Category} from "../../core/models/category.model";
 import { itemStats } from "../../core/models/itemStats.model";
-import { statusToString } from '../../core/services/helpers';
+import { getState, statusToString } from '../../core/services/helpers';
 
 
 const Stats = () => {
-  const [column, setColumn] = useState("");
+  const [column, setColumn] = useState("category_id");
   const {
     data: Statsdata,
     isLoading,
@@ -54,7 +54,7 @@ const Stats = () => {
         } else if (column == "category_id" && item?.category_id) {
           return changeIdtoCategory(item.category_id) || "Unknown category";
         } else {
-          return item?.city || "Unknown city";
+          return getState(item?.state) || "Unknown state";
         }
       }),
     },
@@ -88,7 +88,7 @@ const Stats = () => {
           };
         } else {
           return {
-            name: item?.city || "Unknown City",
+            name: getState(item?.state) || "Unknown state",
             value: item.total,
           };
         }
@@ -125,9 +125,9 @@ const Stats = () => {
               name: changeIdtoCategory(item?.category_id) || "loading",
               value: item?.total,
             };
-          } else if (item?.city) {
+          } else if (item?.state) {
             return {
-              name: item?.city || "loading",
+              name: getState(item?.state) || "loading",
               value: item.total,
             };
           }
@@ -139,7 +139,6 @@ const Stats = () => {
   const changeColumn = (event: React.ChangeEvent<HTMLInputElement>) => {
     setColumn(event.target.value);
     refetch();
-    console.log({ Statsdata });
   };
 
   return (
@@ -150,6 +149,8 @@ const Stats = () => {
         fullWidth
         variant="outlined"
         onChange={changeColumn}
+        defaultValue={column} 
+        
       >
         <MenuItem key="category_id" value="category_id">
           category
@@ -157,8 +158,8 @@ const Stats = () => {
         <MenuItem key="status" value="status">
           status
         </MenuItem>
-        <MenuItem key="city" value="city">
-          city
+        <MenuItem key="state" value="state">
+          state
         </MenuItem>
       </TextField>
       
@@ -184,7 +185,7 @@ const Stats = () => {
                       ? "Status"
                       : column === "category_id"
                       ? "Category"
-                      : "City"}
+                      : "State"}
                   </TableCell>
                   <TableCell>Total</TableCell>
                 </TableRow>
@@ -197,7 +198,7 @@ const Stats = () => {
                         ? statusToString(item.status)
                         : column === "category_id"
                         ? changeIdtoCategory(item.category_id)
-                        : item.city}
+                        : getState(item.state)}
                     </TableCell>
                     <TableCell>{item.total}</TableCell>
                   </TableRow>
