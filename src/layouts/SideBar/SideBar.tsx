@@ -245,6 +245,20 @@ export const Playground: React.FC<Props> = ({
                   </CustomLink>
                 </Menu>
 
+                <SubMenu
+                  label="Partners"
+                  icon={<Service />}
+                  
+                >
+                  <CustomLink to={PATHS.ADDPARTNER}>
+                    {" "}
+                    <MenuItem icon={<Calendar />}>Add Partners</MenuItem>
+                  </CustomLink>
+                  <CustomLink to={PATHS.LISTPARTNER}>
+                    {" "}
+                    <MenuItem icon={<Calendar />}>list Partners</MenuItem>
+                  </CustomLink>
+                </SubMenu>
               </Menu>
             </div>
             <SidebarFooter collapsed={collapsed} />

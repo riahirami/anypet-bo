@@ -28,6 +28,10 @@ export const PATHS = {
     NOtAUTHORIZED : '/notauthorized',
     USERDETAILS : '/user/details/:id',
 
+    ADDPARTNER : '/partner/create',
+    LISTPARTNER : '/partner/list',
+    SHOWPARTNER : '/partner/:id',
+
 
     MYRESERVATIONS : '/reservation/my'
 }
