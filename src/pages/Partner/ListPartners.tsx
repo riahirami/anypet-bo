@@ -3,6 +3,7 @@ import { useGetPartnersQuery, useDeletePartnerMutation } from 'redux/api/partner
 import { Partner } from "core/models/partner.model";
 import { PATHS } from 'routes/Path';
 import CustomLink from 'components/CustomLink/CustomLink';
+import CardPartnerComponent from 'components/CardPartner/CardPartnerComponent';
 
 const ListPartners = () => {
     const { data: partners, isSuccess, isLoading } = useGetPartnersQuery();
@@ -23,25 +24,8 @@ const ListPartners = () => {
 
             <Typography>ListPartners</Typography>
 
-            {isSuccess && partners?.data?.data?.map((partner: Partner["data"]) => (
 
-                <Grid>
-                    <CustomLink to={"/partner/" + partner?.id}>
-                        <Avatar src={partner?.logo}></Avatar>
-                    </CustomLink>
-                    <Typography>{partner?.name}</Typography>
-                    <Grid>
-                        <Button variant='contained' color='error' onClick={() => handleDeletePartner(partner.id || "")}
-                        >delete</Button>
-                        <CustomLink to={"/partner/update/" + partner?.id}>
-                            <Button variant="contained" color='info' >update</Button>
-                        </CustomLink>
-
-                    </Grid>
-
-                </Grid>
-            ))
-            }
+            <CardPartnerComponent partners={partners} isSuccess={isSuccess} handleDeletePartner={deletPartner} />
 
         </Grid >
     )

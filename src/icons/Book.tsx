@@ -7,11 +7,10 @@ export const Book: React.FC<IconProps> = ({ size = 18, ...rest }) => {
       xmlns="http://www.w3.org/2000/svg"
       width={size}
       height={size}
-      viewBox="0 0 24 24"
+      viewBox="0 0 16 16"
       fill="currentColor"
       {...rest}
     >
-      <path d="M21 18H6a1 1 0 0 0 0 2h15v2H6a3 3 0 0 1-3-3V4a2 2 0 0 1 2-2h16v16zm-5-9V7H8v2h8z"></path>
-    </svg>
+     <path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" fill="white"></path> <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2v9.255S12 12 8 12s-5 1.755-5 1.755V2a1 1 0 0 1 1-1h5.5v2z" fill="white"></path> </svg>
   );
 };

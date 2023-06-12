@@ -33,6 +33,8 @@ import { getMyAds } from "redux/slices/adsSlice";
 import { useGetAdsQuery, useGetMyAdsQuery } from "redux/api/adsApi";
 import { parametersListing } from "core/models/parametersListing.model";
 import { Service } from "icons/Service";
+import { User } from "icons/User";
+import { Message } from "icons/Message";
 import CustomLink from "components/CustomLink/CustomLink"
 
 export const Playground: React.FC<Props> = ({
@@ -131,142 +133,22 @@ export const Playground: React.FC<Props> = ({
                     </MenuItem></CustomLink>
                 </SubMenu>
                 <CustomLink to={PATHS.CONVERSATIONS}>
-                  <MenuItem icon={<Service />}>
-                    {" "}
+                  <MenuItem icon={<Message  />}>
+                                        {" "}
                     Conversations
                   </MenuItem></CustomLink>
 
-                <CustomLink to={PATHS.MYRESERVATIONS}>
-                  <MenuItem icon={<Calendar />}> Reservations</MenuItem></CustomLink>
-              </Menu>
-            </div>
-            <SidebarFooter collapsed={collapsed} />
+              <CustomLink to={PATHS.MYRESERVATIONS}>
+                <MenuItem icon={<Calendar />}> Reservations</MenuItem></CustomLink>
+            </Menu>
           </div>
-        </Sidebar>
+          <SidebarFooter collapsed={collapsed} />
       </div>
+        </Sidebar >
+      </div >
     );
 
-  if (currentUser?.user?.role_id === 2)
-    return (
-      <div
-        style={{
-          display: "flex",
-          height: "100vh",
-        }}
-      >
-        <Sidebar
-          image="https://demos.themeselection.com/chameleon-admin-template/app-assets/images/backgrounds/04.jpg"
-          breakPoint="lg"
-          backgroundColor={hexToRgba(
-            themes[theme].sidebar.backgroundColor,
-            hasImage == "false" ? 0.7 : 1
-          )}
-          rootStyles={{
-            color: themes[theme].sidebar.color,
-          }}
-        >
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <SidebarHeader
-              style={{ marginBottom: "24px", marginTop: "16px" }}
-            />
-            <div style={{ flex: 1, marginBottom: "32px" }}>
-              <Menu menuItemStyles={menuItemStyles}>
-                <SubMenu label="Statistics" icon={<BarChart />}>
-                  <MenuItem>
-                    <CustomLink to={PATHS.StatsHome}> Home</CustomLink>
-                  </MenuItem>
-                  <MenuItem>
-                    <CustomLink to={PATHS.Stats}> Advertises</CustomLink>
-                  </MenuItem>
-                </SubMenu>
-
-                <CustomLink to={PATHS.PROFILE}>
-                  {" "}
-                  <MenuItem icon={<Book />}>Profil</MenuItem>
-                </CustomLink>
-                <SubMenu
-                  label="Advertise"
-                  icon={<Diamond />}
-                  suffix={
-                    <Badge variant="danger" shape="circle">
-                      {DataAds?.data?.length}
-                    </Badge>
-                  }
-                >
-                  <MenuItem>
-                    {" "}
-                    <CustomLink to={PATHS.Advertise}>List advertises</CustomLink>
-                  </MenuItem>
-                  <MenuItem>
-                    {" "}
-                    <CustomLink to={PATHS.AddAdvertise}>Add advertise</CustomLink>
-                  </MenuItem>
-                  <MenuItem
-                    suffix={
-                      <Badge variant="danger" shape="circle">
-                        {DataAds?.data?.length}
-                      </Badge>
-                    }
-                  >
-                    {" "}
-                    {/* TODO :  change the badge value*/}
-                    <CustomLink to={PATHS.ManageAds}>Advertises requests </CustomLink>
-                  </MenuItem>
-                </SubMenu>
-                <CustomLink to={PATHS.MYRESERVATIONS}>
-                  <MenuItem icon={<Calendar />}> Reservations</MenuItem></CustomLink>
-                <SubMenu label="Categories" icon={<Global />}>
-                  <MenuItem>
-                    {" "}
-                    <CustomLink to={PATHS.Categories}>List categories</CustomLink>
-                  </MenuItem>
-                  <MenuItem>
-                    {" "}
-                    <CustomLink to={PATHS.AddCategories}>Add categories</CustomLink>
-                  </MenuItem>
-                </SubMenu>
-                <SubMenu
-                  label="Messages"
-                  icon={<Service />}
-                  suffix={<Badge variant="success">New</Badge>}
-                >
-                  <MenuItem>
-                    {" "}
-                    <CustomLink to={PATHS.CONVERSATIONS}> Conversations</CustomLink>
-                  </MenuItem>
-                  <CustomLink to={PATHS.MYRESERVATIONS}>
-                    <MenuItem> Reservations</MenuItem></CustomLink>
-                </SubMenu>
-
-                <Menu menuItemStyles={menuItemStyles}>
-                  <CustomLink to={PATHS.Users}>
-                    {" "}
-                    <MenuItem icon={<Calendar />}>Users</MenuItem>
-                  </CustomLink>
-                </Menu>
-
-                <SubMenu
-                  label="Partners"
-                  icon={<Service />}
-                  
-                >
-                  <CustomLink to={PATHS.ADDPARTNER}>
-                    {" "}
-                    <MenuItem icon={<Calendar />}>Add Partners</MenuItem>
-                  </CustomLink>
-                  <CustomLink to={PATHS.LISTPARTNER}>
-                    {" "}
-                    <MenuItem icon={<Calendar />}>list Partners</MenuItem>
-                  </CustomLink>
-                </SubMenu>
-              </Menu>
-            </div>
-            <SidebarFooter collapsed={collapsed} />
-          </div>
-        </Sidebar>
-      </div>
-    );
-
+if (currentUser?.user?.role_id === 2)
   return (
     <div
       style={{
@@ -286,9 +168,132 @@ export const Playground: React.FC<Props> = ({
         }}
       >
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <Spinner />
+          <SidebarHeader
+            style={{ marginBottom: "24px", marginTop: "16px" }}
+          />
+          <div style={{ flex: 1, marginBottom: "32px" }}>
+            <Menu menuItemStyles={menuItemStyles}>
+              <SubMenu label="Statistics" icon={<BarChart />}>
+                <MenuItem>
+                  <CustomLink to={PATHS.StatsHome}> Home</CustomLink>
+                </MenuItem>
+                <MenuItem>
+                  <CustomLink to={PATHS.Stats}> Advertises</CustomLink>
+                </MenuItem>
+              </SubMenu>
+
+              <CustomLink to={PATHS.PROFILE}>
+                {" "}
+                <MenuItem icon={<Book />}>Profil</MenuItem>
+              </CustomLink>
+              <SubMenu
+                label="Advertise"
+                icon={<Diamond />}
+                suffix={
+                  <Badge variant="danger" shape="circle">
+                    {DataAds?.data?.length}
+                  </Badge>
+                }
+              >
+                <MenuItem>
+                  {" "}
+                  <CustomLink to={PATHS.Advertise}>List advertises</CustomLink>
+                </MenuItem>
+                <MenuItem>
+                  {" "}
+                  <CustomLink to={PATHS.AddAdvertise}>Add advertise</CustomLink>
+                </MenuItem>
+                <MenuItem
+                  suffix={
+                    <Badge variant="danger" shape="circle">
+                      {DataAds?.data?.length}
+                    </Badge>
+                  }
+                >
+                  {" "}
+                  {/* TODO :  change the badge value*/}
+                  <CustomLink to={PATHS.ManageAds}>Advertises requests </CustomLink>
+                </MenuItem>
+              </SubMenu>
+              <CustomLink to={PATHS.MYRESERVATIONS}>
+                <MenuItem icon={<Calendar />}> Reservations</MenuItem></CustomLink>
+              <SubMenu label="Categories" icon={<Global />}>
+                <MenuItem>
+                  {" "}
+                  <CustomLink to={PATHS.Categories}>List categories</CustomLink>
+                </MenuItem>
+                <MenuItem>
+                  {" "}
+                  <CustomLink to={PATHS.AddCategories}>Add categories</CustomLink>
+                </MenuItem>
+              </SubMenu>
+              <SubMenu
+                label="Messages"
+                icon={<Message />}
+                suffix={<Badge variant="success">New</Badge>}
+              >
+                <MenuItem>
+                  {" "}
+                  <CustomLink to={PATHS.CONVERSATIONS}> Conversations</CustomLink>
+                </MenuItem>
+                <MenuItem>
+                  {" "}
+                  <CustomLink to={PATHS.CONVERSATIONS}> Reclamations</CustomLink>
+                </MenuItem>
+
+              </SubMenu>
+
+              <Menu menuItemStyles={menuItemStyles}>
+                <CustomLink to={PATHS.Users}>
+                  {" "}
+                  <MenuItem icon={<User />}>Users</MenuItem>
+                </CustomLink>
+              </Menu>
+
+              <SubMenu
+                label="Partners"
+                icon={<Service />}
+
+              >
+                <CustomLink to={PATHS.ADDPARTNER}>
+                  {" "}
+                  <MenuItem icon={<Calendar />}>Add Partners</MenuItem>
+                </CustomLink>
+                <CustomLink to={PATHS.LISTPARTNER}>
+                  {" "}
+                  <MenuItem icon={<Calendar />}>list Partners</MenuItem>
+                </CustomLink>
+              </SubMenu>
+            </Menu>
+          </div>
+          <SidebarFooter collapsed={collapsed} />
         </div>
       </Sidebar>
     </div>
   );
+
+return (
+  <div
+    style={{
+      display: "flex",
+      height: "100vh",
+    }}
+  >
+    <Sidebar
+      image="https://demos.themeselection.com/chameleon-admin-template/app-assets/images/backgrounds/04.jpg"
+      breakPoint="lg"
+      backgroundColor={hexToRgba(
+        themes[theme].sidebar.backgroundColor,
+        hasImage == "false" ? 0.7 : 1
+      )}
+      rootStyles={{
+        color: themes[theme].sidebar.color,
+      }}
+    >
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <Spinner />
+      </div>
+    </Sidebar>
+  </div>
+);
 };

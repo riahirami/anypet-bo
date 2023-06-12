@@ -61,7 +61,7 @@ export const partnerApi = createApi({
             },
             invalidatesTags: ["Partner"],
         }),
-        getPartnerById: builder.query<Partner, number | string | undefined>({
+        getPartnerById: builder.query({
             query: (id: any) => {
                 return {
                     url: endpoints.PARTNERS + `${id}`,

@@ -65,7 +65,7 @@ const Home = () => {
               <StatBox
                 title="Waiting Messages "
                 subtitle="Total"
-                value={numberWaitingAds}
+                value={"5"}
                 icon={<MarkEmailUnreadOutlinedIcon />}
                 backgroundCol="linear-gradient(45deg, rgb(77 121 226) 0%, rgb(90 225 255) 100%)"
                 details={PATHS.CONVERSATIONS}
@@ -89,7 +89,7 @@ const Home = () => {
               <StatBox
                 title="Waiting reservations"
                 subtitle="Total"
-                value={numberWaitingAds}
+                value={"2"}
                 icon={<TimerOutlinedIcon />}
                 backgroundCol="#0b2948"
                 details={PATHS.MYRESERVATIONS}

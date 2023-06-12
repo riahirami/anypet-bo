@@ -10,6 +10,8 @@ import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/system";
 import Spinner from "../components/Spinner/spinner";
 
+import SettingsIcon from '@mui/icons-material/Settings';
+
 import {
   Avatar,
   Button,
@@ -47,7 +49,6 @@ const theme = createTheme();
 const Signin = () => {
   const [showModal, setShowModal] = useState(false);
   const [descriptionModal, setDescriptionModal] = useState("");
-  const authUser = useAuthentication();
 
   const [formValue, setFormValue] = useState(initialState);
   const { firstname, lastname, email, password, phone, address, avatar } =
@@ -62,6 +63,7 @@ const Signin = () => {
       isError: isLoginError,
       error: loginError,
       isLoading: isLoginLoading,
+      isSuccess
     },
   ] = useLoginUserMutation();
 
@@ -92,6 +94,7 @@ const Signin = () => {
       navigate('/stats/home');
 
     }
+   
   };
 
   const [
@@ -114,8 +117,6 @@ const Signin = () => {
     }
   };
 
-  if (isLoginError)
-    return <AlertComponent title={loginError} severity="error" />;
 
   if (showModal)
     return (
@@ -125,85 +126,109 @@ const Signin = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
-          <Box component="form" noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              onChange={handleChangeForm}
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              onChange={handleChangeForm}
-              autoComplete="current-password"
-            />
-            <Grid container>
-              <Grid item>
-                <Button
-                  type="button"
-                  onClick={handleSubmitForgotPassword}
-                  variant="text"
-                  disabled={forgotLoading}
-                >
-                  Forgot password?
-                </Button>
-              </Grid>
-            </Grid>
-            <Button
-              type="button"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={handleLogin}
-              disabled={isLoginLoading}
-            >
-              Sign In
-            </Button>
 
-            <Divider>
-              <Chip label="Don't have an account ?" />
-            </Divider>
-            <Button
-              href="/signup"
-              type="button"
-              fullWidth
-              sx={{ mt: 3, mb: 2 }}
-              variant="contained"
-            >
-              {"Sign Up"}
-            </Button>
-            <Grid item></Grid>
-          </Box>
+    {(!isSuccess && isLoginLoading) && <AlertComponent title={"Error login ! Check your email & your password"} severity={"error"} />}
+
+    <Container component="main" maxWidth="xs">
+      <Grid container >
+
+        <Grid item>
+          <img
+            src={process.env.PUBLIC_URL + "/illustrations/peoplehugpets.jpg"}
+            alt="Mpeople hug pets"
+            style={{ width: "100%", position: "absolute",left: "0px", bottom: "0px" }}
+          />
+        </Grid>
+      </Grid>
+
+
+      <CssBaseline />
+      <Box
+        sx={{
+          marginTop: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          background: "aliceblue",
+          position: "relative",
+          padding: "50px",
+          width: "501px",
+          border: "2px solid #048694"
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: "#fd521c" }}>
+        <SettingsIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+        Administrator | Sign in
+        </Typography>
+        <Box component="form" noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            onChange={handleChangeForm}
+            autoFocus
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            onChange={handleChangeForm}
+            autoComplete="current-password"
+          />
+          <Grid container>
+            <Grid item>
+              <Button
+                type="button"
+                onClick={handleSubmitForgotPassword}
+                variant="text"
+                disabled={forgotLoading}
+              >
+                Forget password?
+              </Button>
+            </Grid>
+          </Grid>
+          <Button
+            type="button"
+            fullWidth
+            variant="contained"
+
+            sx={{ mt: 3, mb: 2, bgcolor: "#fd521c"}}
+                        onClick={handleLogin}
+            disabled={isLoginLoading}
+          >
+            Sign In
+          </Button>
+
+          {/* <Divider>
+            <Chip label="Don't have an account ?" />
+          </Divider>
+          <Button
+            href="/signup"
+            type="button"
+            fullWidth
+            sx={{ mt: 3, mb: 2, bgcolor: "#fd521c"  }}
+            variant="contained"
+          >
+            {"Sign Up"}
+          </Button> */}
+          <Grid item></Grid>
         </Box>
-      </Container>
-    </ThemeProvider>
+
+
+      </Box>
+
+    </Container>
+  </ThemeProvider>
   );
 };
 

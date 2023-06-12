@@ -81,7 +81,7 @@ const UserReservations = () => {
                                                 Advertise : {item?.advertisement?.title}
                                             </Typography>
                                         </CustomLink>
-                                        <Typography >
+                                        <Typography noWrap>
                                             Message : {item?.message}
                                         </Typography>
                                         <Typography >

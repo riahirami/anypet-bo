@@ -36,7 +36,7 @@ import { message } from "core/constant/message"
 import AlertComponent from "components/Alert/Alert";
 
 
-function AdCard({ adData,user }: AdCardProps) {
+function AdCard({ adData, user }: AdCardProps) {
   const { data: CategoryData, refetch: RefetchCategory } =
     useGetAllCategoriesQuery(100);
   const [setFavorit, { data: datasetFavoris, isSuccess: successFavoris }] =
@@ -126,12 +126,12 @@ function AdCard({ adData,user }: AdCardProps) {
 
   return (
     <>
-       {successChangeStatus && (
-                <AlertComponent
-                    title={message.ADVERTISESTATUSCHANGED}
-                    severity="success"
-                />
-            )}
+      {successChangeStatus && (
+        <AlertComponent
+          title={message.ADVERTISESTATUSCHANGED}
+          severity="success"
+        />
+      )}
       <Card key={adData.id}>
         <CardHeader
           avatar={
@@ -246,10 +246,10 @@ function AdCard({ adData,user }: AdCardProps) {
                 </IconButton>
               </CustomLink>
             </Grid>
-            {currentUser.user.id !== adData.user_id  && <Grid item xs={12} sm={4} md={3} lg={3}>
+            {currentUser.user.id !== adData.user_id && <Grid item xs={12} sm={4} md={3} lg={3}>
               <CustomLink to={"/users/messages/" + adData?.user_id}>
                 <IconButton aria-label="send">
-                  <ChatOutlinedIcon  />
+                  <ChatOutlinedIcon />
                 </IconButton>
               </CustomLink>
             </Grid>}
@@ -259,37 +259,87 @@ function AdCard({ adData,user }: AdCardProps) {
 
 
         </CardActions>
-        {currentUser.user.role_id == "2" && <Grid container style={{ padding: "5px" }}>
-          <Grid item key={adData.id} xs={12} sm={4} md={4} lg={4} >
-            <Button
-              variant="contained"
-              color="warning"
-              disabled={loadingUpdateStatus}
-              onClick={() =>
-                handleStatusChange(adData.id, StatusOption.Waiting)
-              }
-            >Waiting</Button>
-          </Grid>
-          <Grid item key={adData.id} xs={12} sm={4} md={4} lg={4} >
-            <Button
-              variant="contained"
-              color="success"
-              disabled={loadingUpdateStatus}
-              onClick={() =>
-                handleStatusChange(adData.id, StatusOption.Validated)
-              }
-            >Valide</Button>
-          </Grid>
-          <Grid item key={adData.id} xs={12} sm={4} md={4} lg={4} >
-            <Button
-              variant="contained"
-              color="error"
-              disabled={loadingUpdateStatus}
-              onClick={() =>
-                handleStatusChange(adData.id, StatusOption.Canceled)
-              }
-            >Cancel</Button>
-          </Grid>
+        {currentUser.user.role_id == "2" && <Grid container style={{ padding: "5px", display: "flex", justifyContent: "space-around" }}>
+
+
+          {adData.status == StatusOption.Waiting && (
+            <>
+              <Grid item key={adData.id}>
+
+                <Button
+                  variant="contained"
+                  color="error"
+                  disabled={loadingUpdateStatus}
+                  onClick={() => handleStatusChange(adData.id, StatusOption.Canceled)}
+                >
+                  Cancel
+                </Button>
+              </Grid>
+              <Grid item key={adData.id}>
+
+                <Button
+                  variant="contained"
+                  color="success"
+                  disabled={loadingUpdateStatus}
+                  onClick={() => handleStatusChange(adData.id, StatusOption.Validated)}
+                >
+                  Valide
+                </Button>
+              </Grid>
+            </>
+          )}
+
+          {adData.status == StatusOption.Validated && (
+            <>
+              <Grid item key={adData.id}>
+                <Button
+                  variant="contained"
+                  color="warning"
+                  disabled={loadingUpdateStatus}
+                  onClick={() => handleStatusChange(adData.id, StatusOption.Waiting)}
+                >
+                  Waiting
+                </Button>
+              </Grid>
+              <Grid item key={adData.id}>
+
+                <Button
+                  variant="contained"
+                  color="error"
+                  disabled={loadingUpdateStatus}
+                  onClick={() => handleStatusChange(adData.id, StatusOption.Canceled)}
+                >
+                  Cancel
+                </Button>
+              </Grid>
+            </>
+          )}
+          {adData.status == StatusOption.Canceled && (
+            <>
+              <Grid item key={adData.id}>
+                <Button
+                  variant="contained"
+                  color="success"
+                  disabled={loadingUpdateStatus}
+                  onClick={() => handleStatusChange(adData.id, StatusOption.Validated)}
+                >
+                  Valide
+                </Button>
+              </Grid>
+              <Grid item key={adData.id}>
+
+                <Button
+                  variant="contained"
+                  color="warning"
+                  disabled={loadingUpdateStatus}
+                  onClick={() => handleStatusChange(adData.id, StatusOption.Waiting)}
+                >
+                  Waiting
+                </Button>
+              </Grid>
+            </>
+          )}
+
         </Grid>}
       </Card>
     </>

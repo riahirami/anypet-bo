@@ -38,7 +38,7 @@ const partnerSchema = Yup.object().shape({
 const AddPartner = () => {
     const [showModal, setShowModal] = useState(false);
     const [mediaValue, setMediaValue] = useState<File | null>(null);
-    const item: Partner["data"] = {
+    const item: Partner= {
         name: "",
         description: "",
         address: "",

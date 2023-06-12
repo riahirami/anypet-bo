@@ -41,14 +41,14 @@ export const getNotificationMessage = (notification: any): string => {
     return "An ad as one of the categories that you interest has been added ";
   }
   if (notification.type === "App\\Notifications\\AdStatusUpdated") {
-    return "The status of your ad " + notification?.data?.title + " has been " + statusToString(notification?.data?.status);
+    return "The status of your ad " + notification?.data?.title + " has been changed to " + statusToString(notification?.data?.status);
   }
   if (notification.type === "App\\Notifications\\RoleChangedNotification") {
     return "Your role on AnyPet has been changed to " + notification?.data?.role;
   }
-  if (notification.type === "App\\Notifications\\MessageNotification") {
-    return "You have a new message from " + notification?.data?.sender;
-  }
+  // if (notification.type === "App\\Notifications\\MessageNotification") {
+  //   return "You have a new message from " + notification?.data?.sender;
+  // }
   if (notification.type === "App\\Notifications\\ReservationNotification") {
     return "You get an reservation request for the advertisement  " + notification?.data?.ad + " from user"+ notification?.data?.sender?.firstname     ;
   }
