@@ -53,7 +53,7 @@ export const endpoints = {
     PARTNERS : "partner/",
     GETPARTNERS : "partner/",
     ADDPARTNERS : "partner/",
-    UPDATEPARTNERS : "partner/",
+    UPDATEPARTNERS : "partner/update/",
     SHOWPARTNER : "partner/",
     DELETEPARTNERS : "partner/",
 

@@ -22,7 +22,7 @@ const CardPartnerComponent = ({
     <Grid container >
         {isSuccess &&
             partners?.data?.data?.map((partner: Partner) => (
-                <Grid item md={3} xs={12}>
+                <Grid item xs={12} sm={6}  md={3} lg={3}>
 
                     <CardContainer key={partner.id}>
                         <CustomLink to={"/partner/" + partner?.id}>
@@ -31,19 +31,21 @@ const CardPartnerComponent = ({
                         <StyledTypography>{partner?.name}</StyledTypography>
                         <ActionsContainer style={{ display: "flex", justifyContent: "space-evenly" }}>
 
+                        <CustomLink to={"/partner/update/" + partner?.id}>
+                                <Button size="small" variant="contained" color="info">
+                                    Update
+                                </Button>
+                            </CustomLink>
+
                             <Button size="small"
                                 variant="contained"
                                 color="error"
                                 onClick={() => handleDeletePartner(partner.id || "")}
                             >
-                                delete
+                                Delete
                             </Button>
 
-                            <CustomLink to={"/partner/update/" + partner?.id}>
-                                <Button size="small" variant="contained" color="info">
-                                    update
-                                </Button>
-                            </CustomLink>
+                      
                         </ActionsContainer>
                     </CardContainer>
                 </Grid>

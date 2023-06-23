@@ -93,27 +93,47 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
           <MenuIcon />
         </Button>
       </SidebarHeaderButton>
-      <Grid>
-        <StyledLogo rtl={rtl}>AnyPet</StyledLogo>
-      </Grid>
-      <StyledSidebarHeader {...rest}>
-        <Grid style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Grid style={{ marginTop: "20px", marginBottom: "20px" }}>
-            <Avatar
-              alt="Avatar"
-              src={avatar}
-              sx={{ width: 100, height: 100 }}
-            />
-          </Grid>
-          <Grid style={{ marginTop: "20px", marginBottom: "20px" }}>
-            <Typography variant="subtitle1" fontWeight={700} color="#0098e5">
-              {firstname} {lastname}
-            </Typography>
+      {collapsed ?
+        <StyledSidebarHeader {...rest}>
+          <Grid style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <Grid style={{ marginTop: "50px", marginBottom: "20px" }}>
+              <Avatar
+                variant={"rounded"}
+                alt="Avatar"
+                src={avatar}
+                sx={{ width: 50, height: 50 }} />
+            </Grid>
+            <Grid style={{ marginTop: "20px", marginBottom: "20px" }}>
+              <Typography variant="subtitle2" fontWeight={700} color="#0098e5">
+                {lastname}
+              </Typography>
 
+            </Grid>
           </Grid>
+
+        </StyledSidebarHeader>
+        : <><Grid>
+          <StyledLogo>AnyPet</StyledLogo>
         </Grid>
+          <StyledSidebarHeader {...rest}>
+            <Grid style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <Grid style={{ marginTop: "20px", marginBottom: "20px" }}>
+                <Avatar
+                  alt="Avatar"
+                  src={avatar}
+                  sx={{ width: 100, height: 100 }}
+                />
+              </Grid>
+              <Grid style={{ marginTop: "20px", marginBottom: "20px" }}>
+                <Typography variant="subtitle1" fontWeight={700} color="#0098e5">
+                  {firstname} {lastname}
+                </Typography>
 
-      </StyledSidebarHeader>
+              </Grid>
+            </Grid>
+
+          </StyledSidebarHeader> </>
+      }
     </>
   );
 };

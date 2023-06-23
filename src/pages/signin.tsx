@@ -127,22 +127,22 @@ const Signin = () => {
   return (
     <ThemeProvider theme={theme}>
 
-    {(!isSuccess && isLoginLoading) && <AlertComponent title={"Error login ! Check your email & your password"} severity={"error"} />}
+    {isLoginError && <AlertComponent title={"Error login ! Check your email & your password"} severity={"error"} />}
 
-    <Container component="main" maxWidth="xs">
+    <Container component="main" >
       <Grid container >
 
         <Grid item>
           <img
             src={process.env.PUBLIC_URL + "/illustrations/peoplehugpets.jpg"}
-            alt="Mpeople hug pets"
-            style={{ width: "100%", position: "absolute",left: "0px", bottom: "0px" }}
+            alt="sign in background"
+            style={{ width: "100%", position: "absolute",left: "0px",right:"0px",margin:"auto", bottom: "0px" }}
           />
         </Grid>
       </Grid>
 
 
-      <CssBaseline />
+      
       <Box
         sx={{
           marginTop: 8,
@@ -152,8 +152,10 @@ const Signin = () => {
           background: "aliceblue",
           position: "relative",
           padding: "50px",
-          width: "501px",
-          border: "2px solid #048694"
+          width: "400px",
+          border: "2px solid #048694",
+          marginLeft:"auto",
+          marginRight:"auto"
         }}
       >
         <Avatar sx={{ m: 1, bgcolor: "#fd521c" }}>
@@ -226,7 +228,7 @@ const Signin = () => {
 
 
       </Box>
-
+      <CssBaseline />
     </Container>
   </ThemeProvider>
   );

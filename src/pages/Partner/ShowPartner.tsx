@@ -20,7 +20,7 @@ const ShowPartner = () => {
     return (
 
         <StyledGlobalGrid  >
-            {/* <StyledGridMedia> */}
+            <StyledGridMedia>
 
                 {isSuccess &&
                     partner?.media?.map((media: any) => {
@@ -38,7 +38,7 @@ const ShowPartner = () => {
                             </Grid>
                         );
                     })}
-            {/* </StyledGridMedia> */}
+            </StyledGridMedia>
             <Divider>
 
                 <StyledGridLogo container>

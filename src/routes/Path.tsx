@@ -31,6 +31,7 @@ export const PATHS = {
     ADDPARTNER : '/partner/create',
     LISTPARTNER : '/partner/list',
     SHOWPARTNER : '/partner/:id',
+    UPDATEPARTNER : '/partner/update/:id',
 
 
     MYRESERVATIONS : '/reservation/my'

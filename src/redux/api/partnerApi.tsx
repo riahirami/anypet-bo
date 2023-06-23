@@ -33,7 +33,7 @@ export const partnerApi = createApi({
             invalidatesTags: ["Partner"],
         }),
         updatePartner: builder.mutation({
-            query: ({ name, description, address, link, contact, media }) => {
+            query: ({ id,name, description, address, link, contact, media }) => {
                 const formData = new FormData();
                 formData.append("name", name);
                 formData.append("description", description);
@@ -44,7 +44,7 @@ export const partnerApi = createApi({
                     formData.append("media[]", media[i]);
                 }
                 return {
-                    url: endpoints.PARTNERS,
+                    url: endpoints.UPDATEPARTNERS +id,
                     method: "put",
                     body: formData,
                 };
@@ -74,5 +74,5 @@ export const partnerApi = createApi({
 });
 
 export const {
-    useAddPartnerMutation, useDeletePartnerMutation, useGetPartnerByIdQuery, useGetPartnersQuery
+    useAddPartnerMutation, useDeletePartnerMutation, useGetPartnerByIdQuery, useGetPartnersQuery, useUpdatePartnerMutation
 } = partnerApi;

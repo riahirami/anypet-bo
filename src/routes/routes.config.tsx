@@ -31,6 +31,7 @@ import UserReservations from "pages/Users/Reservations/UserReservations";
 import AddPartner from "pages/Partner/AddPartner";
 import ListPartners from "pages/Partner/ListPartners";
 import ShowPartner from "pages/Partner/ShowPartner";
+import UpdatePartner from "pages/Partner/UpdatePartner";
 
 function ProtectedRoute({
   children,
@@ -57,6 +58,10 @@ function ProtectedRoute({
 
 const RoutesConfig: RouteObject[] = [
   {
+    path: PATHS.UPDATEPARTNER,
+    element: <UpdatePartner />,
+  },
+  {
     path: PATHS.SHOWPARTNER,
     element: <ShowPartner />,
   },
@@ -64,11 +69,11 @@ const RoutesConfig: RouteObject[] = [
     path: PATHS.LISTPARTNER,
     element: <ListPartners />,
   },
-   {
+  {
     path: PATHS.ADDPARTNER,
     element: <AddPartner />,
   },
-   {
+  {
     path: PATHS.MYRESERVATIONS,
     element: <UserReservations />,
   },

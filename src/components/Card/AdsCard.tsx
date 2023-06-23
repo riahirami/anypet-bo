@@ -155,10 +155,10 @@ function AdCard({ adData, user }: AdCardProps) {
                       open={Boolean(menuAnchor)}
                       onClose={handleMenuClose}
                     >
-                      <MenuItem onClick={handleDelete}>Delete</MenuItem>
                       <MenuItem>
                         <CustomLink to={"/advertise/update/" + adData.id}>Update</CustomLink>
                       </MenuItem>
+                      <MenuItem onClick={handleDelete}>Delete</MenuItem>
                     </Menu>
                   </>
                 )}
@@ -174,10 +174,10 @@ function AdCard({ adData, user }: AdCardProps) {
               <Grid
                 item
                 key={adData?.media?.[0].id}
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
+                // xs={12}
+                // sm={12}
+                // md={12}
+                // lg={12}
               >
                 <CardMedia
                   component="img"
@@ -190,17 +190,17 @@ function AdCard({ adData, user }: AdCardProps) {
               </Grid>
             )}
           </Grid>
-          <Typography variant="subtitle1" gutterBottom>
+          <Typography variant="subtitle1" noWrap>
             {adData.title}
           </Typography>
-          <Typography variant="body2" gutterBottom>
+        <Typography variant="body2" noWrap>
             Category :{" "}
             <CustomLink to={`/advertise/category/${adData?.category_id}`}>
               {changeIdtoCategory(adData?.category_id)}
             </CustomLink>
           </Typography>
-          <Typography variant="body1" color="text.secondary" noWrap>
-            {adData.description}
+           <Typography  noWrap>
+            {/* {adData.description} */}
           </Typography>
 
           {(currentUser.user.id === adData.user_id ||
@@ -227,7 +227,7 @@ function AdCard({ adData, user }: AdCardProps) {
         </CardContent>
         <CardActions disableSpacing>
           <Grid container justifyContent="space-between">
-            <Grid item xs={12} sm={4} md={3} lg={3}>
+            <Grid item xs={4} sm={4} md={3} lg={3}>
               <IconButton
                 aria-label="add to favorites"
                 onClick={() => setfavorit(adData.id)}
@@ -235,7 +235,7 @@ function AdCard({ adData, user }: AdCardProps) {
                 {isFavorite ? <FavoriteIcon color="error" /> : <FavoriteIcon />}
               </IconButton>
             </Grid>
-            <Grid item xs={12} sm={4} md={3} lg={3}>
+            <Grid item xs={4} sm={4} md={3} lg={3}>
               <CustomLink to={"/advertise/" + adData.id}>
                 <IconButton
                   color="default"
@@ -246,7 +246,7 @@ function AdCard({ adData, user }: AdCardProps) {
                 </IconButton>
               </CustomLink>
             </Grid>
-            {currentUser.user.id !== adData.user_id && <Grid item xs={12} sm={4} md={3} lg={3}>
+            {currentUser.user.id !== adData.user_id && <Grid item xs={4} sm={4} md={3} lg={3}>
               <CustomLink to={"/users/messages/" + adData?.user_id}>
                 <IconButton aria-label="send">
                   <ChatOutlinedIcon />
@@ -255,10 +255,11 @@ function AdCard({ adData, user }: AdCardProps) {
             </Grid>}
           </Grid>
 
-          {/* admin actions */}
+          
 
 
         </CardActions>
+        
         {currentUser.user.role_id == "2" && <Grid container style={{ padding: "5px", display: "flex", justifyContent: "space-around" }}>
 
 

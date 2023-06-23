@@ -9,7 +9,6 @@ const ListPartners = () => {
     const { data: partners, isSuccess, isLoading } = useGetPartnersQuery();
     const [deletPartner] = useDeletePartnerMutation();
 
-    console.log({ partners })
 
     function handleDeletePartner(id: string) {
         deletPartner(id)
