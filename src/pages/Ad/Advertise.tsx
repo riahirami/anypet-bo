@@ -151,7 +151,7 @@ const Advertise = () => {
           </Box>
         </Grid>
 
-        <Grid item xs={4} sm={4} md={4} style={{margin:"auto",display:"flex",justifyContent:"flex-end"}} >
+        <Grid item xs={12} sm={4} md={4} style={{margin:"auto",display:"flex",justifyContent:"flex-end"}} >
           <PerPageSelect
             defaultValue={parameters.perPage}
             value={parameters.perPage}

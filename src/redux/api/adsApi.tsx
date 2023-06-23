@@ -153,6 +153,7 @@ export const adsApi = createApi({
         url: endpoints.changeStatusAds + "?" + generateQueryParams(parameters),
         method: "get",
       }),
+      invalidatesTags: ['Ad'],
     }),
 
     getAdsStats: builder.query({

@@ -1,34 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { Route, Navigate } from "react-router-dom";
-import { useAppDispatch } from "redux/hooks";
-import { setUser } from "redux/slices/authSlice";
+import Signin from "pages/signin";
+import Signup from "pages/signup";
+import {  useLocation } from "react-router-dom";
+import { PATHS } from "routes/Path";
 
 interface AuthGuardProps {
-  element: React.ReactNode;
+  children: React.ReactNode;
 }
+const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
+  const authUser = localStorage.getItem("user");
+  const location = useLocation();
+  const showSignup = location.pathname == PATHS.SIGNUP;
 
-const AuthGuard: React.FC<AuthGuardProps> = ({ element }) => {
-  const dispatch = useAppDispatch();
-  const [isAuth, setIsAuth] = useState(false);
-
-  useEffect(() => {
-    try {
-      const userData = localStorage.getItem("user");
-      if (userData) {
-        const user = JSON.parse(userData);
-        dispatch(setUser(user));
-        setIsAuth(true);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
-  if (isAuth) {
-    return <>{element}</>;
+  if (authUser) {
+    return <>{children}</>;
   } else {
-    return <Navigate to="/signin" />;
+    return showSignup ? <Signup /> : <Signin />;
   }
 };
+
+
 
 export default AuthGuard;

@@ -28,6 +28,10 @@ import AllNotifications from "pages/Users/AllNotifications";
 import Messages from "pages/Users/Messages/Messages";
 import Conversations from "pages/Users/Conversations/Conversations";
 import UserReservations from "pages/Users/Reservations/UserReservations";
+import AddPartner from "pages/Partner/AddPartner";
+import ListPartners from "pages/Partner/ListPartners";
+import ShowPartner from "pages/Partner/ShowPartner";
+import UpdatePartner from "pages/Partner/UpdatePartner";
 
 function ProtectedRoute({
   children,
@@ -38,14 +42,10 @@ function ProtectedRoute({
   allowedRoles: number[];
 }) {
   const user = getCurrentUser();
-
   // const userAuth = useSelector((state: any) => state.auth);
   const currentUser = user;
 
-
-
   const isAuthorized = allowedRoles.includes(currentUser?.user?.role_id ?? 1);
-
 
   return currentUser && isAuthorized ? (
     <>
@@ -57,6 +57,22 @@ function ProtectedRoute({
 }
 
 const RoutesConfig: RouteObject[] = [
+  {
+    path: PATHS.UPDATEPARTNER,
+    element: <UpdatePartner />,
+  },
+  {
+    path: PATHS.SHOWPARTNER,
+    element: <ShowPartner />,
+  },
+  {
+    path: PATHS.LISTPARTNER,
+    element: <ListPartners />,
+  },
+  {
+    path: PATHS.ADDPARTNER,
+    element: <AddPartner />,
+  },
   {
     path: PATHS.MYRESERVATIONS,
     element: <UserReservations />,

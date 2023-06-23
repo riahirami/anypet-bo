@@ -6,7 +6,7 @@ export const themes = {
     light: {
       sidebar: {
         backgroundColor: "#ffffff",
-        color: "#607489",
+        color: "#000000",
       },
       menu: {
         menuContent: "#fbfcfd",
@@ -39,38 +39,4 @@ export const themes = {
     },
   };
   
-  export 
-  const menuItemStyles: MenuItemStyles = {
-    root: {
-      fontSize: "13px",
-      fontWeight: 400,
-    },
-   
-    SubMenuExpandIcon: {
-      color: "#b6b7b9",
-    },
-    // subMenuContent: ({ level }) => ({
-    //   backgroundColor:
-    //     level === 0
-    //       ? hexToRgba(
-    //           themes[theme].menu.menuContent,
-    //           hasImage && !collapsed ? 0.4 : 1
-    //         )
-    //       : "transparent",
-    // }),
-    // button: {
-    //   [`&.${menuClasses.disabled}`]: {
-    //     color: themes[theme].menu.disabled.color,
-    //   },
-    //   "&:hover": {
-    //     backgroundColor: hexToRgba(
-    //       themes[theme].menu.hover.backgroundColor,
-    //       hasImage ? 0.8 : 1
-    //     ),
-    //     color: themes[theme].menu.hover.color,
-    //   },
-    // },
-    label: ({ open }) => ({
-      fontWeight: open ? 600 : undefined,
-    }),
-  };
+ 

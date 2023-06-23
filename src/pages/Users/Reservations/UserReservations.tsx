@@ -72,19 +72,19 @@ const UserReservations = () => {
                                     <CardContent>
                                         <CustomLink to={"/user/details/" + item?.sender_id}>
 
-                                            <Typography gutterBottom variant="h5" component="div">
+                                            <Typography gutterBottom variant="h5" component="div" noWrap> 
                                                 From :  {item?.sender?.firstname} {item?.sender?.lastname}
                                             </Typography>
                                         </CustomLink>
                                         <CustomLink to={"/advertise/" + item?.ad_id}>
-                                            <Typography >
+                                            <Typography noWrap>
                                                 Advertise : {item?.advertisement?.title}
                                             </Typography>
                                         </CustomLink>
-                                        <Typography >
+                                        <Typography noWrap>
                                             Message : {item?.message}
                                         </Typography>
-                                        <Typography >
+                                        <Typography noWrap>
                                             Reservation : {ReservationDateTime(item?.reservation_date)}
                                         </Typography>
                                         <Typography style={{
@@ -99,7 +99,7 @@ const UserReservations = () => {
                                         }}>
                                             Status :  {statusToString(item?.status)}
                                         </Typography>
-                                        <Typography variant="body2" color="text.secondary">
+                                        <Typography variant="body2" color="text.secondary" noWrap>
                                             Created at :  {formaDateTime(item?.created_at)}
                                         </Typography>
 
@@ -136,7 +136,7 @@ const UserReservations = () => {
                                                 </CustomLink>
                                             }
                                         >
-                                            <CustomLink to={"/advertise/" + item?.ad_id}>
+                                            <CustomLink to={"/advertise/" + item?.ad_id} >
                                                 <Avatar alt={item?.advertisement?.title} src={item?.advertisement?.media?.[0].file_path} sx={{ width: 180, height: 180 }} />
                                             </CustomLink>
                                         </Badge>
@@ -144,20 +144,20 @@ const UserReservations = () => {
 
                                     <CardContent>
                                         <CustomLink to={"/user/details/" + item?.receiver_id}>
-                                            <Typography gutterBottom variant="h5" component="div">
+                                            <Typography gutterBottom variant="h5" component="div" noWrap>
                                                 To :  {item?.receiver?.firstname} {item?.receiver?.lastname}
                                             </Typography>
                                         </CustomLink>
                                         <CustomLink to={"/advertise/" + item?.ad_id}>
-                                            <Typography >
+                                            <Typography noWrap>
                                                 Advertise : {item?.advertisement?.title}
                                             </Typography>
                                         </CustomLink>
 
-                                        <Typography >
+                                        <Typography noWrap>
                                             Reservation : {ReservationDateTime(item?.reservation_date)}
                                         </Typography>
-                                        <Typography >
+                                        <Typography noWrap>
                                             Message : {item?.message}
                                         </Typography>
                                         <Typography style={{
@@ -172,7 +172,7 @@ const UserReservations = () => {
                                         }}>
                                             Status :  {statusToString(item?.status)}
                                         </Typography>
-                                        <Typography variant="body2" color="text.secondary">
+                                        <Typography variant="body2" color="text.secondary" noWrap>
                                             Created at :  {formaDateTime(item?.created_at)}
                                         </Typography>
                                         <CardActionsCustom>
