@@ -65,6 +65,8 @@ const AdvertiseRequest = () => {
     { value: StatusOption.Waiting, label: "Waiting" },
     { value: StatusOption.Canceled, label: "Canceled" },
     { value: StatusOption.Validated, label: "Validated" },
+    { value: StatusOption.Reserved, label: "Reserved" },
+    { value: StatusOption.Adopted, label: "Adopted" },
   ];
 
   const { data, error, isLoading, isSuccess, refetch, isFetching } =

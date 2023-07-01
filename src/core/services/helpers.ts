@@ -4,6 +4,8 @@ export const statusToString = (status: string | number | undefined) => {
   if (status == "0") return "Waiting";
   else if (status == "1") return "Canceled";
   else if (status == "2") return "Validated";
+  else if (status == "3") return "Reserved";
+  else if (status == "4") return "Adopted";
   else return "Unknown Status";
 };
 

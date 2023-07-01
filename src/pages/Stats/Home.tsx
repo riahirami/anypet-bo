@@ -8,6 +8,7 @@ import { Spinner } from "../../components/Spinner/spinner";
 import StatBox from "../../components/StatsBox/StatsBox";
 import TimerOutlinedIcon from "@mui/icons-material/TimerOutlined";
 import MarkEmailUnreadOutlinedIcon from "@mui/icons-material/MarkEmailUnreadOutlined";
+import PetsIcon from '@mui/icons-material/Pets';
 import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
 import { PATHS } from "../../routes/Path";
 import ReactECharts from "echarts-for-react";
@@ -20,10 +21,15 @@ const Home = () => {
     isSuccess: SuccessWaitingStatus,
   } = useGetAdsByStatusQuery("0");
 
+  const {
+    data: DataAdoptedStatus,
+   
+  } = useGetAdsByStatusQuery("4");
   const { data } = useVerifiedUsersQuery();
 
   const numberVerifiedUsers = data?.data?.length;
   const numberWaitingAds = DataWaitingStatus?.data?.length;
+  const numberAdoptedAds = DataAdoptedStatus?.data?.length;
 
   const { data: CountAdsPerDate, isLoading: loadingCountDataPerDate, isSuccess: successCountAdsPerDate } = useGetCountAdsPerDateQuery("");
 
@@ -63,10 +69,10 @@ const Home = () => {
 
             <Grid item xs={12} sm={6}>
               <StatBox
-                title="Waiting Messages "
+                title="Adopted pets "
                 subtitle="Total"
-                value={"5"}
-                icon={<MarkEmailUnreadOutlinedIcon />}
+                value={numberAdoptedAds}
+                icon={<PetsIcon />}
                 backgroundCol="linear-gradient(45deg, rgb(77 121 226) 0%, rgb(90 225 255) 100%)"
                 details={PATHS.CONVERSATIONS}
 

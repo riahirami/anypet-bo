@@ -202,6 +202,7 @@ function AdCard({ adData, user }: AdCardProps) {
            <Typography  noWrap>
             {/* {adData.description} */}
           </Typography>
+          
 
           {(currentUser.user.id === adData.user_id ||
             currentUser.user.role_id == "2") && (
@@ -211,19 +212,109 @@ function AdCard({ adData, user }: AdCardProps) {
                 variant="body2"
                 gutterBottom
                 style={{
-                  color:
+                  textAlign:"center",
+                  width:"100%",
+                  color:'white',
+                  backgroundColor:
                     adData.status == "0"
                       ? "orange"
                       : adData.status == "1"
                         ? "red"
                         : adData.status == "2"
                           ? "green"
+                          : adData.status == "3"
+                          ? "midnightblue"
+                          : adData.status == "4"
+                          ? "goldenrod"
                           : "inherit",
                 }}
               >
                 Status:  {statusToString(adData.status)}
               </Typography>
             )}
+
+{currentUser.user.role_id == "2" && <Grid container style={{ padding: "5px", display: "flex", justifyContent: "space-around" }}>
+
+
+{adData.status == StatusOption.Waiting && (
+  <>
+    <Grid item key={adData.id}>
+
+      <Button
+        variant="contained"
+        color="error"
+        disabled={loadingUpdateStatus}
+        onClick={() => handleStatusChange(adData.id, StatusOption.Canceled)}
+      >
+        Cancel
+      </Button>
+    </Grid>
+    <Grid item key={adData.id}>
+
+      <Button
+        variant="contained"
+        color="success"
+        disabled={loadingUpdateStatus}
+        onClick={() => handleStatusChange(adData.id, StatusOption.Validated)}
+      >
+        Valide
+      </Button>
+    </Grid>
+  </>
+)}
+
+{adData.status == StatusOption.Validated && (
+  <>
+    <Grid item key={adData.id}>
+      <Button
+        variant="contained"
+        color="warning"
+        disabled={loadingUpdateStatus}
+        onClick={() => handleStatusChange(adData.id, StatusOption.Waiting)}
+      >
+        Waiting
+      </Button>
+    </Grid>
+    <Grid item key={adData.id}>
+
+      <Button
+        variant="contained"
+        color="error"
+        disabled={loadingUpdateStatus}
+        onClick={() => handleStatusChange(adData.id, StatusOption.Canceled)}
+      >
+        Cancel
+      </Button>
+    </Grid>
+  </>
+)}
+{adData.status == StatusOption.Canceled && (
+  <>
+    <Grid item key={adData.id}>
+      <Button
+        variant="contained"
+        color="success"
+        disabled={loadingUpdateStatus}
+        onClick={() => handleStatusChange(adData.id, StatusOption.Validated)}
+      >
+        Valide
+      </Button>
+    </Grid>
+    <Grid item key={adData.id}>
+
+      <Button
+        variant="contained"
+        color="warning"
+        disabled={loadingUpdateStatus}
+        onClick={() => handleStatusChange(adData.id, StatusOption.Waiting)}
+      >
+        Waiting
+      </Button>
+    </Grid>
+  </>
+)}
+
+</Grid>}
         </CardContent>
         <CardActions disableSpacing>
           <Grid container justifyContent="space-between">
@@ -260,88 +351,7 @@ function AdCard({ adData, user }: AdCardProps) {
 
         </CardActions>
         
-        {currentUser.user.role_id == "2" && <Grid container style={{ padding: "5px", display: "flex", justifyContent: "space-around" }}>
-
-
-          {adData.status == StatusOption.Waiting && (
-            <>
-              <Grid item key={adData.id}>
-
-                <Button
-                  variant="contained"
-                  color="error"
-                  disabled={loadingUpdateStatus}
-                  onClick={() => handleStatusChange(adData.id, StatusOption.Canceled)}
-                >
-                  Cancel
-                </Button>
-              </Grid>
-              <Grid item key={adData.id}>
-
-                <Button
-                  variant="contained"
-                  color="success"
-                  disabled={loadingUpdateStatus}
-                  onClick={() => handleStatusChange(adData.id, StatusOption.Validated)}
-                >
-                  Valide
-                </Button>
-              </Grid>
-            </>
-          )}
-
-          {adData.status == StatusOption.Validated && (
-            <>
-              <Grid item key={adData.id}>
-                <Button
-                  variant="contained"
-                  color="warning"
-                  disabled={loadingUpdateStatus}
-                  onClick={() => handleStatusChange(adData.id, StatusOption.Waiting)}
-                >
-                  Waiting
-                </Button>
-              </Grid>
-              <Grid item key={adData.id}>
-
-                <Button
-                  variant="contained"
-                  color="error"
-                  disabled={loadingUpdateStatus}
-                  onClick={() => handleStatusChange(adData.id, StatusOption.Canceled)}
-                >
-                  Cancel
-                </Button>
-              </Grid>
-            </>
-          )}
-          {adData.status == StatusOption.Canceled && (
-            <>
-              <Grid item key={adData.id}>
-                <Button
-                  variant="contained"
-                  color="success"
-                  disabled={loadingUpdateStatus}
-                  onClick={() => handleStatusChange(adData.id, StatusOption.Validated)}
-                >
-                  Valide
-                </Button>
-              </Grid>
-              <Grid item key={adData.id}>
-
-                <Button
-                  variant="contained"
-                  color="warning"
-                  disabled={loadingUpdateStatus}
-                  onClick={() => handleStatusChange(adData.id, StatusOption.Waiting)}
-                >
-                  Waiting
-                </Button>
-              </Grid>
-            </>
-          )}
-
-        </Grid>}
+     
       </Card>
     </>
   );
