@@ -6,15 +6,18 @@ import Topbar from "./components/Topbar/Topbar";
 import useTheme from "./customHooks/useTheme";
 import Signin from "pages/signin";
 import { useAuthentication } from "customHooks/useAuthentication";
+import AuthGuard from "components/AuthGuard/AuthGuard";
 
 function App() {
   const { mode, handleThemeChange, handleImageChange, hasImage } = useTheme();
   const authUser = useAuthentication();
 
-  
-  if (authUser != null)
-    return (
-      <div className="App">
+
+
+  return (
+    <div className="App">
+      <AuthGuard>
+
         <ProSidebarProvider>
           <div className="playground-container">
             <Playground
@@ -36,10 +39,10 @@ function App() {
             <Router />
           </div>
         </ProSidebarProvider>
-      </div>
-    );
+      </AuthGuard>
+    </div>
+  );
 
-  return <Signin />;
 }
 
 export default App;

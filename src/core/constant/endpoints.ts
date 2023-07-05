@@ -50,5 +50,11 @@ export const endpoints = {
     RESPONSERESERVATIONS: "reservation/response",
 
 
+    PARTNERS : "partner/",
+    GETPARTNERS : "partner/",
+    ADDPARTNERS : "partner/",
+    UPDATEPARTNERS : "partner/update/",
+    SHOWPARTNER : "partner/",
+    DELETEPARTNERS : "partner/",
 
 }

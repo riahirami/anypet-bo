@@ -36,7 +36,7 @@ import { message } from "core/constant/message"
 import AlertComponent from "components/Alert/Alert";
 
 
-function AdCard({ adData,user }: AdCardProps) {
+function AdCard({ adData, user }: AdCardProps) {
   const { data: CategoryData, refetch: RefetchCategory } =
     useGetAllCategoriesQuery(100);
   const [setFavorit, { data: datasetFavoris, isSuccess: successFavoris }] =
@@ -126,12 +126,12 @@ function AdCard({ adData,user }: AdCardProps) {
 
   return (
     <>
-       {successChangeStatus && (
-                <AlertComponent
-                    title={message.ADVERTISESTATUSCHANGED}
-                    severity="success"
-                />
-            )}
+      {successChangeStatus && (
+        <AlertComponent
+          title={message.ADVERTISESTATUSCHANGED}
+          severity="success"
+        />
+      )}
       <Card key={adData.id}>
         <CardHeader
           avatar={
@@ -155,10 +155,10 @@ function AdCard({ adData,user }: AdCardProps) {
                       open={Boolean(menuAnchor)}
                       onClose={handleMenuClose}
                     >
-                      <MenuItem onClick={handleDelete}>Delete</MenuItem>
                       <MenuItem>
                         <CustomLink to={"/advertise/update/" + adData.id}>Update</CustomLink>
                       </MenuItem>
+                      <MenuItem onClick={handleDelete}>Delete</MenuItem>
                     </Menu>
                   </>
                 )}
@@ -174,10 +174,10 @@ function AdCard({ adData,user }: AdCardProps) {
               <Grid
                 item
                 key={adData?.media?.[0].id}
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
+                // xs={12}
+                // sm={12}
+                // md={12}
+                // lg={12}
               >
                 <CardMedia
                   component="img"
@@ -190,18 +190,19 @@ function AdCard({ adData,user }: AdCardProps) {
               </Grid>
             )}
           </Grid>
-          <Typography variant="subtitle1" gutterBottom>
+          <Typography variant="subtitle1" noWrap>
             {adData.title}
           </Typography>
-          <Typography variant="body2" gutterBottom>
+        <Typography variant="body2" noWrap>
             Category :{" "}
             <CustomLink to={`/advertise/category/${adData?.category_id}`}>
               {changeIdtoCategory(adData?.category_id)}
             </CustomLink>
           </Typography>
-          <Typography variant="body1" color="text.secondary" noWrap>
-            {adData.description}
+           <Typography  noWrap>
+            {/* {adData.description} */}
           </Typography>
+          
 
           {(currentUser.user.id === adData.user_id ||
             currentUser.user.role_id == "2") && (
@@ -211,23 +212,113 @@ function AdCard({ adData,user }: AdCardProps) {
                 variant="body2"
                 gutterBottom
                 style={{
-                  color:
+                  textAlign:"center",
+                  width:"100%",
+                  color:'white',
+                  backgroundColor:
                     adData.status == "0"
                       ? "orange"
                       : adData.status == "1"
                         ? "red"
                         : adData.status == "2"
                           ? "green"
+                          : adData.status == "3"
+                          ? "midnightblue"
+                          : adData.status == "4"
+                          ? "goldenrod"
                           : "inherit",
                 }}
               >
                 Status:  {statusToString(adData.status)}
               </Typography>
             )}
+
+{currentUser.user.role_id == "2" && <Grid container style={{ padding: "5px", display: "flex", justifyContent: "space-around" }}>
+
+
+{adData.status == StatusOption.Waiting && (
+  <>
+    <Grid item key={adData.id}>
+
+      <Button
+        variant="contained"
+        color="error"
+        disabled={loadingUpdateStatus}
+        onClick={() => handleStatusChange(adData.id, StatusOption.Canceled)}
+      >
+        Cancel
+      </Button>
+    </Grid>
+    <Grid item key={adData.id}>
+
+      <Button
+        variant="contained"
+        color="success"
+        disabled={loadingUpdateStatus}
+        onClick={() => handleStatusChange(adData.id, StatusOption.Validated)}
+      >
+        Valide
+      </Button>
+    </Grid>
+  </>
+)}
+
+{adData.status == StatusOption.Validated && (
+  <>
+    <Grid item key={adData.id}>
+      <Button
+        variant="contained"
+        color="warning"
+        disabled={loadingUpdateStatus}
+        onClick={() => handleStatusChange(adData.id, StatusOption.Waiting)}
+      >
+        Waiting
+      </Button>
+    </Grid>
+    <Grid item key={adData.id}>
+
+      <Button
+        variant="contained"
+        color="error"
+        disabled={loadingUpdateStatus}
+        onClick={() => handleStatusChange(adData.id, StatusOption.Canceled)}
+      >
+        Cancel
+      </Button>
+    </Grid>
+  </>
+)}
+{adData.status == StatusOption.Canceled && (
+  <>
+    <Grid item key={adData.id}>
+      <Button
+        variant="contained"
+        color="success"
+        disabled={loadingUpdateStatus}
+        onClick={() => handleStatusChange(adData.id, StatusOption.Validated)}
+      >
+        Valide
+      </Button>
+    </Grid>
+    <Grid item key={adData.id}>
+
+      <Button
+        variant="contained"
+        color="warning"
+        disabled={loadingUpdateStatus}
+        onClick={() => handleStatusChange(adData.id, StatusOption.Waiting)}
+      >
+        Waiting
+      </Button>
+    </Grid>
+  </>
+)}
+
+</Grid>}
         </CardContent>
         <CardActions disableSpacing>
           <Grid container justifyContent="space-between">
-            <Grid item xs={12} sm={4} md={3} lg={3}>
+            <Grid item xs={4} sm={4} md={3} lg={3}>
               <IconButton
                 aria-label="add to favorites"
                 onClick={() => setfavorit(adData.id)}
@@ -235,7 +326,7 @@ function AdCard({ adData,user }: AdCardProps) {
                 {isFavorite ? <FavoriteIcon color="error" /> : <FavoriteIcon />}
               </IconButton>
             </Grid>
-            <Grid item xs={12} sm={4} md={3} lg={3}>
+            <Grid item xs={4} sm={4} md={3} lg={3}>
               <CustomLink to={"/advertise/" + adData.id}>
                 <IconButton
                   color="default"
@@ -246,51 +337,21 @@ function AdCard({ adData,user }: AdCardProps) {
                 </IconButton>
               </CustomLink>
             </Grid>
-            {currentUser.user.id !== adData.user_id  && <Grid item xs={12} sm={4} md={3} lg={3}>
+            {currentUser.user.id !== adData.user_id && <Grid item xs={4} sm={4} md={3} lg={3}>
               <CustomLink to={"/users/messages/" + adData?.user_id}>
                 <IconButton aria-label="send">
-                  <ChatOutlinedIcon  />
+                  <ChatOutlinedIcon />
                 </IconButton>
               </CustomLink>
             </Grid>}
           </Grid>
 
-          {/* admin actions */}
+          
 
 
         </CardActions>
-        {currentUser.user.role_id == "2" && <Grid container style={{ padding: "5px" }}>
-          <Grid item key={adData.id} xs={12} sm={4} md={4} lg={4} >
-            <Button
-              variant="contained"
-              color="warning"
-              disabled={loadingUpdateStatus}
-              onClick={() =>
-                handleStatusChange(adData.id, StatusOption.Waiting)
-              }
-            >Waiting</Button>
-          </Grid>
-          <Grid item key={adData.id} xs={12} sm={4} md={4} lg={4} >
-            <Button
-              variant="contained"
-              color="success"
-              disabled={loadingUpdateStatus}
-              onClick={() =>
-                handleStatusChange(adData.id, StatusOption.Validated)
-              }
-            >Valide</Button>
-          </Grid>
-          <Grid item key={adData.id} xs={12} sm={4} md={4} lg={4} >
-            <Button
-              variant="contained"
-              color="error"
-              disabled={loadingUpdateStatus}
-              onClick={() =>
-                handleStatusChange(adData.id, StatusOption.Canceled)
-              }
-            >Cancel</Button>
-          </Grid>
-        </Grid>}
+        
+     
       </Card>
     </>
   );

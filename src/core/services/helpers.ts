@@ -4,6 +4,8 @@ export const statusToString = (status: string | number | undefined) => {
   if (status == "0") return "Waiting";
   else if (status == "1") return "Canceled";
   else if (status == "2") return "Validated";
+  else if (status == "3") return "Reserved";
+  else if (status == "4") return "Adopted";
   else return "Unknown Status";
 };
 
@@ -41,14 +43,14 @@ export const getNotificationMessage = (notification: any): string => {
     return "An ad as one of the categories that you interest has been added ";
   }
   if (notification.type === "App\\Notifications\\AdStatusUpdated") {
-    return "The status of your ad " + notification?.data?.title + " has been " + statusToString(notification?.data?.status);
+    return "The status of your ad " + notification?.data?.title + " has been changed to " + statusToString(notification?.data?.status);
   }
   if (notification.type === "App\\Notifications\\RoleChangedNotification") {
     return "Your role on AnyPet has been changed to " + notification?.data?.role;
   }
-  if (notification.type === "App\\Notifications\\MessageNotification") {
-    return "You have a new message from " + notification?.data?.sender;
-  }
+  // if (notification.type === "App\\Notifications\\MessageNotification") {
+  //   return "You have a new message from " + notification?.data?.sender;
+  // }
   if (notification.type === "App\\Notifications\\ReservationNotification") {
     return "You get an reservation request for the advertisement  " + notification?.data?.ad + " from user"+ notification?.data?.sender?.firstname     ;
   }

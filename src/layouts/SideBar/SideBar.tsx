@@ -21,7 +21,7 @@ import { Book } from "../../icons/Book";
 import { Calendar } from "../../icons/Calendar";
 import { PATHS } from "../../routes/Path";
 
-import { menuItemStyles, themes } from "./SideBar.style";
+import { themes } from "./SideBar.style";
 import { Props } from "components/Topbar/TopbarProps.type";
 
 import { hexToRgba } from "../../core/services/helpers";
@@ -33,7 +33,10 @@ import { getMyAds } from "redux/slices/adsSlice";
 import { useGetAdsQuery, useGetMyAdsQuery } from "redux/api/adsApi";
 import { parametersListing } from "core/models/parametersListing.model";
 import { Service } from "icons/Service";
+import { User } from "icons/User";
+import { Message } from "icons/Message";
 import CustomLink from "components/CustomLink/CustomLink"
+
 
 export const Playground: React.FC<Props> = ({
   mode: theme,
@@ -41,6 +44,41 @@ export const Playground: React.FC<Props> = ({
   hasImage,
   handleImageChange,
 }) => {
+
+  const menuItemStyles: MenuItemStyles = {
+    root: {
+      fontSize: "13px",
+      fontWeight: 400,
+    },
+
+    SubMenuExpandIcon: {
+      color: "#b6b7b9",
+    },
+    subMenuContent: ({ level }) => ({
+      backgroundColor:
+        level === 0
+          ? hexToRgba(
+            themes[theme].menu.menuContent,
+            hasImage && !collapsed ? 0.4 : 1
+          )
+          : "transparent",
+    }),
+    button: {
+      [`&.${menuClasses.disabled}`]: {
+        color: themes[theme].menu.disabled.color,
+      },
+      "&:hover": {
+        backgroundColor: hexToRgba(
+          themes[theme].menu.hover.backgroundColor,
+          hasImage ? 0.8 : 1
+        ),
+        color: themes[theme].menu.hover.color,
+      },
+    },
+    label: ({ open }) => ({
+      fontWeight: open ? 600 : undefined,
+    }),
+  };
   const { toggleSidebar, collapseSidebar, broken, collapsed } = useProSidebar();
 
   const tokenValue = getToken();
@@ -131,7 +169,7 @@ export const Playground: React.FC<Props> = ({
                     </MenuItem></CustomLink>
                 </SubMenu>
                 <CustomLink to={PATHS.CONVERSATIONS}>
-                  <MenuItem icon={<Service />}>
+                  <MenuItem icon={<Message />}>
                     {" "}
                     Conversations
                   </MenuItem></CustomLink>
@@ -142,8 +180,8 @@ export const Playground: React.FC<Props> = ({
             </div>
             <SidebarFooter collapsed={collapsed} />
           </div>
-        </Sidebar>
-      </div>
+        </Sidebar >
+      </div >
     );
 
   if (currentUser?.user?.role_id === 2)
@@ -156,7 +194,7 @@ export const Playground: React.FC<Props> = ({
       >
         <Sidebar
           image="https://demos.themeselection.com/chameleon-admin-template/app-assets/images/backgrounds/04.jpg"
-          breakPoint="lg"
+          // breakPoint="lg"
           backgroundColor={hexToRgba(
             themes[theme].sidebar.backgroundColor,
             hasImage == "false" ? 0.7 : 1
@@ -170,9 +208,12 @@ export const Playground: React.FC<Props> = ({
               style={{ marginBottom: "24px", marginTop: "16px" }}
             />
             <div style={{ flex: 1, marginBottom: "32px" }}>
-              <Menu menuItemStyles={menuItemStyles}>
-                <SubMenu label="Statistics" icon={<BarChart />}>
-                  <MenuItem>
+              <Menu menuItemStyles={menuItemStyles} style={{
+                color:
+                  themes[theme].sidebar.color
+              }}>
+                <SubMenu label="Statistics" icon={<BarChart />} >
+                  <MenuItem >
                     <CustomLink to={PATHS.StatsHome}> Home</CustomLink>
                   </MenuItem>
                   <MenuItem>
@@ -182,7 +223,7 @@ export const Playground: React.FC<Props> = ({
 
                 <CustomLink to={PATHS.PROFILE}>
                   {" "}
-                  <MenuItem icon={<Book />}>Profil</MenuItem>
+                  <MenuItem icon={<Book fill={themes[theme].sidebar.color}/>} >Profil</MenuItem>
                 </CustomLink>
                 <SubMenu
                   label="Advertise"
@@ -214,7 +255,7 @@ export const Playground: React.FC<Props> = ({
                   </MenuItem>
                 </SubMenu>
                 <CustomLink to={PATHS.MYRESERVATIONS}>
-                  <MenuItem icon={<Calendar />}> Reservations</MenuItem></CustomLink>
+                  <MenuItem icon={<Calendar fill={themes[theme].sidebar.color} />}> Reservations</MenuItem></CustomLink>
                 <SubMenu label="Categories" icon={<Global />}>
                   <MenuItem>
                     {" "}
@@ -227,24 +268,38 @@ export const Playground: React.FC<Props> = ({
                 </SubMenu>
                 <SubMenu
                   label="Messages"
-                  icon={<Service />}
+                  icon={<Message />}
                   suffix={<Badge variant="success">New</Badge>}
                 >
                   <MenuItem>
                     {" "}
                     <CustomLink to={PATHS.CONVERSATIONS}> Conversations</CustomLink>
                   </MenuItem>
-                  <CustomLink to={PATHS.MYRESERVATIONS}>
-                    <MenuItem> Reservations</MenuItem></CustomLink>
+
+
                 </SubMenu>
 
                 <Menu menuItemStyles={menuItemStyles}>
                   <CustomLink to={PATHS.Users}>
                     {" "}
-                    <MenuItem icon={<Calendar />}>Users</MenuItem>
+                    <MenuItem icon={<User fill={themes[theme].sidebar.color}/>}>Users</MenuItem>
                   </CustomLink>
                 </Menu>
 
+                <SubMenu
+                  label="Partners"
+                  icon={<Service />}
+
+                >
+                  <CustomLink to={PATHS.ADDPARTNER}>
+                    {" "}
+                    <MenuItem >Add Partners</MenuItem>
+                  </CustomLink>
+                  <CustomLink to={PATHS.LISTPARTNER}>
+                    {" "}
+                    <MenuItem >list Partners</MenuItem>
+                  </CustomLink>
+                </SubMenu>
               </Menu>
             </div>
             <SidebarFooter collapsed={collapsed} />

@@ -14,9 +14,9 @@ const AdsByCategory = () => {
     isSuccess,
     isLoading,
   } = useGetAdsByCategoryQuery(id);
-  const [Ads, setAds] = useState();
 
 
+  console.log({adData})
   return (
    
        <Container>
@@ -24,7 +24,7 @@ const AdsByCategory = () => {
 
        <Grid container >
            {
-             adData?.map((item: Ad) => (
+             adData?.data?.map((item: Ad) => (
                <Grid item key={item.id} xs={12} sm={4} md={4} lg={3}>
                  <AdCard adData={item} />
                </Grid>

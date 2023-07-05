@@ -65,6 +65,8 @@ const AdvertiseRequest = () => {
     { value: StatusOption.Waiting, label: "Waiting" },
     { value: StatusOption.Canceled, label: "Canceled" },
     { value: StatusOption.Validated, label: "Validated" },
+    { value: StatusOption.Reserved, label: "Reserved" },
+    { value: StatusOption.Adopted, label: "Adopted" },
   ];
 
   const { data, error, isLoading, isSuccess, refetch, isFetching } =
@@ -151,10 +153,10 @@ const AdvertiseRequest = () => {
 
       <Typography align="left">Advertises requests</Typography>
 
-      <Grid item xs={12} md={12}>
+      <Grid >
 
         <CustomGrid container alignItems="center">
-          <Grid item xs={12} sm={2} md={4}>
+          <Grid item xs={12} sm={12} md={4} lg={4}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 value={value}
@@ -167,8 +169,8 @@ const AdvertiseRequest = () => {
             </Button>
           </Grid>
 
-          <Grid item xs={12} sm={2} md={2}>
-            <Grid container >
+          <Grid item xs={12} sm={12} md={2} lg={4}>
+            <Grid  >
               <TextField
                 id="outlined-select-status"
                 select
@@ -187,7 +189,7 @@ const AdvertiseRequest = () => {
             </Grid>
           </Grid>
 
-          <Grid item>
+          <Grid item  xs={12} sm={12} md={6} lg={4}>
             <PerPageSelect
               defaultValue={parameters.perPage}
               value={parameters.perPage}

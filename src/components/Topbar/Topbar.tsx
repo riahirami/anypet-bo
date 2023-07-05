@@ -112,10 +112,7 @@ const Topbar: React.FC<Props> = ({
               <Person2Icon></Person2Icon>
               <CustomLink to={PATHS.PROFILE}>Profile</CustomLink>
             </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <ManageAccountsIcon></ManageAccountsIcon>
-              <CustomLink to={PATHS.PROFILEUpdate}>My account</CustomLink>
-            </MenuItem>
+           
             <MenuItem onClick={() => logoutFunction()}>
               <LogoutIcon />
               Logout
