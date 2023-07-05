@@ -74,6 +74,7 @@ const Signin = () => {
   const handleLogin = async () => {
     if (!(email && password)) {
       setShowModal(true);
+      setDescriptionModal("check your email and your password password");
     }
 
     const loginData: any = await loginUser({ email, password });
@@ -120,7 +121,7 @@ const Signin = () => {
 
   if (showModal)
     return (
-      <CustomModal title="Forgot password" description={descriptionModal} />
+      <CustomModal title="error" description={descriptionModal} />
     );
   if (forgotLoading) return <Spinner />;
 
